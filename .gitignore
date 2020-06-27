@@ -1,2 +1,7 @@
 /cache/
 /config/development/
+/.idea
+/vendor
+composer.lock
+.env
+boxfile.yml
