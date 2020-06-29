@@ -1,3 +1,4 @@
 *.sql
 *.sqlite
 *.sqlite3
+!forward-engineer-export.sql
