@@ -16,7 +16,8 @@ use function Vokuro\root_path;
 defined('BASE_PATH') || define('BASE_PATH', dirname(dirname(__FILE__)));
 defined('APP_PATH') || define('APP_PATH', BASE_PATH.DIRECTORY_SEPARATOR.'src');
 
-return [
+// missed ?
+return new \Phalcon\Config([
     'database'    => [
         'adapter'  => "mysql",
         'host'     => "127.0.0.1",
@@ -24,20 +25,21 @@ return [
         'username' => 'root',
         'password' => '',
         'dbname'   => "vokuro",
+        'charset'     => 'utf8',
     ],
     'application' => [
         'baseUri'         => '/',
         'publicUrl'       => 'localhost',
         'cryptSalt'       => 'eEAfR|_&G&f,+vU]:jFr!!A&+71w1Ms9~8_4L!<@[N@DyaIP_2My|:+.u>/6m,$D',
-        'viewsDir'        => BASE_PATH.'themes/vokuro/',
-        'cacheDir'        => BASE_PATH.'var/cache/',
-        'modelsDir'       => APP_PATH . '/Models/',
+        'viewsDir'        => BASE_PATH.'/themes/vokuro/',
+        'cacheDir'        => BASE_PATH.'/var/cache/',
+        'modelsDir'       => BASE_PATH . '/src/Models/',
         'sessionSavePath' => BASE_PATH.'/var/cache/session/',
 
-        'controllersDir' => APP_PATH . '/Controllers/',
-        'migrationsDir'  => BASE_PATH . 'db/migrations/',
-        'pluginsDir'     => APP_PATH . '/Plugins/',
-        'libraryDir'     => APP_PATH . '/Providers/',
+        'controllersDir' => BASE_PATH . '/src/Controllers/',
+        'migrationsDir'  => BASE_PATH . '/db/migrations/',
+        'pluginsDir'     => BASE_PATH . '/src/Plugins/',
+        'libraryDir'     => BASE_PATH . '/src/Providers/',
 
 
 
@@ -62,4 +64,4 @@ return [
     ],
     // Set to false to disable sending emails (for use in test environment)
     'useMail'     => true,
-];
+]);

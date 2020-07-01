@@ -18,7 +18,7 @@ USE `vokuro` ;
 -- Table `vokuro`.`equipment`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `vokuro`.`equipment` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `desc_short` VARCHAR(60) NULL,
@@ -33,7 +33,7 @@ ENGINE = InnoDB;
 -- Table `vokuro`.`volunteers`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `vokuro`.`volunteers` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `firstName` VARCHAR(60) NULL,
@@ -49,7 +49,7 @@ ENGINE = InnoDB;
 -- Table `vokuro`.`certificates`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `vokuro`.`certificates` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `desc_short` VARCHAR(60) UNIQUE NULL,
@@ -87,7 +87,7 @@ ENGINE = InnoDB;
 -- Table `vokuro`.`vehicles`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `vokuro`.`vehicles` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `desc_short` VARCHAR(60) UNIQUE NOT NULL,
@@ -106,7 +106,7 @@ ENGINE = InnoDB;
 -- Table `vokuro`.`departments`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `vokuro`.`departments` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `desc_short` VARCHAR(60) UNIQUE NULL,
@@ -119,7 +119,7 @@ ENGINE = InnoDB;
 -- Table `vokuro`.`vehicleProperties`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `vokuro`.`vehicleProperties` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `vehiclesId` INT NOT NULL,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -142,7 +142,7 @@ ENGINE = InnoDB;
 -- Table `vokuro`.`locations`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `vokuro`.`locations` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `desc_short` VARCHAR(60) UNIQUE NULL,
@@ -160,7 +160,7 @@ ENGINE = InnoDB;
 -- Table `vokuro`.`clients`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `vokuro`.`clients` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `desc_short` VARCHAR(60) UNIQUE NULL,
