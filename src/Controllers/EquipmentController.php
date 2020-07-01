@@ -19,6 +19,7 @@ class EquipmentController extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
+        $this->view->setVar('extraTitle', "Search equipment :: ");
     }
 
     /**
@@ -55,6 +56,7 @@ class EquipmentController extends ControllerBase
             return;
         }
 
+        $this->view->setVar('extraTitle', "Found equipment :: ");
         $this->view->page = $paginate;
     }
 
@@ -66,6 +68,7 @@ class EquipmentController extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
+        $this->view->setVar('extraTitle', "New Equipment :: ");
     }
 
     /**
@@ -101,6 +104,8 @@ class EquipmentController extends ControllerBase
             $this->tag->setDefault("total_count", $equipment->getTotalCount());
             
         }
+
+        $this->view->setVar('extraTitle', "Edit Equipment :: ");
     }
 
     /**

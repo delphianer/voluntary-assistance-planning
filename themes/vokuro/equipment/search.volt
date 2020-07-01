@@ -1,4 +1,4 @@
-<h1>Search result</h1>
+<h1 class="mt-3">Search result</h1>
 
 <div class="btn-group mb-5" role="group">
     {{ link_to(url("equipment"), "&larr; Go Back", "class": "btn btn-warning") }}
