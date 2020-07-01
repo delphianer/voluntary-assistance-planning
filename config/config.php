@@ -13,50 +13,37 @@ declare(strict_types=1);
 use Phalcon\Logger;
 use function Vokuro\root_path;
 
-defined('BASE_PATH') || define('BASE_PATH', dirname(dirname(__FILE__)));
-defined('APP_PATH') || define('APP_PATH', BASE_PATH.DIRECTORY_SEPARATOR.'src');
-
-// missed ?
-return new \Phalcon\Config([
+return [
     'database'    => [
-        'adapter'  => "mysql",
-        'host'     => "127.0.0.1",
-        'port'     => '3306',
-        'username' => 'root',
-        'password' => '',
-        'dbname'   => "vokuro",
-        'charset'     => 'utf8',
+        'adapter'  => getenv('DB_ADAPTER'),
+        'host'     => getenv('DB_HOST'),
+        'port'     => getenv('DB_PORT'),
+        'username' => getenv('DB_USERNAME'),
+        'password' => getenv('DB_PASSWORD'),
+        'dbname'   => getenv('DB_NAME'),
+        'port'     => getenv('DB_PORT'),
     ],
     'application' => [
-        'baseUri'         => '/',
-        'publicUrl'       => 'localhost',
-        'cryptSalt'       => 'eEAfR|_&G&f,+vU]:jFr!!A&+71w1Ms9~8_4L!<@[N@DyaIP_2My|:+.u>/6m,$D',
-        'viewsDir'        => BASE_PATH.'/themes/vokuro/',
-        'cacheDir'        => BASE_PATH.'/var/cache/',
-        'modelsDir'       => BASE_PATH . '/src/Models/',
-        'sessionSavePath' => BASE_PATH.'/var/cache/session/',
-
-        'controllersDir' => BASE_PATH . '/src/Controllers/',
-        'migrationsDir'  => BASE_PATH . '/db/migrations/',
-        'pluginsDir'     => BASE_PATH . '/src/Plugins/',
-        'libraryDir'     => BASE_PATH . '/src/Providers/',
-
-
-
+        'baseUri'         => getenv('APP_BASE_URI'),
+        'publicUrl'       => getenv('APP_PUBLIC_URL'),
+        'cryptSalt'       => getenv('APP_CRYPT_SALT'),
+        'viewsDir'        => root_path('themes/vokuro/'),
+        'cacheDir'        => root_path('var/cache/'),
+        'sessionSavePath' => root_path('var/cache/session/'),
     ],
     'mail'        => [
-        'fromName'  => 'Vokuro',
-        'fromEmail' => "mail@mh.io",
+        'fromName'  => getenv('MAIL_FROM_NAME'),
+        'fromEmail' => getenv('MAIL_FROM_EMAIL'),
         'smtp'      => [
-            'server'   => 'smtp.gmail.com',
-            'port'     => '587',
-            'security' => 'tls',
-            'username' => '',
-            'password' => '',
+            'server'   => getenv('MAIL_SMTP_SERVER'),
+            'port'     => getenv('MAIL_SMTP_PORT'),
+            'security' => getenv('MAIL_SMTP_SECURITY'),
+            'username' => getenv('MAIL_SMTP_USERNAME'),
+            'password' => getenv('MAIL_SMTP_PASSWORD'),
         ],
     ],
     'logger'      => [
-        'path'     => BASE_PATH.'var/logs/',
+        'path'     => root_path('var/logs/'),
         'format'   => '%date% [%type%] %message%',
         'date'     => 'D j H:i:s',
         'logLevel' => Logger::DEBUG,
@@ -64,4 +51,4 @@ return new \Phalcon\Config([
     ],
     // Set to false to disable sending emails (for use in test environment)
     'useMail'     => true,
-]);
+];

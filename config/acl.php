@@ -27,6 +27,35 @@ return [
             'create',
             'delete',
         ],
+        'certificates' => [
+            'index',
+            'search',
+            'edit',
+            'create',
+            'delete',
+        ],
+        'clients' => [
+            'index',
+            'search',
+            'edit',
+            'create',
+            'delete',
+        ],
+        'departments' => [
+            'index',
+            'search',
+            'edit',
+            'create',
+            'delete',
+        ],
+        'equipment' => [
+            'index',
+            'search',
+            'edit',
+            'create',
+            'delete',
+        ],
+        // todo: setup all dimensions
         'permissions' => [
             'index',
         ],

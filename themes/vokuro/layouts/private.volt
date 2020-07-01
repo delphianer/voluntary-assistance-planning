@@ -2,6 +2,7 @@
     'Home': null,
     'Users': 'users',
     'Profiles': 'profiles',
+    'Equipment' : 'equipment',
     'Permissions': 'permissions'
 ] -%}
 
