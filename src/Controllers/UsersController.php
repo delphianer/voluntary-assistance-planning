@@ -37,6 +37,7 @@ class UsersController extends ControllerBase
     {
         $this->view->setVar('form', new UsersForm());
         $this->assets->collection("js")->addJs("/js/privateUsers.js", true, true);
+        $this->view->setVar('extraTitle', "Search for User :: ");
     }
 
     /**
@@ -63,6 +64,7 @@ class UsersController extends ControllerBase
         ]);
 
         $this->view->setVar('page', $paginator->paginate());
+        $this->view->setVar('extraTitle', "Found User :: ");
     }
 
     /**
@@ -94,6 +96,7 @@ class UsersController extends ControllerBase
             }
         }
 
+        $this->view->setVar('extraTitle', "Create new User :: ");
         $this->view->setVar('form', $form);
     }
 
@@ -146,6 +149,7 @@ class UsersController extends ControllerBase
             'user' => $user,
             'form' => $form,
         ]);
+        $this->view->setVar('extraTitle', "Edit User :: ");
     }
 
     /**

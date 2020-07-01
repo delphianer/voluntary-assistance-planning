@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
 <head>
-    <title>{{ pageTitle }}</title>
+    <title>{{ extraTitle }}V:A:P :: Voluntary Assistance Planning</title>
 
     {{ assets.outputCss('css') }}
 </head>
