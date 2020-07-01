@@ -1,10 +1,12 @@
 <?php
 declare(strict_types=1);
 
- 
+
+namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
+use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Equipment;
 
 class EquipmentController extends ControllerBase
@@ -14,7 +16,9 @@ class EquipmentController extends ControllerBase
      */
     public function indexAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
     }
 
     /**
@@ -22,6 +26,10 @@ class EquipmentController extends ControllerBase
      */
     public function searchAction()
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
+
         $numberPage = $this->request->getQuery('page', 'int', 1);
         $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Equipment', $_GET)->getParams();
         $parameters['order'] = "id";
@@ -56,7 +64,9 @@ class EquipmentController extends ControllerBase
      */
     public function newAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
     }
 
     /**
@@ -66,6 +76,10 @@ class EquipmentController extends ControllerBase
      */
     public function editAction($id)
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
+
         if (!$this->request->isPost()) {
             $equipment = Equipment::findFirstByid($id);
             if (!$equipment) {
@@ -87,9 +101,10 @@ class EquipmentController extends ControllerBase
             $this->tag->setDefault("desc_short", $equipment->getDescShort());
             $this->tag->setDefault("desc_long", $equipment->getDescLong());
             $this->tag->setDefault("total_count", $equipment->getTotalCount());
-            
         }
     }
+
+
 
     /**
      * Creates a new equipment
@@ -106,16 +121,17 @@ class EquipmentController extends ControllerBase
         }
 
         $equipment = new Equipment();
-        $equipment->setcreateTime($this->request->getPost("create_time", "int"));
-        $equipment->setupdateTime($this->request->getPost("update_time", "int"));
-        $equipment->setdescShort($this->request->getPost("desc_short", "int"));
-        $equipment->setdescLong($this->request->getPost("desc_long", "int"));
+        // will be default on creation: CURRENT_TIMESTAMP
+        //$equipment->setcreateTime($this->request->getPost("create_time", "int"));
+        //$equipment->setupdateTime($this->request->getPost("update_time", "int"));
+        $equipment->setdescShort($this->request->getPost("desc_short", "string"));
+        $equipment->setdescLong($this->request->getPost("desc_long", "string"));
         $equipment->settotalCount($this->request->getPost("total_count", "int"));
-        
+
 
         if (!$equipment->save()) {
             foreach ($equipment->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
@@ -164,17 +180,15 @@ class EquipmentController extends ControllerBase
             return;
         }
 
-        $equipment->setcreateTime($this->request->getPost("create_time", "int"));
+        // do not change createtime - $equipment->setcreateTime($this->request->getPost("create_time", "int"));
         $equipment->setupdateTime($this->request->getPost("update_time", "int"));
         $equipment->setdescShort($this->request->getPost("desc_short", "int"));
         $equipment->setdescLong($this->request->getPost("desc_long", "int"));
         $equipment->settotalCount($this->request->getPost("total_count", "int"));
-        
 
         if (!$equipment->save()) {
-
             foreach ($equipment->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
@@ -216,7 +230,7 @@ class EquipmentController extends ControllerBase
         if (!$equipment->delete()) {
 
             foreach ($equipment->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([

@@ -51,8 +51,10 @@ return [
         'equipment' => [
             'index',
             'search',
+            'delete',
             'edit',
             'create',
+            'new',
             'delete',
         ],
         // todo: setup all dimensions
