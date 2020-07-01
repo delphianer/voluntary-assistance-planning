@@ -1,13 +1,15 @@
-<div class="page-header">
-    <h1>Search equipment</h1>
-    <p>{{ link_to("equipment/new", "Neu: equipment", 'class': 'btn btn-outline-primary btn-sm') }}</p>
+<h1>Search equipment</h1>
+
+<div class="btn-group mb-5" role="group">
+    {{ link_to(url("equipment"), "&larr; Go Back", "class": "btn btn-warning") }}
+    {{ link_to(url("equipment/new"), "Create equipment", 'class': 'btn btn-primary') }}
 </div>
 
 {{ content() }}
 
 {{ flash.output() }}
 
-<form action="equipment/search" class="form-horizontal" method="get">
+<form action="{{ url("equipment/search") }}" class="form-horizontal" method="get">
     <div class="form-group">
     <label for="fieldId" class="col-sm-2 control-label">Id</label>
     <div class="col-sm-10">

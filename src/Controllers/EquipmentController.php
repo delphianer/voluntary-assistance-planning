@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-
+// 
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -29,7 +29,6 @@ class EquipmentController extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
-
         $numberPage = $this->request->getQuery('page', 'int', 1);
         $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Equipment', $_GET)->getParams();
         $parameters['order'] = "id";
@@ -79,7 +78,6 @@ class EquipmentController extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
-
         if (!$this->request->isPost()) {
             $equipment = Equipment::findFirstByid($id);
             if (!$equipment) {
@@ -101,33 +99,33 @@ class EquipmentController extends ControllerBase
             $this->tag->setDefault("desc_short", $equipment->getDescShort());
             $this->tag->setDefault("desc_long", $equipment->getDescLong());
             $this->tag->setDefault("total_count", $equipment->getTotalCount());
+            
         }
     }
-
-
 
     /**
      * Creates a new equipment
      */
     public function createAction()
     {
-        if (!$this->request->isPost()) {
-            $this->dispatcher->forward([
-                'controller' => "equipment",
-                'action' => 'index'
-            ]);
+        $form = new UsersForm();
 
-            return;
+        if (!$this->request->isPost()) {
+            // forward:
+            //$this->dispatcher->forward([ 'controller' => "equipment",'action' => 'index']);
+            foreach ($form->getMessages() as $message) {
+                $this->flash->error((string) $message);
+            }
+            //return;
         }
 
         $equipment = new Equipment();
-        // will be default on creation: CURRENT_TIMESTAMP
-        //$equipment->setcreateTime($this->request->getPost("create_time", "int"));
-        //$equipment->setupdateTime($this->request->getPost("update_time", "int"));
-        $equipment->setdescShort($this->request->getPost("desc_short", "string"));
-        $equipment->setdescLong($this->request->getPost("desc_long", "string"));
+        $equipment->setcreateTime($this->request->getPost("create_time", "int"));
+        $equipment->setupdateTime($this->request->getPost("update_time", "int"));
+        $equipment->setdescShort($this->request->getPost("desc_short", "int"));
+        $equipment->setdescLong($this->request->getPost("desc_long", "int"));
         $equipment->settotalCount($this->request->getPost("total_count", "int"));
-
+        
 
         if (!$equipment->save()) {
             foreach ($equipment->getMessages() as $message) {
@@ -156,7 +154,6 @@ class EquipmentController extends ControllerBase
      */
     public function saveAction()
     {
-
         if (!$this->request->isPost()) {
             $this->dispatcher->forward([
                 'controller' => "equipment",
@@ -180,13 +177,15 @@ class EquipmentController extends ControllerBase
             return;
         }
 
-        // do not change createtime - $equipment->setcreateTime($this->request->getPost("create_time", "int"));
+        $equipment->setcreateTime($this->request->getPost("create_time", "int"));
         $equipment->setupdateTime($this->request->getPost("update_time", "int"));
         $equipment->setdescShort($this->request->getPost("desc_short", "int"));
         $equipment->setdescLong($this->request->getPost("desc_long", "int"));
         $equipment->settotalCount($this->request->getPost("total_count", "int"));
+        
 
         if (!$equipment->save()) {
+
             foreach ($equipment->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }

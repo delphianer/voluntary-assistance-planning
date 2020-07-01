@@ -1,22 +1,25 @@
-<div class="row">
-    <nav>
-        <ul class="pager">
-            <li class="previous">{{ link_to("equipment", "Zurück", 'class': 'btn btn-outline-primary btn-sm') }}</li>
-        </ul>
-    </nav>
+<h1 class="mt-3">Create equipment</h1>
+
+<div class="btn-group mb-5" role="group">
+    {{ link_to(url("equipment"), "&larr; Go Back", "class": "btn btn-warning") }}
 </div>
 
-<div class="page-header">
-    <h1>Create equipment</h1>
-</div>
-
-{# display flashing outputs: #}
 {{ flash.output() }}
 
-{{ content() }}
+<form action="{{ url("equipment/create") }}" class="form-horizontal" method="post">
+    <div class="form-group">
+    <label for="fieldCreateTime" class="col-sm-2 control-label">Create Of Time</label>
+    <div class="col-sm-10">
+        {{ text_field("create_time", "size" : 30, "class" : "form-control", "id" : "fieldCreateTime") }}
+    </div>
+</div>
 
-<form action="/equipment/create" class="form-horizontal" method="post">
-
+<div class="form-group">
+    <label for="fieldUpdateTime" class="col-sm-2 control-label">Update Of Time</label>
+    <div class="col-sm-10">
+        {{ text_field("update_time", "size" : 30, "class" : "form-control", "id" : "fieldUpdateTime") }}
+    </div>
+</div>
 
 <div class="form-group">
     <label for="fieldDescShort" class="col-sm-2 control-label">Desc Of Short</label>
@@ -26,7 +29,7 @@
 </div>
 
 <div class="form-group">
-    <label for="fieldDescLong" class="col-sm-2 control-label">Desc Of Long - todo: big text box</label>
+    <label for="fieldDescLong" class="col-sm-2 control-label">Desc Of Long</label>
     <div class="col-sm-10">
         {{ text_field("desc_long", "size" : 30, "class" : "form-control", "id" : "fieldDescLong") }}
     </div>
@@ -40,9 +43,6 @@
 </div>
 
 
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            {{ submit_button('Save', 'class': 'btn btn-default') }}
-        </div>
-    </div>
+
+    {{ submit_button("Save", "class": "btn btn-success") }}
 </form>
