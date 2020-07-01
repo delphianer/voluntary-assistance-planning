@@ -1,22 +1,13 @@
-<div class="row">
-    <nav>
-        <ul class="pager">
-            <li class="previous">{{ link_to("$plural$", "Zurück", 'class': 'btn btn-outline-primary btn-sm') }}</li>
-        </ul>
-    </nav>
+<h1 class="mt-3">Create $plural$</h1>
+
+<div class="btn-group mb-5" role="group">
+    {{ link_to(url("$plural$"), "&larr; Go Back", "class": "btn btn-warning") }}
 </div>
 
-<div class="page-header">
-    <h1>Create $plural$</h1>
-</div>
+{{ flash.output() }}
 
-{{ content() }}
-
-<form action="$plural$/create" class="form-horizontal" method="post">
+<form action="{{ url("$plural$/create") }}" class="form-horizontal" method="post">
     $captureFields$
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            {{ submit_button('Save', 'class': 'btn btn-default') }}
-        </div>
-    </div>
+
+    {{ submit_button("Save", "class": "btn btn-success") }}
 </form>

@@ -1,10 +1,12 @@
 <?php
 declare(strict_types=1);
 
-$namespace$
+//$namespace$
+namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
+use Vokuro\Forms\UsersForm;
 $useFullyQualifiedModelName$
 
 class $className$Controller extends ControllerBase
@@ -14,7 +16,9 @@ class $className$Controller extends ControllerBase
      */
     public function indexAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
     }
 
     /**
@@ -22,6 +26,9 @@ class $className$Controller extends ControllerBase
      */
     public function searchAction()
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
         $numberPage = $this->request->getQuery('page', 'int', 1);
         $parameters = Criteria::fromInput($this->di, '$fullyQualifiedModelName$', $_GET)->getParams();
         $parameters['order'] = "$pk$";
@@ -56,7 +63,9 @@ class $className$Controller extends ControllerBase
      */
     public function newAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
     }
 
     /**
@@ -66,6 +75,9 @@ class $className$Controller extends ControllerBase
      */
     public function editAction($pkVar$)
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
         if (!$this->request->isPost()) {
             $singularVar$ = $className$::findFirstBy$pk$($pkVar$);
             if (!$singularVar$) {
@@ -90,13 +102,15 @@ class $className$Controller extends ControllerBase
      */
     public function createAction()
     {
-        if (!$this->request->isPost()) {
-            $this->dispatcher->forward([
-                'controller' => "$plural$",
-                'action' => 'index'
-            ]);
+        $form = new UsersForm();
 
-            return;
+        if (!$this->request->isPost()) {
+            // forward:
+            //$this->dispatcher->forward([ 'controller' => "$plural$",'action' => 'index']);
+            foreach ($form->getMessages() as $message) {
+                $this->flash->error((string) $message);
+            }
+            //return;
         }
 
         $singularVar$ = new $className$();
@@ -104,7 +118,7 @@ class $className$Controller extends ControllerBase
 
         if (!$singularVar$->save()) {
             foreach ($singularVar$->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
@@ -129,7 +143,6 @@ class $className$Controller extends ControllerBase
      */
     public function saveAction()
     {
-
         if (!$this->request->isPost()) {
             $this->dispatcher->forward([
                 'controller' => "$plural$",
@@ -158,7 +171,7 @@ class $className$Controller extends ControllerBase
         if (!$singularVar$->save()) {
 
             foreach ($singularVar$->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
@@ -200,7 +213,7 @@ class $className$Controller extends ControllerBase
         if (!$singularVar$->delete()) {
 
             foreach ($singularVar$->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
