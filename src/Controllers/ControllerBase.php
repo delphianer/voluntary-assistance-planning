@@ -58,6 +58,12 @@ class ControllerBase extends Controller
                 return false;
             }
 
+            // TODO-003: remove this bypass...
+            $bypass = (getenv('SECURITY_BYPASS_ROLE_NAME') == $identity['profile']);
+            if ($bypass) {
+                return true;
+            }
+
             // Check if the user have permission to the current option
             if (!$this->acl->isAllowed($identity['profile'], $controllerName, $actionName)) {
                 $this->flash->notice('You don\'t have access to this module: ' . $controllerName . ':' . $actionName);
