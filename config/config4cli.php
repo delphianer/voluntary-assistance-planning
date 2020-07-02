@@ -11,7 +11,6 @@ declare(strict_types=1);
  */
 
 use Phalcon\Logger;
-use function Vokuro\root_path;
 
 defined('BASE_PATH') || define('BASE_PATH', dirname(dirname(__FILE__)));
 defined('APP_PATH') || define('APP_PATH', BASE_PATH.DIRECTORY_SEPARATOR.'src');
