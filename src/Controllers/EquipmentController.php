@@ -8,6 +8,7 @@ use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
 use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Equipment;
+use function Vokuro\getCurrentDateTimeStamp;
 
 class EquipmentController extends ControllerBase
 {
@@ -125,10 +126,8 @@ class EquipmentController extends ControllerBase
         }
 
         $equipment = new Equipment();
-        $equipment->setcreateTime($this->request->getPost("create_time", "int"));
-        $equipment->setupdateTime($this->request->getPost("update_time", "int"));
-        $equipment->setdescShort($this->request->getPost("desc_short", "int"));
-        $equipment->setdescLong($this->request->getPost("desc_long", "int"));
+        $equipment->setdescShort($this->request->getPost("desc_short", "string"));
+        $equipment->setdescLong($this->request->getPost("desc_long", "string"));
         $equipment->settotalCount($this->request->getPost("total_count", "int"));
 
 
@@ -182,15 +181,12 @@ class EquipmentController extends ControllerBase
             return;
         }
 
-        $equipment->setcreateTime($this->request->getPost("create_time", "int"));
-        $equipment->setupdateTime($this->request->getPost("update_time", "int"));
-        $equipment->setdescShort($this->request->getPost("desc_short", "int"));
-        $equipment->setdescLong($this->request->getPost("desc_long", "int"));
+        $equipment->setupdateTime(getCurrentDateTimeStamp());
+        $equipment->setdescShort($this->request->getPost("desc_short", "string"));
+        $equipment->setdescLong($this->request->getPost("desc_long", "string"));
         $equipment->settotalCount($this->request->getPost("total_count", "int"));
 
-
-        if (!$equipment->save()) {
-
+        if (!$equipment->save()){
             foreach ($equipment->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
