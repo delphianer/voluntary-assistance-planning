@@ -36,3 +36,11 @@ function root_path(string $prefix = ''): string
 
     return join(DIRECTORY_SEPARATOR, [$application->getRootPath(), ltrim($prefix, DIRECTORY_SEPARATOR)]);
 }
+
+/**
+ * @return string
+ */
+function getCurrentDateTimeStamp()
+{
+    return date("Y-m-d H:i:s");
+}
