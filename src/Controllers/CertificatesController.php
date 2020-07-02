@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
 use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Certificates;
+use function Vokuro\getCurrentDateTimeStamp;
 
 class CertificatesController extends ControllerBase
 {
@@ -97,11 +98,9 @@ class CertificatesController extends ControllerBase
             $this->view->id = $certificate->getId();
 
             $this->tag->setDefault("id", $certificate->getId());
-            $this->tag->setDefault("create_time", $certificate->getCreateTime());
-            $this->tag->setDefault("update_time", $certificate->getUpdateTime());
             $this->tag->setDefault("desc_short", $certificate->getDescShort());
             $this->tag->setDefault("desc_long", $certificate->getDescLong());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit Certificates :: ");
@@ -124,11 +123,9 @@ class CertificatesController extends ControllerBase
         }
 
         $certificate = new Certificates();
-        $certificate->setcreateTime($this->request->getPost("create_time", "int"));
-        $certificate->setupdateTime($this->request->getPost("update_time", "int"));
-        $certificate->setdescShort($this->request->getPost("desc_short", "int"));
-        $certificate->setdescLong($this->request->getPost("desc_long", "int"));
-        
+        $certificate->setupdateTime(getCurrentDateTimeStamp());
+        $certificate->setdescShort($this->request->getPost("desc_short", "string"));
+        $certificate->setdescLong($this->request->getPost("desc_long", "string"));
 
         if (!$certificate->save()) {
             foreach ($certificate->getMessages() as $message) {
@@ -180,14 +177,11 @@ class CertificatesController extends ControllerBase
             return;
         }
 
-        $certificate->setcreateTime($this->request->getPost("create_time", "int"));
-        $certificate->setupdateTime($this->request->getPost("update_time", "int"));
-        $certificate->setdescShort($this->request->getPost("desc_short", "int"));
-        $certificate->setdescLong($this->request->getPost("desc_long", "int"));
-        
+        $certificate->setupdateTime(getCurrentDateTimeStamp());
+        $certificate->setdescShort($this->request->getPost("desc_short", "string"));
+        $certificate->setdescLong($this->request->getPost("desc_long", "string"));
 
         if (!$certificate->save()) {
-
             foreach ($certificate->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }

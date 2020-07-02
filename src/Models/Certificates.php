@@ -36,30 +36,6 @@ class Certificates extends \Phalcon\Mvc\Model
     protected $id;
 
     /**
-     *
-     * @var string
-     */
-    protected $create_time;
-
-    /**
-     *
-     * @var string
-     */
-    protected $update_time;
-
-    /**
-     *
-     * @var string
-     */
-    protected $desc_short;
-
-    /**
-     *
-     * @var string
-     */
-    protected $desc_long;
-
-    /**
      * Method to set the value of field id
      *
      * @param integer $id

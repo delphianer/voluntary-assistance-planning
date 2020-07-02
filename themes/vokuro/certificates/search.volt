@@ -13,8 +13,6 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Create Of Time</th>
-            <th>Update Of Time</th>
             <th>Desc Of Short</th>
             <th>Desc Of Long</th>
 
@@ -26,8 +24,6 @@
     {% for certificate in page.getItems() %}
         <tr>
             <td>{{ certificate['id'] }}</td>
-            <td>{{ certificate['create_time'] }}</td>
-            <td>{{ certificate['update_time'] }}</td>
             <td>{{ certificate['desc_short'] }}</td>
             <td>{{ certificate['desc_long'] }}</td>
 
