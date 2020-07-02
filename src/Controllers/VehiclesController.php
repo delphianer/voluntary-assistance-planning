@@ -1,10 +1,12 @@
 <?php
 declare(strict_types=1);
 
- 
+// 
+namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
+use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Vehicles;
 
 class VehiclesController extends ControllerBase
@@ -14,7 +16,10 @@ class VehiclesController extends ControllerBase
      */
     public function indexAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
+        $this->view->setVar('extraTitle', "Search vehicles :: ");
     }
 
     /**
@@ -22,6 +27,9 @@ class VehiclesController extends ControllerBase
      */
     public function searchAction()
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
         $numberPage = $this->request->getQuery('page', 'int', 1);
         $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Vehicles', $_GET)->getParams();
         $parameters['order'] = "id";
@@ -48,6 +56,7 @@ class VehiclesController extends ControllerBase
             return;
         }
 
+        $this->view->setVar('extraTitle', "Found vehicles :: ");
         $this->view->page = $paginate;
     }
 
@@ -56,7 +65,10 @@ class VehiclesController extends ControllerBase
      */
     public function newAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
+        $this->view->setVar('extraTitle', "New Vehicles :: ");
     }
 
     /**
@@ -66,6 +78,9 @@ class VehiclesController extends ControllerBase
      */
     public function editAction($id)
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
         if (!$this->request->isPost()) {
             $vehicle = Vehicles::findFirstByid($id);
             if (!$vehicle) {
@@ -94,6 +109,8 @@ class VehiclesController extends ControllerBase
             $this->tag->setDefault("hasDigitalRadioCom", $vehicle->getHasdigitalradiocom());
             
         }
+
+        $this->view->setVar('extraTitle', "Edit Vehicles :: ");
     }
 
     /**
@@ -101,13 +118,15 @@ class VehiclesController extends ControllerBase
      */
     public function createAction()
     {
-        if (!$this->request->isPost()) {
-            $this->dispatcher->forward([
-                'controller' => "vehicles",
-                'action' => 'index'
-            ]);
+        $form = new UsersForm();
 
-            return;
+        if (!$this->request->isPost()) {
+            // forward:
+            //$this->dispatcher->forward([ 'controller' => "vehicles",'action' => 'index']);
+            foreach ($form->getMessages() as $message) {
+                $this->flash->error((string) $message);
+            }
+            //return;
         }
 
         $vehicle = new Vehicles();
@@ -125,7 +144,7 @@ class VehiclesController extends ControllerBase
 
         if (!$vehicle->save()) {
             foreach ($vehicle->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
@@ -150,7 +169,6 @@ class VehiclesController extends ControllerBase
      */
     public function saveAction()
     {
-
         if (!$this->request->isPost()) {
             $this->dispatcher->forward([
                 'controller' => "vehicles",
@@ -189,7 +207,7 @@ class VehiclesController extends ControllerBase
         if (!$vehicle->save()) {
 
             foreach ($vehicle->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
@@ -231,7 +249,7 @@ class VehiclesController extends ControllerBase
         if (!$vehicle->delete()) {
 
             foreach ($vehicle->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([

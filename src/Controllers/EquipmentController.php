@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -19,7 +19,7 @@ class EquipmentController extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
-        $this->view->setVar('extraTitle', "Search equipment :: ");
+        $this->view->setVar('extraTitle', "Search equipment");
     }
 
     /**
@@ -56,7 +56,7 @@ class EquipmentController extends ControllerBase
             return;
         }
 
-        $this->view->setVar('extraTitle', "Found equipment :: ");
+        $this->view->setVar('extraTitle', "Found equipment");
         $this->view->page = $paginate;
     }
 
@@ -68,7 +68,7 @@ class EquipmentController extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
-        $this->view->setVar('extraTitle', "New Equipment :: ");
+        $this->view->setVar('extraTitle', "New Equipment");
     }
 
     /**
@@ -102,10 +102,10 @@ class EquipmentController extends ControllerBase
             $this->tag->setDefault("desc_short", $equipment->getDescShort());
             $this->tag->setDefault("desc_long", $equipment->getDescLong());
             $this->tag->setDefault("total_count", $equipment->getTotalCount());
-            
+
         }
 
-        $this->view->setVar('extraTitle', "Edit Equipment :: ");
+        $this->view->setVar('extraTitle', "Edit Equipment");
     }
 
     /**
@@ -130,7 +130,7 @@ class EquipmentController extends ControllerBase
         $equipment->setdescShort($this->request->getPost("desc_short", "int"));
         $equipment->setdescLong($this->request->getPost("desc_long", "int"));
         $equipment->settotalCount($this->request->getPost("total_count", "int"));
-        
+
 
         if (!$equipment->save()) {
             foreach ($equipment->getMessages() as $message) {
@@ -187,7 +187,7 @@ class EquipmentController extends ControllerBase
         $equipment->setdescShort($this->request->getPost("desc_short", "int"));
         $equipment->setdescLong($this->request->getPost("desc_long", "int"));
         $equipment->settotalCount($this->request->getPost("total_count", "int"));
-        
+
 
         if (!$equipment->save()) {
 

@@ -1,10 +1,12 @@
 <?php
 declare(strict_types=1);
 
- 
+// 
+namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
+use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Vehicleproperties;
 
 class VehiclepropertiesController extends ControllerBase
@@ -14,7 +16,10 @@ class VehiclepropertiesController extends ControllerBase
      */
     public function indexAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
+        $this->view->setVar('extraTitle', "Search vehicleproperties :: ");
     }
 
     /**
@@ -22,6 +27,9 @@ class VehiclepropertiesController extends ControllerBase
      */
     public function searchAction()
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
         $numberPage = $this->request->getQuery('page', 'int', 1);
         $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Vehicleproperties', $_GET)->getParams();
         $parameters['order'] = "id";
@@ -48,6 +56,7 @@ class VehiclepropertiesController extends ControllerBase
             return;
         }
 
+        $this->view->setVar('extraTitle', "Found vehicleproperties :: ");
         $this->view->page = $paginate;
     }
 
@@ -56,7 +65,10 @@ class VehiclepropertiesController extends ControllerBase
      */
     public function newAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
+        $this->view->setVar('extraTitle', "New Vehicleproperties :: ");
     }
 
     /**
@@ -66,6 +78,9 @@ class VehiclepropertiesController extends ControllerBase
      */
     public function editAction($id)
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
         if (!$this->request->isPost()) {
             $vehiclepropertie = Vehicleproperties::findFirstByid($id);
             if (!$vehiclepropertie) {
@@ -92,6 +107,8 @@ class VehiclepropertiesController extends ControllerBase
             $this->tag->setDefault("value_numeric", $vehiclepropertie->getValueNumeric());
             
         }
+
+        $this->view->setVar('extraTitle', "Edit Vehicleproperties :: ");
     }
 
     /**
@@ -99,13 +116,15 @@ class VehiclepropertiesController extends ControllerBase
      */
     public function createAction()
     {
-        if (!$this->request->isPost()) {
-            $this->dispatcher->forward([
-                'controller' => "vehicleproperties",
-                'action' => 'index'
-            ]);
+        $form = new UsersForm();
 
-            return;
+        if (!$this->request->isPost()) {
+            // forward:
+            //$this->dispatcher->forward([ 'controller' => "vehicleproperties",'action' => 'index']);
+            foreach ($form->getMessages() as $message) {
+                $this->flash->error((string) $message);
+            }
+            //return;
         }
 
         $vehiclepropertie = new Vehicleproperties();
@@ -121,7 +140,7 @@ class VehiclepropertiesController extends ControllerBase
 
         if (!$vehiclepropertie->save()) {
             foreach ($vehiclepropertie->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
@@ -146,7 +165,6 @@ class VehiclepropertiesController extends ControllerBase
      */
     public function saveAction()
     {
-
         if (!$this->request->isPost()) {
             $this->dispatcher->forward([
                 'controller' => "vehicleproperties",
@@ -183,7 +201,7 @@ class VehiclepropertiesController extends ControllerBase
         if (!$vehiclepropertie->save()) {
 
             foreach ($vehiclepropertie->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
@@ -225,7 +243,7 @@ class VehiclepropertiesController extends ControllerBase
         if (!$vehiclepropertie->delete()) {
 
             foreach ($vehiclepropertie->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([

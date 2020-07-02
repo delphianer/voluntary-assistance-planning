@@ -1,13 +1,14 @@
-<div class="page-header">
-    <h1>Search vehicleproperties</h1>
-    <p>{{ link_to("vehicleproperties/new", "Neu: vehicleproperties", 'class': 'btn btn-outline-primary btn-sm') }}</p>
+<h1 class="mt-3">Search vehicleproperties</h1>
+
+<div class="btn-group mb-5" role="group">
+    {{ link_to(url("vehicleproperties/new"), "Create vehicleproperties", 'class': 'btn btn-primary') }}
 </div>
 
 {{ content() }}
 
 {{ flash.output() }}
 
-<form action="vehicleproperties/search" class="form-horizontal" method="get">
+<form action="{{ url("vehicleproperties/search") }}" class="form-horizontal" method="get">
     <div class="form-group">
     <label for="fieldId" class="col-sm-2 control-label">Id</label>
     <div class="col-sm-10">
@@ -74,7 +75,7 @@
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            {{ submit_button('Search', 'class': 'btn btn-default') }}
+            {{ submit_button('Search', 'class': 'btn btn-primary') }}
         </div>
     </div>
 </form>

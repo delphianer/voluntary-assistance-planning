@@ -1,18 +1,16 @@
-<div class="row">
-    <nav>
-        <ul class="pager">
-            <li class="previous">{{ link_to("locations", "Zurück", 'class': 'btn btn-outline-primary btn-sm') }}</li>
-        </ul>
-    </nav>
-</div>
+<h1 class="mt-3">Edit locations</h1>
 
-<div class="page-header">
-    <h1>locations bearbeiten</h1>
+<div class="btn-group mb-5" role="group">
+    {{ link_to(url("locations"), "&larr; Go Back", "class": "btn btn-warning") }}
 </div>
 
 {{ content() }}
 
-<form action="locations/save" class="form-horizontal" method="post">
+{{ flash.output() }}
+
+
+<form class="form-horizontal" method="post">
+
     <div class="form-group">
     <label for="fieldCreateTime" class="col-sm-2 control-label">Create Of Time</label>
     <div class="col-sm-10">
@@ -77,11 +75,12 @@
 </div>
 
 
+
     {{ hidden_field("id") }}
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            {{ submit_button('Send', 'class': 'btn btn-default') }}
+            {{ submit_button('Save', 'class': 'btn btn-big btn-success') }}
         </div>
     </div>
 </form>

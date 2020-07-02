@@ -1,63 +1,64 @@
-<div class="row">
-    <nav>
-        <ul class="pager">
-            <li class="previous">{{ link_to("certificates/index", "Zurück", 'class': 'btn btn-outline-primary btn-sm') }}</li>
-            <li class="next">{{ link_to("certificates/new", "Neu", 'class': 'btn btn-outline-success') }}</li>
-        </ul>
-    </nav>
-</div>
+<h1 class="mt-3">Search result</h1>
 
-<div class="page-header">
-    <h1>Search result</h1>
+<div class="btn-group mb-5" role="group">
+    {{ link_to(url("certificates"), "&larr; Go Back", "class": "btn btn-warning") }}
+    {{ link_to(url("certificates/new"), "Create certificates", 'class': 'btn btn-primary') }}
 </div>
 
 {{ content() }}
 
-<div class="row">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Id</th>
+{{ flash.output() }}
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
             <th>Create Of Time</th>
             <th>Update Of Time</th>
             <th>Desc Of Short</th>
             <th>Desc Of Long</th>
 
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for certificate in page.getItems() %}
-            <tr>
-                <td>{{ certificate['id'] }}</td>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for certificate in page.getItems() %}
+        <tr>
+            <td>{{ certificate['id'] }}</td>
             <td>{{ certificate['create_time'] }}</td>
             <td>{{ certificate['update_time'] }}</td>
             <td>{{ certificate['desc_short'] }}</td>
             <td>{{ certificate['desc_long'] }}</td>
 
-                <td>{{ link_to("certificates/edit/"~certificate['id'], "Edit") }}</td>
-                <td>{{ link_to("certificates/delete/"~certificate['id'], "Delete") }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
 
-<div class="row">
-    <div class="col-sm-1">
-        <p class="pagination" style="line-height: 1.42857;padding: 6px 12px;">
-            {{ page.getCurrent()~"/"~page.getTotalItems() }}
-        </p>
-    </div>
-    <div class="col-sm-11">
-        <nav>
-            <ul class="pagination">
-                <li>{{ link_to("certificates/search", "First", false, "class": "page-link", 'id': 'first') }}</li>
-                <li>{{ link_to("certificates/search?page="~page.getPrevious(), "Previous", false, "class": "page-link", 'id': 'previous') }}</li>
-                <li>{{ link_to("certificates/search?page="~page.getNext(), "Next", false, "class": "page-link", 'id': 'next') }}</li>
-                <li>{{ link_to("certificates/search?page="~page.getLast(), "Last", false, "class": "page-link", 'id': 'last') }}</li>
-            </ul>
-        </nav>
-    </div>
-</div>
+            <td class="td-width-12">{{ link_to( url("certificates/edit") ~ certificate['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
+            <td class="td-width-12">{{ link_to( url("certificates/delete") ~ certificate['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="10">
+                No certificates are recorded
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="10" class="text-right">
+            <div class="btn-group" role="group">
+                {{ link_to(url("certificates/search") , '<i class="icon-fast-backward"></i> First', "class": "btn btn-secondary") }}
+                {{ link_to(url("certificates/search?page=") ~ page.previous, '<i class="icon-step-backward"></i> Previous', "class": "btn btn-secondary") }}
+                {{ link_to(url("certificates/search?page=") ~ page.next, '<i class="icon-step-forward"></i> Next', "class": "btn btn-secondary") }}
+                {{ link_to(url("certificates/search?page=") ~ page.last, '<i class="icon-fast-forward"></i> Last', "class": "btn btn-secondary") }}
+            </div>
+
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-secondary" disabled>{{ page.current }}</button>
+                <button type="button" class="btn btn-secondary" disabled>/</button>
+                <button type="button" class="btn btn-secondary" disabled>{{ page.last }}</button>
+            </div>
+        </td>
+    </tr>
+    </tfoot>
+</table>

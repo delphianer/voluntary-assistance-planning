@@ -7,6 +7,30 @@ class Clients extends \Phalcon\Mvc\Model
 
     /**
      *
+     * @var string
+     */
+    protected $create_time;
+
+    /**
+     *
+     * @var string
+     */
+    protected $update_time;
+
+    /**
+     *
+     * @var string
+     */
+    protected $desc_short;
+
+    /**
+     *
+     * @var string
+     */
+    protected $desc_long;
+
+    /**
+     *
      * @var integer
      */
     protected $id;
@@ -167,6 +191,29 @@ class Clients extends \Phalcon\Mvc\Model
     public function getDescLong()
     {
         return $this->desc_long;
+    }
+
+    /**
+     * Returns the value of field contactInformation
+     *
+     * @return string
+     */
+    public function getContactInformation()
+    {
+        return $this->contactInformation;
+    }
+
+    /**
+     * Method to set the value of field contactInformation
+     *
+     * @param string $contactInformation
+     * @return $this
+     */
+    public function setContactInformation($contactInformation)
+    {
+        $this->contactInformation = $contactInformation;
+
+        return $this;
     }
 
     /**

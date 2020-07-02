@@ -1,10 +1,12 @@
 <?php
 declare(strict_types=1);
 
- 
+// 
+namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
+use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Departments;
 
 class DepartmentsController extends ControllerBase
@@ -14,7 +16,10 @@ class DepartmentsController extends ControllerBase
      */
     public function indexAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
+        $this->view->setVar('extraTitle', "Search departments :: ");
     }
 
     /**
@@ -22,6 +27,9 @@ class DepartmentsController extends ControllerBase
      */
     public function searchAction()
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
         $numberPage = $this->request->getQuery('page', 'int', 1);
         $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Departments', $_GET)->getParams();
         $parameters['order'] = "id";
@@ -48,6 +56,7 @@ class DepartmentsController extends ControllerBase
             return;
         }
 
+        $this->view->setVar('extraTitle', "Found departments :: ");
         $this->view->page = $paginate;
     }
 
@@ -56,7 +65,10 @@ class DepartmentsController extends ControllerBase
      */
     public function newAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
+        $this->view->setVar('extraTitle', "New Departments :: ");
     }
 
     /**
@@ -66,6 +78,9 @@ class DepartmentsController extends ControllerBase
      */
     public function editAction($id)
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
         if (!$this->request->isPost()) {
             $department = Departments::findFirstByid($id);
             if (!$department) {
@@ -88,6 +103,8 @@ class DepartmentsController extends ControllerBase
             $this->tag->setDefault("desc_long", $department->getDescLong());
             
         }
+
+        $this->view->setVar('extraTitle', "Edit Departments :: ");
     }
 
     /**
@@ -95,13 +112,15 @@ class DepartmentsController extends ControllerBase
      */
     public function createAction()
     {
-        if (!$this->request->isPost()) {
-            $this->dispatcher->forward([
-                'controller' => "departments",
-                'action' => 'index'
-            ]);
+        $form = new UsersForm();
 
-            return;
+        if (!$this->request->isPost()) {
+            // forward:
+            //$this->dispatcher->forward([ 'controller' => "departments",'action' => 'index']);
+            foreach ($form->getMessages() as $message) {
+                $this->flash->error((string) $message);
+            }
+            //return;
         }
 
         $department = new Departments();
@@ -113,7 +132,7 @@ class DepartmentsController extends ControllerBase
 
         if (!$department->save()) {
             foreach ($department->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
@@ -138,7 +157,6 @@ class DepartmentsController extends ControllerBase
      */
     public function saveAction()
     {
-
         if (!$this->request->isPost()) {
             $this->dispatcher->forward([
                 'controller' => "departments",
@@ -171,7 +189,7 @@ class DepartmentsController extends ControllerBase
         if (!$department->save()) {
 
             foreach ($department->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
@@ -213,7 +231,7 @@ class DepartmentsController extends ControllerBase
         if (!$department->delete()) {
 
             foreach ($department->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([

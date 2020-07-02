@@ -7,6 +7,48 @@ class Vehicleproperties extends \Phalcon\Mvc\Model
 
     /**
      *
+     * @var string
+     */
+    protected $create_time;
+
+    /**
+     *
+     * @var string
+     */
+    protected $update_time;
+
+    /**
+     *
+     * @var string
+     */
+    protected $desc_short;
+
+    /**
+     *
+     * @var string
+     */
+    protected $desc_long;
+
+    /**
+     *
+     * @var string
+     */
+    protected $is_numeric;
+
+    /**
+     *
+     * @var string
+     */
+    protected $value_string;
+
+    /**
+     *
+     * @var double
+     */
+    protected $value_numeric;
+
+    /**
+     *
      * @var integer
      */
     protected $id;
@@ -264,6 +306,29 @@ class Vehicleproperties extends \Phalcon\Mvc\Model
     public function getValueNumeric()
     {
         return $this->value_numeric;
+    }
+
+    /**
+     * Method to set the value of field vehiclesId
+     *
+     * @param integer $vehiclesId
+     * @return $this
+     */
+    public function setVehiclesId($vehiclesId)
+    {
+        $this->vehiclesId = $vehiclesId;
+
+        return $this;
+    }
+
+    /**
+     * Returns the value of field vehiclesId
+     *
+     * @return integer
+     */
+    public function getVehiclesId()
+    {
+        return $this->vehiclesId;
     }
 
     /**

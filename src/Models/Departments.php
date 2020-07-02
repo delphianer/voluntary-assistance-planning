@@ -7,6 +7,30 @@ class Departments extends \Phalcon\Mvc\Model
 
     /**
      *
+     * @var string
+     */
+    protected $create_time;
+
+    /**
+     *
+     * @var string
+     */
+    protected $update_time;
+
+    /**
+     *
+     * @var string
+     */
+    protected $desc_short;
+
+    /**
+     *
+     * @var string
+     */
+    protected $desc_long;
+
+    /**
+     *
      * @var integer
      */
     protected $id;

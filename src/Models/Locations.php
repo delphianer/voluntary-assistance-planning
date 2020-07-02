@@ -7,6 +7,30 @@ class Locations extends \Phalcon\Mvc\Model
 
     /**
      *
+     * @var string
+     */
+    protected $create_time;
+
+    /**
+     *
+     * @var string
+     */
+    protected $update_time;
+
+    /**
+     *
+     * @var string
+     */
+    protected $desc_short;
+
+    /**
+     *
+     * @var string
+     */
+    protected $desc_long;
+
+    /**
+     *
      * @var integer
      */
     protected $id;
@@ -293,6 +317,29 @@ class Locations extends \Phalcon\Mvc\Model
     public function getCountry()
     {
         return $this->country;
+    }
+
+    /**
+     * Method to set the value of field additionalText
+     *
+     * @param string $additionalText
+     * @return $this
+     */
+    public function setAdditionalText($additionalText)
+    {
+        $this->additionalText = $additionalText;
+
+        return $this;
+    }
+
+    /**
+     * Returns the value of field additionalText
+     *
+     * @return string
+     */
+    public function getAdditionalText()
+    {
+        return $this->additionalText;
     }
 
     /**

@@ -19,7 +19,7 @@ class $className$Controller extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
-        $this->view->setVar('extraTitle', "Search $plural$ :: ");
+        $this->view->setVar('extraTitle', "Search $plural$");
     }
 
     /**
@@ -56,7 +56,7 @@ class $className$Controller extends ControllerBase
             return;
         }
 
-        $this->view->setVar('extraTitle', "Found $plural$ :: ");
+        $this->view->setVar('extraTitle', "Found $plural$");
         $this->view->page = $paginate;
     }
 
@@ -68,7 +68,7 @@ class $className$Controller extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
-        $this->view->setVar('extraTitle', "New $className$ :: ");
+        $this->view->setVar('extraTitle', "New $className$");
     }
 
     /**
@@ -99,7 +99,7 @@ class $className$Controller extends ControllerBase
             $assignTagDefaults$
         }
 
-        $this->view->setVar('extraTitle', "Edit $className$ :: ");
+        $this->view->setVar('extraTitle', "Edit $className$");
     }
 
     /**

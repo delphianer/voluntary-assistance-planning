@@ -1,10 +1,12 @@
 <?php
 declare(strict_types=1);
 
- 
+// 
+namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
+use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Certificates;
 
 class CertificatesController extends ControllerBase
@@ -14,7 +16,10 @@ class CertificatesController extends ControllerBase
      */
     public function indexAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
+        $this->view->setVar('extraTitle', "Search certificates :: ");
     }
 
     /**
@@ -22,6 +27,9 @@ class CertificatesController extends ControllerBase
      */
     public function searchAction()
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
         $numberPage = $this->request->getQuery('page', 'int', 1);
         $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Certificates', $_GET)->getParams();
         $parameters['order'] = "id";
@@ -48,6 +56,7 @@ class CertificatesController extends ControllerBase
             return;
         }
 
+        $this->view->setVar('extraTitle', "Found certificates :: ");
         $this->view->page = $paginate;
     }
 
@@ -56,7 +65,10 @@ class CertificatesController extends ControllerBase
      */
     public function newAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
+        $this->view->setVar('extraTitle', "New Certificates :: ");
     }
 
     /**
@@ -66,6 +78,9 @@ class CertificatesController extends ControllerBase
      */
     public function editAction($id)
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
         if (!$this->request->isPost()) {
             $certificate = Certificates::findFirstByid($id);
             if (!$certificate) {
@@ -79,15 +94,17 @@ class CertificatesController extends ControllerBase
                 return;
             }
 
-            $this->view->id = $certificate->id;
+            $this->view->id = $certificate->getId();
 
-            $this->tag->setDefault("id", $certificate->id);
-            $this->tag->setDefault("create_time", $certificate->create_time);
-            $this->tag->setDefault("update_time", $certificate->update_time);
-            $this->tag->setDefault("desc_short", $certificate->desc_short);
-            $this->tag->setDefault("desc_long", $certificate->desc_long);
+            $this->tag->setDefault("id", $certificate->getId());
+            $this->tag->setDefault("create_time", $certificate->getCreateTime());
+            $this->tag->setDefault("update_time", $certificate->getUpdateTime());
+            $this->tag->setDefault("desc_short", $certificate->getDescShort());
+            $this->tag->setDefault("desc_long", $certificate->getDescLong());
             
         }
+
+        $this->view->setVar('extraTitle', "Edit Certificates :: ");
     }
 
     /**
@@ -95,25 +112,27 @@ class CertificatesController extends ControllerBase
      */
     public function createAction()
     {
-        if (!$this->request->isPost()) {
-            $this->dispatcher->forward([
-                'controller' => "certificates",
-                'action' => 'index'
-            ]);
+        $form = new UsersForm();
 
-            return;
+        if (!$this->request->isPost()) {
+            // forward:
+            //$this->dispatcher->forward([ 'controller' => "certificates",'action' => 'index']);
+            foreach ($form->getMessages() as $message) {
+                $this->flash->error((string) $message);
+            }
+            //return;
         }
 
         $certificate = new Certificates();
-        $certificate->createTime = $this->request->getPost("create_time", "int");
-        $certificate->updateTime = $this->request->getPost("update_time", "int");
-        $certificate->descShort = $this->request->getPost("desc_short", "int");
-        $certificate->descLong = $this->request->getPost("desc_long", "int");
+        $certificate->setcreateTime($this->request->getPost("create_time", "int"));
+        $certificate->setupdateTime($this->request->getPost("update_time", "int"));
+        $certificate->setdescShort($this->request->getPost("desc_short", "int"));
+        $certificate->setdescLong($this->request->getPost("desc_long", "int"));
         
 
         if (!$certificate->save()) {
             foreach ($certificate->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
@@ -138,7 +157,6 @@ class CertificatesController extends ControllerBase
      */
     public function saveAction()
     {
-
         if (!$this->request->isPost()) {
             $this->dispatcher->forward([
                 'controller' => "certificates",
@@ -162,22 +180,22 @@ class CertificatesController extends ControllerBase
             return;
         }
 
-        $certificate->createTime = $this->request->getPost("create_time", "int");
-        $certificate->updateTime = $this->request->getPost("update_time", "int");
-        $certificate->descShort = $this->request->getPost("desc_short", "int");
-        $certificate->descLong = $this->request->getPost("desc_long", "int");
+        $certificate->setcreateTime($this->request->getPost("create_time", "int"));
+        $certificate->setupdateTime($this->request->getPost("update_time", "int"));
+        $certificate->setdescShort($this->request->getPost("desc_short", "int"));
+        $certificate->setdescLong($this->request->getPost("desc_long", "int"));
         
 
         if (!$certificate->save()) {
 
             foreach ($certificate->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
                 'controller' => "certificates",
                 'action' => 'edit',
-                'params' => [$certificate->id]
+                'params' => [$certificate->getId()]
             ]);
 
             return;
@@ -213,7 +231,7 @@ class CertificatesController extends ControllerBase
         if (!$certificate->delete()) {
 
             foreach ($certificate->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([

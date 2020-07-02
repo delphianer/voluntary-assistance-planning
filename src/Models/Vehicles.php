@@ -7,6 +7,30 @@ class Vehicles extends \Phalcon\Mvc\Model
 
     /**
      *
+     * @var string
+     */
+    protected $create_time;
+
+    /**
+     *
+     * @var string
+     */
+    protected $update_time;
+
+    /**
+     *
+     * @var string
+     */
+    protected $desc_short;
+
+    /**
+     *
+     * @var string
+     */
+    protected $desc_long;
+
+    /**
+     *
      * @var integer
      */
     protected $id;
@@ -262,6 +286,144 @@ class Vehicles extends \Phalcon\Mvc\Model
     public function getDescLong()
     {
         return $this->desc_long;
+    }
+
+    /**
+     * Returns the value of field technicalInspection
+     *
+     * @return string
+     */
+    public function getTechnicalInspection()
+    {
+        return $this->technicalInspection;
+    }
+
+    /**
+     * Returns the value of field seatCount
+     *
+     * @return integer
+     */
+    public function getSeatCount()
+    {
+        return $this->seatCount;
+    }
+
+    /**
+     * Returns the value of field isAmbulance
+     *
+     * @return string
+     */
+    public function getIsAmbulance()
+    {
+        return $this->isAmbulance;
+    }
+
+    /**
+     * Returns the value of field hasFlashingLights
+     *
+     * @return string
+     */
+    public function getHasFlashingLights()
+    {
+        return $this->hasFlashingLights;
+    }
+
+    /**
+     * Returns the value of field hasRadioCom
+     *
+     * @return string
+     */
+    public function getHasRadioCom()
+    {
+        return $this->hasRadioCom;
+    }
+
+    /**
+     * Returns the value of field hasDigitalRadioCom
+     *
+     * @return string
+     */
+    public function getHasDigitalRadioCom()
+    {
+        return $this->hasDigitalRadioCom;
+    }
+
+    /**
+     * Method to set the value of field technicalInspection
+     *
+     * @param string $technicalInspection
+     * @return $this
+     */
+    public function setTechnicalInspection($technicalInspection)
+    {
+        $this->technicalInspection = $technicalInspection;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field seatCount
+     *
+     * @param integer $seatCount
+     * @return $this
+     */
+    public function setSeatCount($seatCount)
+    {
+        $this->seatCount = $seatCount;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field isAmbulance
+     *
+     * @param string $isAmbulance
+     * @return $this
+     */
+    public function setIsAmbulance($isAmbulance)
+    {
+        $this->isAmbulance = $isAmbulance;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field hasFlashingLights
+     *
+     * @param string $hasFlashingLights
+     * @return $this
+     */
+    public function setHasFlashingLights($hasFlashingLights)
+    {
+        $this->hasFlashingLights = $hasFlashingLights;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field hasRadioCom
+     *
+     * @param string $hasRadioCom
+     * @return $this
+     */
+    public function setHasRadioCom($hasRadioCom)
+    {
+        $this->hasRadioCom = $hasRadioCom;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field hasDigitalRadioCom
+     *
+     * @param string $hasDigitalRadioCom
+     * @return $this
+     */
+    public function setHasDigitalRadioCom($hasDigitalRadioCom)
+    {
+        $this->hasDigitalRadioCom = $hasDigitalRadioCom;
+
+        return $this;
     }
 
     /**

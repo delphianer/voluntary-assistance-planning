@@ -1,10 +1,12 @@
 <?php
 declare(strict_types=1);
 
- 
+// 
+namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
+use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Locations;
 
 class LocationsController extends ControllerBase
@@ -14,7 +16,10 @@ class LocationsController extends ControllerBase
      */
     public function indexAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
+        $this->view->setVar('extraTitle', "Search locations :: ");
     }
 
     /**
@@ -22,6 +27,9 @@ class LocationsController extends ControllerBase
      */
     public function searchAction()
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
         $numberPage = $this->request->getQuery('page', 'int', 1);
         $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Locations', $_GET)->getParams();
         $parameters['order'] = "id";
@@ -48,6 +56,7 @@ class LocationsController extends ControllerBase
             return;
         }
 
+        $this->view->setVar('extraTitle', "Found locations :: ");
         $this->view->page = $paginate;
     }
 
@@ -56,7 +65,10 @@ class LocationsController extends ControllerBase
      */
     public function newAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
+        $this->view->setVar('extraTitle', "New Locations :: ");
     }
 
     /**
@@ -66,6 +78,9 @@ class LocationsController extends ControllerBase
      */
     public function editAction($id)
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
         if (!$this->request->isPost()) {
             $location = Locations::findFirstByid($id);
             if (!$location) {
@@ -93,6 +108,8 @@ class LocationsController extends ControllerBase
             $this->tag->setDefault("country", $location->getCountry());
             
         }
+
+        $this->view->setVar('extraTitle', "Edit Locations :: ");
     }
 
     /**
@@ -100,13 +117,15 @@ class LocationsController extends ControllerBase
      */
     public function createAction()
     {
-        if (!$this->request->isPost()) {
-            $this->dispatcher->forward([
-                'controller' => "locations",
-                'action' => 'index'
-            ]);
+        $form = new UsersForm();
 
-            return;
+        if (!$this->request->isPost()) {
+            // forward:
+            //$this->dispatcher->forward([ 'controller' => "locations",'action' => 'index']);
+            foreach ($form->getMessages() as $message) {
+                $this->flash->error((string) $message);
+            }
+            //return;
         }
 
         $location = new Locations();
@@ -123,7 +142,7 @@ class LocationsController extends ControllerBase
 
         if (!$location->save()) {
             foreach ($location->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
@@ -148,7 +167,6 @@ class LocationsController extends ControllerBase
      */
     public function saveAction()
     {
-
         if (!$this->request->isPost()) {
             $this->dispatcher->forward([
                 'controller' => "locations",
@@ -186,7 +204,7 @@ class LocationsController extends ControllerBase
         if (!$location->save()) {
 
             foreach ($location->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
@@ -228,7 +246,7 @@ class LocationsController extends ControllerBase
         if (!$location->delete()) {
 
             foreach ($location->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([

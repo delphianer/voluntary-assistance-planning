@@ -1,10 +1,12 @@
 <?php
 declare(strict_types=1);
 
- 
+// 
+namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
+use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Clients;
 
 class ClientsController extends ControllerBase
@@ -14,7 +16,10 @@ class ClientsController extends ControllerBase
      */
     public function indexAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
+        $this->view->setVar('extraTitle', "Search clients :: ");
     }
 
     /**
@@ -22,6 +27,9 @@ class ClientsController extends ControllerBase
      */
     public function searchAction()
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
         $numberPage = $this->request->getQuery('page', 'int', 1);
         $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Clients', $_GET)->getParams();
         $parameters['order'] = "id";
@@ -48,6 +56,7 @@ class ClientsController extends ControllerBase
             return;
         }
 
+        $this->view->setVar('extraTitle', "Found clients :: ");
         $this->view->page = $paginate;
     }
 
@@ -56,7 +65,10 @@ class ClientsController extends ControllerBase
      */
     public function newAction()
     {
-        //
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
+        $this->view->setVar('extraTitle', "New Clients :: ");
     }
 
     /**
@@ -66,6 +78,9 @@ class ClientsController extends ControllerBase
      */
     public function editAction($id)
     {
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
         if (!$this->request->isPost()) {
             $client = Clients::findFirstByid($id);
             if (!$client) {
@@ -89,6 +104,8 @@ class ClientsController extends ControllerBase
             $this->tag->setDefault("contactInformation", $client->getContactinformation());
             
         }
+
+        $this->view->setVar('extraTitle', "Edit Clients :: ");
     }
 
     /**
@@ -96,13 +113,15 @@ class ClientsController extends ControllerBase
      */
     public function createAction()
     {
-        if (!$this->request->isPost()) {
-            $this->dispatcher->forward([
-                'controller' => "clients",
-                'action' => 'index'
-            ]);
+        $form = new UsersForm();
 
-            return;
+        if (!$this->request->isPost()) {
+            // forward:
+            //$this->dispatcher->forward([ 'controller' => "clients",'action' => 'index']);
+            foreach ($form->getMessages() as $message) {
+                $this->flash->error((string) $message);
+            }
+            //return;
         }
 
         $client = new Clients();
@@ -115,7 +134,7 @@ class ClientsController extends ControllerBase
 
         if (!$client->save()) {
             foreach ($client->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
@@ -140,7 +159,6 @@ class ClientsController extends ControllerBase
      */
     public function saveAction()
     {
-
         if (!$this->request->isPost()) {
             $this->dispatcher->forward([
                 'controller' => "clients",
@@ -174,7 +192,7 @@ class ClientsController extends ControllerBase
         if (!$client->save()) {
 
             foreach ($client->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
@@ -216,7 +234,7 @@ class ClientsController extends ControllerBase
         if (!$client->delete()) {
 
             foreach ($client->getMessages() as $message) {
-                $this->flash->error($message);
+                $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
