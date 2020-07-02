@@ -48,6 +48,14 @@ class ViewProvider implements ServiceProviderInterface
                         'separator' => '_',
                     ]);
 
+                    $volt->getCompiler()
+                         ->addFunction(
+                             'isAnArray',
+                                function ($resolvedArgs, $exprArgs) {
+                                    return 'is_array('.$resolvedArgs.')';
+                                }
+                         );
+
                     return $volt;
                 },
             ]);
