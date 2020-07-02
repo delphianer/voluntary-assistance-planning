@@ -13,10 +13,9 @@ declare(strict_types=1);
 $actions_std = [
     'index',
     'search',
-    'delete',
-    'edit',
-    'create',
     'new',
+    'create',
+    'edit',
     'delete',
 ];
 
