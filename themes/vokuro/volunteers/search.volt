@@ -13,8 +13,6 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Create Of Time</th>
-            <th>Update Of Time</th>
             <th>FirstName</th>
             <th>LastName</th>
             <th>UserId</th>
@@ -28,16 +26,14 @@
     {% for volunteer in page.getItems() %}
         <tr>
             <td>{{ volunteer['id'] }}</td>
-            <td>{{ volunteer['create_time'] }}</td>
-            <td>{{ volunteer['update_time'] }}</td>
             <td>{{ volunteer['firstName'] }}</td>
             <td>{{ volunteer['lastName'] }}</td>
             <td>{{ volunteer['userId'] }}</td>
             <td>{{ volunteer['departmentId'] }}</td>
 
 
-            <td class="td-width-12">{{ link_to( url("volunteers/edit") ~ volunteer['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
-            <td class="td-width-12">{{ link_to( url("volunteers/delete") ~ volunteer['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
+            <td class="td-width-12">{{ link_to( url("volunteers/edit/") ~ volunteer['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
+            <td class="td-width-12">{{ link_to( url("volunteers/delete/") ~ volunteer['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
         </tr>
     {% else %}
         <tr>

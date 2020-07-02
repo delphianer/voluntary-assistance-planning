@@ -3,7 +3,8 @@ set menus = [
     'Home': null,
     'Manage' : [
         'Certificates' : 'certificates',
-        'Equipment' : 'equipment'
+        'Equipment' : 'equipment',
+        'Volunteers' : 'volunteers'
         ],
     'Admin': [
         'Users': 'users',

@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
 use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Volunteers;
+use function Vokuro\getCurrentDateTimeStamp;
 
 class VolunteersController extends ControllerBase
 {
@@ -97,13 +98,11 @@ class VolunteersController extends ControllerBase
             $this->view->id = $volunteer->getId();
 
             $this->tag->setDefault("id", $volunteer->getId());
-            $this->tag->setDefault("create_time", $volunteer->getCreateTime());
-            $this->tag->setDefault("update_time", $volunteer->getUpdateTime());
             $this->tag->setDefault("firstName", $volunteer->getFirstname());
             $this->tag->setDefault("lastName", $volunteer->getLastname());
             $this->tag->setDefault("userId", $volunteer->getUserid());
             $this->tag->setDefault("departmentId", $volunteer->getDepartmentid());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit Volunteers :: ");
@@ -126,13 +125,11 @@ class VolunteersController extends ControllerBase
         }
 
         $volunteer = new Volunteers();
-        $volunteer->setcreateTime($this->request->getPost("create_time", "int"));
-        $volunteer->setupdateTime($this->request->getPost("update_time", "int"));
-        $volunteer->setfirstName($this->request->getPost("firstName", "int"));
-        $volunteer->setlastName($this->request->getPost("lastName", "int"));
+        $volunteer->setfirstName($this->request->getPost("firstName", "string"));
+        $volunteer->setlastName($this->request->getPost("lastName", "string"));
         $volunteer->setuserId($this->request->getPost("userId", "int"));
         $volunteer->setdepartmentId($this->request->getPost("departmentId", "int"));
-        
+
 
         if (!$volunteer->save()) {
             foreach ($volunteer->getMessages() as $message) {
@@ -184,13 +181,12 @@ class VolunteersController extends ControllerBase
             return;
         }
 
-        $volunteer->setcreateTime($this->request->getPost("create_time", "int"));
-        $volunteer->setupdateTime($this->request->getPost("update_time", "int"));
-        $volunteer->setfirstName($this->request->getPost("firstName", "int"));
-        $volunteer->setlastName($this->request->getPost("lastName", "int"));
+        $volunteer->setupdateTime(getCurrentDateTimeStamp());
+        $volunteer->setfirstName($this->request->getPost("firstName", "string"));
+        $volunteer->setlastName($this->request->getPost("lastName", "string"));
         $volunteer->setuserId($this->request->getPost("userId", "int"));
         $volunteer->setdepartmentId($this->request->getPost("departmentId", "int"));
-        
+
 
         if (!$volunteer->save()) {
 

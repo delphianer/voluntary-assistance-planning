@@ -27,18 +27,6 @@ class Volunteers extends \Phalcon\Mvc\Model
      *
      * @var string
      */
-    protected $create_time;
-
-    /**
-     *
-     * @var string
-     */
-    protected $update_time;
-
-    /**
-     *
-     * @var string
-     */
     protected $firstName;
 
     /**
@@ -220,97 +208,6 @@ class Volunteers extends \Phalcon\Mvc\Model
         return $this->departmentId;
     }
 
-    /**
-     * Method to set the value of field firstName
-     *
-     * @param string $firstName
-     * @return $this
-     */
-    public function setFirstName($firstName)
-    {
-        $this->firstName = $firstName;
-
-        return $this;
-    }
-
-    /**
-     * Method to set the value of field lastName
-     *
-     * @param string $lastName
-     * @return $this
-     */
-    public function setLastName($lastName)
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    /**
-     * Method to set the value of field userId
-     *
-     * @param integer $userId
-     * @return $this
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Method to set the value of field departmentId
-     *
-     * @param integer $departmentId
-     * @return $this
-     */
-    public function setDepartmentId($departmentId)
-    {
-        $this->departmentId = $departmentId;
-
-        return $this;
-    }
-
-    /**
-     * Returns the value of field firstName
-     *
-     * @return string
-     */
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * Returns the value of field lastName
-     *
-     * @return string
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * Returns the value of field userId
-     *
-     * @return integer
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * Returns the value of field departmentId
-     *
-     * @return integer
-     */
-    public function getDepartmentId()
-    {
-        return $this->departmentId;
-    }
 
     /**
      * Initialize method for model.
