@@ -16,6 +16,6 @@ use function Vokuro\root_path;
 $standardConfigFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . "config.orig.php";
 $cliConfigFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . "config4cli.php";
 
-return function_exists("root_path") ?
+return isset($_ENV['NORMAL_STARTUP']) ?
     include_once( $standardConfigFile) :
     include_once( $cliConfigFile) ;

@@ -13,6 +13,7 @@ use Vokuro\Application as VokuroApplication;
 
 error_reporting(E_ALL);
 $rootPath = dirname(__DIR__);
+$_ENV['NORMAL_STARTUP'] = true; // used in config.php to decide if webtools or normal start ;)
 
 try {
     require_once $rootPath . '/vendor/autoload.php';

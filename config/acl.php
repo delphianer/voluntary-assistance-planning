@@ -10,6 +10,18 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+$actions_std = [
+    'index',
+    'search',
+    'delete',
+    'edit',
+    'create',
+    'new',
+    'delete',
+];
+
+
+
 return [
     'private' => [
         'users' => [
@@ -27,39 +39,18 @@ return [
             'create',
             'delete',
         ],
-        'certificates' => [
-            'index',
-            'search',
-            'edit',
-            'create',
-            'delete',
-        ],
-        'clients' => [
-            'index',
-            'search',
-            'edit',
-            'create',
-            'delete',
-        ],
-        'departments' => [
-            'index',
-            'search',
-            'edit',
-            'create',
-            'delete',
-        ],
-        'equipment' => [
-            'index',
-            'search',
-            'delete',
-            'edit',
-            'create',
-            'new',
-            'delete',
-        ],
-        // todo: setup all dimensions
         'permissions' => [
             'index',
         ],
+        // vap own defines:
+        'certificates' => $actions_std,
+        'clients' => $actions_std,
+        'departments' => $actions_std,
+        'equipment' => $actions_std,
+        'locations' => $actions_std,
+        'vehicleporperties' => $actions_std,
+        'vehicle' => $actions_std,
+        'volunteers' => $actions_std,
+        // todo: setup all dimensions
     ],
 ];
