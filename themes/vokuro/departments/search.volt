@@ -32,8 +32,8 @@
             <td>{{ department['desc_long'] }}</td>
 
 
-            <td class="td-width-12">{{ link_to( url("departments/edit") ~ department['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
-            <td class="td-width-12">{{ link_to( url("departments/delete") ~ department['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
+            <td class="td-width-12">{{ link_to( url("departments/edit/") ~ department['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
+            <td class="td-width-12">{{ link_to( url("departments/delete/") ~ department['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
         </tr>
     {% else %}
         <tr>

@@ -19,7 +19,7 @@ class DepartmentsController extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
-        $this->view->setVar('extraTitle', "Search departments :: ");
+        $this->view->setVar('extraTitle', "Search departments");
     }
 
     /**
@@ -56,7 +56,7 @@ class DepartmentsController extends ControllerBase
             return;
         }
 
-        $this->view->setVar('extraTitle', "Found departments :: ");
+        $this->view->setVar('extraTitle', "Found departments");
         $this->view->page = $paginate;
     }
 
@@ -68,7 +68,7 @@ class DepartmentsController extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
-        $this->view->setVar('extraTitle', "New Departments :: ");
+        $this->view->setVar('extraTitle', "New Departments");
     }
 
     /**
@@ -104,7 +104,7 @@ class DepartmentsController extends ControllerBase
             
         }
 
-        $this->view->setVar('extraTitle', "Edit Departments :: ");
+        $this->view->setVar('extraTitle', "Edit Departments");
     }
 
     /**

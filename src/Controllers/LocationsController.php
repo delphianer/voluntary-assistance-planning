@@ -19,7 +19,7 @@ class LocationsController extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
-        $this->view->setVar('extraTitle', "Search locations :: ");
+        $this->view->setVar('extraTitle', "Search locations");
     }
 
     /**
@@ -56,7 +56,7 @@ class LocationsController extends ControllerBase
             return;
         }
 
-        $this->view->setVar('extraTitle', "Found locations :: ");
+        $this->view->setVar('extraTitle', "Found locations");
         $this->view->page = $paginate;
     }
 
@@ -68,7 +68,7 @@ class LocationsController extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
-        $this->view->setVar('extraTitle', "New Locations :: ");
+        $this->view->setVar('extraTitle', "New Locations");
     }
 
     /**
@@ -109,7 +109,7 @@ class LocationsController extends ControllerBase
             
         }
 
-        $this->view->setVar('extraTitle', "Edit Locations :: ");
+        $this->view->setVar('extraTitle', "Edit Locations");
     }
 
     /**

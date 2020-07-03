@@ -7,6 +7,12 @@ class Clients extends \Phalcon\Mvc\Model
 
     /**
      *
+     * @var integer
+     */
+    protected $id;
+
+    /**
+     *
      * @var string
      */
     protected $create_time;
@@ -28,12 +34,6 @@ class Clients extends \Phalcon\Mvc\Model
      * @var string
      */
     protected $desc_long;
-
-    /**
-     *
-     * @var integer
-     */
-    protected $id;
 
     /**
      *

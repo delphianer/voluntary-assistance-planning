@@ -19,7 +19,7 @@ class ClientsController extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
-        $this->view->setVar('extraTitle', "Search clients :: ");
+        $this->view->setVar('extraTitle', "Search clients");
     }
 
     /**
@@ -56,7 +56,7 @@ class ClientsController extends ControllerBase
             return;
         }
 
-        $this->view->setVar('extraTitle', "Found clients :: ");
+        $this->view->setVar('extraTitle', "Found clients");
         $this->view->page = $paginate;
     }
 
@@ -68,7 +68,7 @@ class ClientsController extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
-        $this->view->setVar('extraTitle', "New Clients :: ");
+        $this->view->setVar('extraTitle', "New Clients");
     }
 
     /**
@@ -105,7 +105,7 @@ class ClientsController extends ControllerBase
             
         }
 
-        $this->view->setVar('extraTitle', "Edit Clients :: ");
+        $this->view->setVar('extraTitle', "Edit Clients");
     }
 
     /**

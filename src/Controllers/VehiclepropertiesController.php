@@ -19,7 +19,7 @@ class VehiclepropertiesController extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
-        $this->view->setVar('extraTitle', "Search vehicleproperties :: ");
+        $this->view->setVar('extraTitle', "Search vehicleproperties");
     }
 
     /**
@@ -56,7 +56,7 @@ class VehiclepropertiesController extends ControllerBase
             return;
         }
 
-        $this->view->setVar('extraTitle', "Found vehicleproperties :: ");
+        $this->view->setVar('extraTitle', "Found vehicleproperties");
         $this->view->page = $paginate;
     }
 
@@ -68,7 +68,7 @@ class VehiclepropertiesController extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
-        $this->view->setVar('extraTitle', "New Vehicleproperties :: ");
+        $this->view->setVar('extraTitle', "New Vehicleproperties");
     }
 
     /**
@@ -108,7 +108,7 @@ class VehiclepropertiesController extends ControllerBase
             
         }
 
-        $this->view->setVar('extraTitle', "Edit Vehicleproperties :: ");
+        $this->view->setVar('extraTitle', "Edit Vehicleproperties");
     }
 
     /**

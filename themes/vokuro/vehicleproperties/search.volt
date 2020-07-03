@@ -40,8 +40,8 @@
             <td>{{ vehiclepropertie['value_numeric'] }}</td>
 
 
-            <td class="td-width-12">{{ link_to( url("vehicleproperties/edit") ~ vehiclepropertie['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
-            <td class="td-width-12">{{ link_to( url("vehicleproperties/delete") ~ vehiclepropertie['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
+            <td class="td-width-12">{{ link_to( url("vehicleproperties/edit/") ~ vehiclepropertie['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
+            <td class="td-width-12">{{ link_to( url("vehicleproperties/delete/") ~ vehiclepropertie['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
         </tr>
     {% else %}
         <tr>
