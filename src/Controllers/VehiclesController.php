@@ -1,13 +1,15 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
 use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Vehicles;
+use function Vokuro\getCurrentDateTimeStamp;
+use function Vokuro\translateYesNo;
 
 class VehiclesController extends ControllerBase
 {
@@ -107,7 +109,7 @@ class VehiclesController extends ControllerBase
             $this->tag->setDefault("hasFlashingLights", $vehicle->getHasflashinglights());
             $this->tag->setDefault("hasRadioCom", $vehicle->getHasradiocom());
             $this->tag->setDefault("hasDigitalRadioCom", $vehicle->getHasdigitalradiocom());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit Vehicles");
@@ -130,17 +132,8 @@ class VehiclesController extends ControllerBase
         }
 
         $vehicle = new Vehicles();
-        $vehicle->setcreateTime($this->request->getPost("create_time", "int"));
-        $vehicle->setupdateTime($this->request->getPost("update_time", "int"));
-        $vehicle->setdescShort($this->request->getPost("desc_short", "int"));
-        $vehicle->setdescLong($this->request->getPost("desc_long", "int"));
-        $vehicle->settechnicalInspection($this->request->getPost("technicalInspection", "int"));
-        $vehicle->setseatCount($this->request->getPost("seatCount", "int"));
-        $vehicle->setisAmbulance($this->request->getPost("isAmbulance", "int"));
-        $vehicle->sethasFlashingLights($this->request->getPost("hasFlashingLights", "int"));
-        $vehicle->sethasRadioCom($this->request->getPost("hasRadioCom", "int"));
-        $vehicle->sethasDigitalRadioCom($this->request->getPost("hasDigitalRadioCom", "int"));
-        
+        $this->setVehicleDetails($vehicle);
+
 
         if (!$vehicle->save()) {
             foreach ($vehicle->getMessages() as $message) {
@@ -192,20 +185,11 @@ class VehiclesController extends ControllerBase
             return;
         }
 
-        $vehicle->setcreateTime($this->request->getPost("create_time", "int"));
-        $vehicle->setupdateTime($this->request->getPost("update_time", "int"));
-        $vehicle->setdescShort($this->request->getPost("desc_short", "int"));
-        $vehicle->setdescLong($this->request->getPost("desc_long", "int"));
-        $vehicle->settechnicalInspection($this->request->getPost("technicalInspection", "int"));
-        $vehicle->setseatCount($this->request->getPost("seatCount", "int"));
-        $vehicle->setisAmbulance($this->request->getPost("isAmbulance", "int"));
-        $vehicle->sethasFlashingLights($this->request->getPost("hasFlashingLights", "int"));
-        $vehicle->sethasRadioCom($this->request->getPost("hasRadioCom", "int"));
-        $vehicle->sethasDigitalRadioCom($this->request->getPost("hasDigitalRadioCom", "int"));
-        
+        $vehicle->setupdateTime(getCurrentDateTimeStamp());
+        $this->setVehicleDetails($vehicle);
+
 
         if (!$vehicle->save()) {
-
             foreach ($vehicle->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -247,7 +231,6 @@ class VehiclesController extends ControllerBase
         }
 
         if (!$vehicle->delete()) {
-
             foreach ($vehicle->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -266,5 +249,20 @@ class VehiclesController extends ControllerBase
             'controller' => "vehicles",
             'action' => "index"
         ]);
+    }
+
+    /**
+     * @param $vehicle
+     */
+    public function setVehicleDetails($vehicle): void
+    {
+        $vehicle->setdescShort($this->request->getPost("desc_short", "string"));
+        $vehicle->setdescLong($this->request->getPost("desc_long", "string"));
+        $vehicle->settechnicalInspection($this->request->getPost("technicalInspection", "DateTime"));
+        $vehicle->setseatCount($this->request->getPost("seatCount", "int"));
+        $vehicle->setisAmbulance(translateYesNo($this->request->getPost("isAmbulance", "int")));
+        $vehicle->sethasFlashingLights(translateYesNo($this->request->getPost("hasFlashingLights", "int")));
+        $vehicle->sethasRadioCom(translateYesNo($this->request->getPost("hasRadioCom", "int")));
+        $vehicle->sethasDigitalRadioCom(translateYesNo($this->request->getPost("hasDigitalRadioCom", "int")));
     }
 }

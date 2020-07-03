@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
 use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Clients;
+use function Vokuro\getCurrentDateTimeStamp;
 
 class ClientsController extends ControllerBase
 {
@@ -102,7 +103,7 @@ class ClientsController extends ControllerBase
             $this->tag->setDefault("desc_short", $client->getDescShort());
             $this->tag->setDefault("desc_long", $client->getDescLong());
             $this->tag->setDefault("contactInformation", $client->getContactinformation());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit Clients");
@@ -125,12 +126,8 @@ class ClientsController extends ControllerBase
         }
 
         $client = new Clients();
-        $client->setcreateTime($this->request->getPost("create_time", "int"));
-        $client->setupdateTime($this->request->getPost("update_time", "int"));
-        $client->setdescShort($this->request->getPost("desc_short", "int"));
-        $client->setdescLong($this->request->getPost("desc_long", "int"));
-        $client->setcontactInformation($this->request->getPost("contactInformation", "int"));
-        
+        $this->setClientDetails($client);
+
 
         if (!$client->save()) {
             foreach ($client->getMessages() as $message) {
@@ -182,12 +179,9 @@ class ClientsController extends ControllerBase
             return;
         }
 
-        $client->setcreateTime($this->request->getPost("create_time", "int"));
-        $client->setupdateTime($this->request->getPost("update_time", "int"));
-        $client->setdescShort($this->request->getPost("desc_short", "int"));
-        $client->setdescLong($this->request->getPost("desc_long", "int"));
-        $client->setcontactInformation($this->request->getPost("contactInformation", "int"));
-        
+        $client->setupdateTime(getCurrentDateTimeStamp());
+        $this->setClientDetails($client);
+
 
         if (!$client->save()) {
 
@@ -232,7 +226,6 @@ class ClientsController extends ControllerBase
         }
 
         if (!$client->delete()) {
-
             foreach ($client->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -251,5 +244,15 @@ class ClientsController extends ControllerBase
             'controller' => "clients",
             'action' => "index"
         ]);
+    }
+
+    /**
+     * @param Clients $client
+     */
+    public function setClientDetails(Clients $client): void
+    {
+        $client->setdescShort($this->request->getPost("desc_short", "string"));
+        $client->setdescLong($this->request->getPost("desc_long", "string"));
+        $client->setcontactInformation($this->request->getPost("contactInformation", "string"));
     }
 }

@@ -9,19 +9,6 @@
 {{ flash.output() }}
 
 <form action="{{ url("vehicles/search") }}" class="form-horizontal" method="get">
-    <div class="form-group">
-    <label for="fieldId" class="col-sm-2 control-label">Id</label>
-    <div class="col-sm-10">
-        {{ text_field("id", "type" : "numeric", "class" : "form-control", "id" : "fieldId") }}
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="fieldCreateTime" class="col-sm-2 control-label">Create Of Time</label>
-    <div class="col-sm-10">
-        {{ text_field("create_time", "size" : 30, "class" : "form-control", "id" : "fieldCreateTime") }}
-    </div>
-</div>
 
 <div class="form-group">
     <label for="fieldUpdateTime" class="col-sm-2 control-label">Update Of Time</label>

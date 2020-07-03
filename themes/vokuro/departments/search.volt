@@ -13,8 +13,6 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Create Of Time</th>
-            <th>Update Of Time</th>
             <th>Desc Of Short</th>
             <th>Desc Of Long</th>
 
@@ -26,11 +24,8 @@
     {% for department in page.getItems() %}
         <tr>
             <td>{{ department['id'] }}</td>
-            <td>{{ department['create_time'] }}</td>
-            <td>{{ department['update_time'] }}</td>
             <td>{{ department['desc_short'] }}</td>
             <td>{{ department['desc_long'] }}</td>
-
 
             <td class="td-width-12">{{ link_to( url("departments/edit/") ~ department['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
             <td class="td-width-12">{{ link_to( url("departments/delete/") ~ department['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>

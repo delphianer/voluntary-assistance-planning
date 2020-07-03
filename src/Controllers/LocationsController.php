@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
 use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Locations;
+use function Vokuro\getCurrentDateTimeStamp;
 
 class LocationsController extends ControllerBase
 {
@@ -106,7 +107,7 @@ class LocationsController extends ControllerBase
             $this->tag->setDefault("postalcode", $location->getPostalcode());
             $this->tag->setDefault("city", $location->getCity());
             $this->tag->setDefault("country", $location->getCountry());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit Locations");
@@ -129,16 +130,8 @@ class LocationsController extends ControllerBase
         }
 
         $location = new Locations();
-        $location->setcreateTime($this->request->getPost("create_time", "int"));
-        $location->setupdateTime($this->request->getPost("update_time", "int"));
-        $location->setdescShort($this->request->getPost("desc_short", "int"));
-        $location->setdescLong($this->request->getPost("desc_long", "int"));
-        $location->setstreet($this->request->getPost("street", "int"));
-        $location->setadditionalText($this->request->getPost("additionalText", "int"));
-        $location->setpostalcode($this->request->getPost("postalcode", "int"));
-        $location->setcity($this->request->getPost("city", "int"));
-        $location->setcountry($this->request->getPost("country", "int"));
-        
+        $this->setLocationDetails($location);
+
 
         if (!$location->save()) {
             foreach ($location->getMessages() as $message) {
@@ -190,16 +183,9 @@ class LocationsController extends ControllerBase
             return;
         }
 
-        $location->setcreateTime($this->request->getPost("create_time", "int"));
-        $location->setupdateTime($this->request->getPost("update_time", "int"));
-        $location->setdescShort($this->request->getPost("desc_short", "int"));
-        $location->setdescLong($this->request->getPost("desc_long", "int"));
-        $location->setstreet($this->request->getPost("street", "int"));
-        $location->setadditionalText($this->request->getPost("additionalText", "int"));
-        $location->setpostalcode($this->request->getPost("postalcode", "int"));
-        $location->setcity($this->request->getPost("city", "int"));
-        $location->setcountry($this->request->getPost("country", "int"));
-        
+        $location->setupdateTime(getCurrentDateTimeStamp());
+        $this->setLocationDetails($location);
+
 
         if (!$location->save()) {
 
@@ -244,7 +230,6 @@ class LocationsController extends ControllerBase
         }
 
         if (!$location->delete()) {
-
             foreach ($location->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -263,5 +248,19 @@ class LocationsController extends ControllerBase
             'controller' => "locations",
             'action' => "index"
         ]);
+    }
+
+    /**
+     * @param $location
+     */
+    public function setLocationDetails($location): void
+    {
+        $location->setdescShort($this->request->getPost("desc_short", "string"));
+        $location->setdescLong($this->request->getPost("desc_long", "string"));
+        $location->setstreet($this->request->getPost("street", "string"));
+        $location->setadditionalText($this->request->getPost("additionalText", "string"));
+        $location->setpostalcode($this->request->getPost("postalcode", "string"));
+        $location->setcity($this->request->getPost("city", "string"));
+        $location->setcountry($this->request->getPost("country", "string"));
     }
 }

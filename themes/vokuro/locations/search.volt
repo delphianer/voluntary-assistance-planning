@@ -13,8 +13,6 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Create Of Time</th>
-            <th>Update Of Time</th>
             <th>Desc Of Short</th>
             <th>Desc Of Long</th>
             <th>Street</th>
@@ -31,8 +29,6 @@
     {% for location in page.getItems() %}
         <tr>
             <td>{{ location['id'] }}</td>
-            <td>{{ location['create_time'] }}</td>
-            <td>{{ location['update_time'] }}</td>
             <td>{{ location['desc_short'] }}</td>
             <td>{{ location['desc_long'] }}</td>
             <td>{{ location['street'] }}</td>

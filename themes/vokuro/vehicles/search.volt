@@ -13,8 +13,6 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Create Of Time</th>
-            <th>Update Of Time</th>
             <th>Desc Of Short</th>
             <th>Desc Of Long</th>
             <th>TechnicalInspection</th>
@@ -32,8 +30,6 @@
     {% for vehicle in page.getItems() %}
         <tr>
             <td>{{ vehicle['id'] }}</td>
-            <td>{{ vehicle['create_time'] }}</td>
-            <td>{{ vehicle['update_time'] }}</td>
             <td>{{ vehicle['desc_short'] }}</td>
             <td>{{ vehicle['desc_long'] }}</td>
             <td>{{ vehicle['technicalInspection'] }}</td>

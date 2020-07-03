@@ -1,13 +1,15 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
 use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Vehicleproperties;
+use function Vokuro\getCurrentDateTimeStamp;
+use function Vokuro\translateYesNo;
 
 class VehiclepropertiesController extends ControllerBase
 {
@@ -105,7 +107,7 @@ class VehiclepropertiesController extends ControllerBase
             $this->tag->setDefault("is_numeric", $vehiclepropertie->getIsNumeric());
             $this->tag->setDefault("value_string", $vehiclepropertie->getValueString());
             $this->tag->setDefault("value_numeric", $vehiclepropertie->getValueNumeric());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit Vehicleproperties");
@@ -128,15 +130,8 @@ class VehiclepropertiesController extends ControllerBase
         }
 
         $vehiclepropertie = new Vehicleproperties();
-        $vehiclepropertie->setvehiclesId($this->request->getPost("vehiclesId", "int"));
-        $vehiclepropertie->setcreateTime($this->request->getPost("create_time", "int"));
-        $vehiclepropertie->setupdateTime($this->request->getPost("update_time", "int"));
-        $vehiclepropertie->setdescShort($this->request->getPost("desc_short", "int"));
-        $vehiclepropertie->setdescLong($this->request->getPost("desc_long", "int"));
-        $vehiclepropertie->setisNumeric($this->request->getPost("is_numeric", "int"));
-        $vehiclepropertie->setvalueString($this->request->getPost("value_string", "int"));
-        $vehiclepropertie->setvalueNumeric($this->request->getPost("value_numeric", "int"));
-        
+        $this->setVehiclePropertieDetails($vehiclepropertie);
+
 
         if (!$vehiclepropertie->save()) {
             foreach ($vehiclepropertie->getMessages() as $message) {
@@ -188,15 +183,9 @@ class VehiclepropertiesController extends ControllerBase
             return;
         }
 
-        $vehiclepropertie->setvehiclesId($this->request->getPost("vehiclesId", "int"));
-        $vehiclepropertie->setcreateTime($this->request->getPost("create_time", "int"));
-        $vehiclepropertie->setupdateTime($this->request->getPost("update_time", "int"));
-        $vehiclepropertie->setdescShort($this->request->getPost("desc_short", "int"));
-        $vehiclepropertie->setdescLong($this->request->getPost("desc_long", "int"));
-        $vehiclepropertie->setisNumeric($this->request->getPost("is_numeric", "int"));
-        $vehiclepropertie->setvalueString($this->request->getPost("value_string", "int"));
-        $vehiclepropertie->setvalueNumeric($this->request->getPost("value_numeric", "int"));
-        
+        $vehiclepropertie->setupdateTime(getCurrentDateTimeStamp());
+        $this->setVehiclePropertieDetails($vehiclepropertie);
+
 
         if (!$vehiclepropertie->save()) {
 
@@ -241,7 +230,6 @@ class VehiclepropertiesController extends ControllerBase
         }
 
         if (!$vehiclepropertie->delete()) {
-
             foreach ($vehiclepropertie->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -260,5 +248,18 @@ class VehiclepropertiesController extends ControllerBase
             'controller' => "vehicleproperties",
             'action' => "index"
         ]);
+    }
+
+    /**
+     * @param $vehiclepropertie
+     */
+    public function setVehiclePropertieDetails($vehiclepropertie): void
+    {
+        $vehiclepropertie->setvehiclesId($this->request->getPost("vehiclesId", "string"));
+        $vehiclepropertie->setdescShort($this->request->getPost("desc_short", "string"));
+        $vehiclepropertie->setdescLong($this->request->getPost("desc_long", "int"));
+        $vehiclepropertie->setisNumeric(translateYesNo($this->request->getPost("is_numeric", "int")));
+        $vehiclepropertie->setvalueString($this->request->getPost("value_string", "string"));
+        $vehiclepropertie->setvalueNumeric($this->request->getPost("value_numeric", "float"));
     }
 }

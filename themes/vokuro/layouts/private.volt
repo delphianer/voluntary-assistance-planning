@@ -3,7 +3,14 @@ set menus = [
     'Home': null,
     'Manage' : [
         'Certificates' : 'certificates',
+        'Departments' : 'departments',
         'Equipment' : 'equipment',
+        'Locations' : 'locations',
+        'Vehicles' : 'vehicles',
+        'Vehicleproperties' : 'vehicleproperties'
+        ],
+    'Manage People': [
+        'Clients' : 'clients',
         'Volunteers' : 'volunteers'
         ],
     'Admin': [

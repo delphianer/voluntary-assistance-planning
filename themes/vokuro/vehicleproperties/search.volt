@@ -14,8 +14,6 @@
         <tr>
             <th>Id</th>
             <th>VehiclesId</th>
-            <th>Create Of Time</th>
-            <th>Update Of Time</th>
             <th>Desc Of Short</th>
             <th>Desc Of Long</th>
             <th>Is Of Numeric</th>
@@ -31,8 +29,6 @@
         <tr>
             <td>{{ vehiclepropertie['id'] }}</td>
             <td>{{ vehiclepropertie['vehiclesId'] }}</td>
-            <td>{{ vehiclepropertie['create_time'] }}</td>
-            <td>{{ vehiclepropertie['update_time'] }}</td>
             <td>{{ vehiclepropertie['desc_short'] }}</td>
             <td>{{ vehiclepropertie['desc_long'] }}</td>
             <td>{{ vehiclepropertie['is_numeric'] }}</td>

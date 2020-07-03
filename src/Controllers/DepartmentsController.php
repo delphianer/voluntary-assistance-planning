@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
 use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Departments;
+use function Vokuro\getCurrentDateTimeStamp;
 
 class DepartmentsController extends ControllerBase
 {
@@ -101,7 +102,7 @@ class DepartmentsController extends ControllerBase
             $this->tag->setDefault("update_time", $department->getUpdateTime());
             $this->tag->setDefault("desc_short", $department->getDescShort());
             $this->tag->setDefault("desc_long", $department->getDescLong());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit Departments");
@@ -124,11 +125,8 @@ class DepartmentsController extends ControllerBase
         }
 
         $department = new Departments();
-        $department->setcreateTime($this->request->getPost("create_time", "int"));
-        $department->setupdateTime($this->request->getPost("update_time", "int"));
-        $department->setdescShort($this->request->getPost("desc_short", "int"));
-        $department->setdescLong($this->request->getPost("desc_long", "int"));
-        
+        $this->setDepartmentDetails($department);
+
 
         if (!$department->save()) {
             foreach ($department->getMessages() as $message) {
@@ -180,11 +178,9 @@ class DepartmentsController extends ControllerBase
             return;
         }
 
-        $department->setcreateTime($this->request->getPost("create_time", "int"));
-        $department->setupdateTime($this->request->getPost("update_time", "int"));
-        $department->setdescShort($this->request->getPost("desc_short", "int"));
-        $department->setdescLong($this->request->getPost("desc_long", "int"));
-        
+        $department->setupdateTime(getCurrentDateTimeStamp());
+        $this->setDepartmentDetails($department);
+
 
         if (!$department->save()) {
 
@@ -229,7 +225,6 @@ class DepartmentsController extends ControllerBase
         }
 
         if (!$department->delete()) {
-
             foreach ($department->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -248,5 +243,14 @@ class DepartmentsController extends ControllerBase
             'controller' => "departments",
             'action' => "index"
         ]);
+    }
+
+    /**
+     * @param Departments $department
+     */
+    public function setDepartmentDetails(Departments $department): void
+    {
+        $department->setdescShort($this->request->getPost("desc_short", "string"));
+        $department->setdescLong($this->request->getPost("desc_long", "string"));
     }
 }

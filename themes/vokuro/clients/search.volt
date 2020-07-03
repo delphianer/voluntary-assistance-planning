@@ -13,8 +13,6 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Create Of Time</th>
-            <th>Update Of Time</th>
             <th>Desc Of Short</th>
             <th>Desc Of Long</th>
             <th>ContactInformation</th>
@@ -27,8 +25,6 @@
     {% for client in page.getItems() %}
         <tr>
             <td>{{ client['id'] }}</td>
-            <td>{{ client['create_time'] }}</td>
-            <td>{{ client['update_time'] }}</td>
             <td>{{ client['desc_short'] }}</td>
             <td>{{ client['desc_long'] }}</td>
             <td>{{ client['contactInformation'] }}</td>

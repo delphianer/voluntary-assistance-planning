@@ -44,3 +44,13 @@ function getCurrentDateTimeStamp()
 {
     return date("Y-m-d H:i:s");
 }
+
+
+/**
+ * @return string
+ */
+function translateYesNo(int $oneZero)
+{
+    return ($oneZero == 1) ? 'Y' : 'N';
+}
+
