@@ -12,16 +12,26 @@ final class ProfilesSeeder extends AbstractSeed
         $data = [
             [
                 'id' => 1,
-                'name' => 'Administrators',
+                'name' => 'Systemadministrators',
                 'active' => 'Y',
             ],
             [
                 'id' => 2,
-                'name' => 'Users',
+                'name' => 'Management',
                 'active' => 'Y',
             ],
             [
                 'id' => 3,
+                'name' => 'Executive',
+                'active' => 'Y',
+            ],
+            [
+                'id' => 4,
+                'name' => 'Helpers',
+                'active' => 'Y',
+            ],
+            [
+                'id' => 5,
                 'name' => 'Read-Only',
                 'active' => 'Y',
             ],
