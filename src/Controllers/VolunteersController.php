@@ -7,6 +7,7 @@ namespace Vokuro\Controllers;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
 use Vokuro\Forms\UsersForm;
+use Vokuro\Forms\VolunteersForm;
 use Vokuro\Models\Volunteers;
 use function Vokuro\getCurrentDateTimeStamp;
 
@@ -64,12 +65,15 @@ class VolunteersController extends ControllerBase
     /**
      * Displays the creation form
      */
-    public function newAction()
+    public function newAction() // preparation of "create"-Process
     {
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
         $this->view->setVar('extraTitle', "New Volunteers :: ");
+
+        $form = new VolunteersForm();
+        $this->view->setVar('form', $form);
     }
 
     /**
@@ -79,6 +83,9 @@ class VolunteersController extends ControllerBase
      */
     public function editAction($id)
     {
+        $form = new VolunteersForm();
+        $this->view->setVar('form', $form);
+
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
@@ -111,17 +118,10 @@ class VolunteersController extends ControllerBase
     /**
      * Creates a new volunteer
      */
-    public function createAction()
+    public function createAction() // the other part is "newAction"
     {
-        $form = new UsersForm();
-
         if (!$this->request->isPost()) {
-            // forward:
-            //$this->dispatcher->forward([ 'controller' => "volunteers",'action' => 'index']);
-            foreach ($form->getMessages() as $message) {
-                $this->flash->error((string) $message);
-            }
-            //return;
+            $this->dispatcher->forward([ 'controller' => "volunteers",'action' => 'index']);
         }
 
         $volunteer = new Volunteers();

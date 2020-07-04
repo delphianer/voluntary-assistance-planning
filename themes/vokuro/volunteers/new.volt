@@ -11,28 +11,28 @@
 <div class="form-group">
     <label for="fieldFirstname" class="col-sm-2 control-label">FirstName</label>
     <div class="col-sm-10">
-        {{ text_field("firstName", "size" : 30, "class" : "form-control", "id" : "fieldFirstname") }}
+        {{ form.render('firstName', ['class': 'form-control', 'placeholder': 'FirstName']) }}
     </div>
 </div>
 
 <div class="form-group">
     <label for="fieldLastname" class="col-sm-2 control-label">LastName</label>
     <div class="col-sm-10">
-        {{ text_field("lastName", "size" : 30, "class" : "form-control", "id" : "fieldLastname") }}
+        {{ form.render('lastName', ['class': 'form-control', 'placeholder': 'LastName']) }}
     </div>
 </div>
 
 <div class="form-group">
     <label for="fieldUserid" class="col-sm-2 control-label">UserId</label>
     <div class="col-sm-10">
-        {{ text_field("userId", "type" : "numeric", "class" : "form-control", "id" : "fieldUserid") }}
+        {{ form.render('userId', ['class': 'form-control', 'placeholder': 'System User']) }}
     </div>
 </div>
 
 <div class="form-group">
-    <label for="fieldDepartmentid" class="col-sm-2 control-label">DepartmentId</label>
+    <label for="fieldDepartmentid" class="col-sm-2 control-label">Department</label>
     <div class="col-sm-10">
-        {{ text_field("departmentId", "type" : "numeric", "class" : "form-control", "id" : "fieldDepartmentid") }}
+        {{ form.render('departmentId', ['class': 'form-control', 'placeholder': 'Department']) }}
     </div>
 </div>
 
