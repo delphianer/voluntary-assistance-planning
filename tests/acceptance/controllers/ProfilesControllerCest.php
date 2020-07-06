@@ -96,12 +96,12 @@ final class ProfilesControllerCest
         $I->amOnPage('/profiles');
         $I->click('Search');
         $I->see('Found profiles');
-        $I->see('Administrators');
+        $I->see('Management');
 
         $I->click('//a[@href="/profiles/delete/1"]');
 
         $I->amOnPage('/profiles');
         $I->see('Search');
-        $I->cantSee('Administrators');
+        $I->cantSee('Management');
     }
 }
