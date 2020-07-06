@@ -1,4 +1,13 @@
 {%-
+set menuRights = [
+    'Home':null,
+    'Manage' : 'equipment',
+    'Manage People': 'clients',
+    'Admin': 'users',
+    'SU': 'permissions'
+]    -%}
+
+{%-
 set menus = [
     'Home': null,
     'Manage' : [
@@ -33,6 +42,8 @@ set menus = [
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             {%- for key, value in menus %}
                 {% if isAnArray( value) %}
+                    {# dump(value) #}
+                    {% if acl.isAllowed( userRole, menuRights[key], "index") %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{ key }}
@@ -51,14 +62,15 @@ set menus = [
                             {%- endfor -%}
                         </ul>
                     </li>
+                    {% endif %}
                 {% elseif value == dispatcher.getControllerName() %}
                     <li class="nav-item active">
                         {{ link_to(value, 'class': 'nav-link', key) }}
                     </li>
                 {% else %}
-                    {# TODO: TODO-001 make this working % if acl.isAllowed( acl.acl.activeRole, value, "index") % #}
+                    {% if acl.isAllowed( userRole, value, "index") %}
                     <li class="nav-item">{{ link_to(value, 'class': 'nav-link', key) }}</li>
-                    {# % endif % #}
+                    {% endif %}
                 {% endif %}
             {%- endfor -%}
         </ul>
