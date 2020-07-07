@@ -1,4 +1,5 @@
 <?php
+/** @noinspection ALL */
 declare(strict_types=1);
 
 /**
@@ -16,6 +17,5 @@ use function Vokuro\root_path;
 $standardConfigFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . "config.orig.php";
 $cliConfigFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . "config4cli.php";
 
-return isset($_ENV['NORMAL_STARTUP']) ?
-    include_once( $standardConfigFile) :
-    include_once( $cliConfigFile) ;
+// todo: replace this file with config.orig.php before copy to productive!
+return isset($_ENV['NORMAL_STARTUP']) ? include_once($standardConfigFile) : include_once($cliConfigFile) ;

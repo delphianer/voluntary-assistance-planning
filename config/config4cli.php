@@ -15,7 +15,7 @@ use Phalcon\Logger;
 defined('BASE_PATH') || define('BASE_PATH', dirname(dirname(__FILE__)));
 defined('APP_PATH') || define('APP_PATH', BASE_PATH.DIRECTORY_SEPARATOR.'src');
 
-// missed ?
+// warning: todo: only used while development - this should not go to productive server!
 return new \Phalcon\Config([
     'database'    => [
         'adapter'  => "mysql",
