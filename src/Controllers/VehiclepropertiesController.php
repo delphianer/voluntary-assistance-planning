@@ -118,6 +118,7 @@ class VehiclepropertiesController extends ControllerBase
      */
     public function createAction()
     {
+        // TODO-011: remove UserForm in multiple classes where not necessary
         $form = new UsersForm();
 
         if (!$this->request->isPost()) {
@@ -130,7 +131,7 @@ class VehiclepropertiesController extends ControllerBase
         }
 
         $vehiclepropertie = new Vehicleproperties();
-        $this->setVehiclePropertieDetails($vehiclepropertie);
+        $this->setVehiclePropertyDetails($vehiclepropertie);
 
 
         if (!$vehiclepropertie->save()) {
@@ -184,7 +185,7 @@ class VehiclepropertiesController extends ControllerBase
         }
 
         $vehiclepropertie->setupdateTime(getCurrentDateTimeStamp());
-        $this->setVehiclePropertieDetails($vehiclepropertie);
+        $this->setVehiclePropertyDetails($vehiclepropertie);
 
 
         if (!$vehiclepropertie->save()) {
@@ -251,15 +252,15 @@ class VehiclepropertiesController extends ControllerBase
     }
 
     /**
-     * @param $vehiclepropertie
+     * @param $vehicleproperty
      */
-    public function setVehiclePropertieDetails($vehiclepropertie): void
+    public function setVehiclePropertyDetails($vehicleproperty): void
     {
-        $vehiclepropertie->setvehiclesId($this->request->getPost("vehiclesId", "string"));
-        $vehiclepropertie->setdescShort($this->request->getPost("desc_short", "string"));
-        $vehiclepropertie->setdescLong($this->request->getPost("desc_long", "int"));
-        $vehiclepropertie->setisNumeric(translateYesNo($this->request->getPost("is_numeric", "int")));
-        $vehiclepropertie->setvalueString($this->request->getPost("value_string", "string"));
-        $vehiclepropertie->setvalueNumeric($this->request->getPost("value_numeric", "float"));
+        $vehicleproperty->setvehiclesId($this->request->getPost("vehiclesId", "int"));
+        $vehicleproperty->setdescShort($this->request->getPost("desc_short", "string"));
+        $vehicleproperty->setdescLong($this->request->getPost("desc_long", "string"));
+        $vehicleproperty->setisNumeric(translateYesNo($this->request->getPost("is_numeric", "int")));
+        $vehicleproperty->setvalueString($this->request->getPost("value_string", "string"));
+        $vehicleproperty->setvalueNumeric($this->request->getPost("value_numeric", "float"));
     }
 }

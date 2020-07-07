@@ -125,10 +125,7 @@ class VolunteersController extends ControllerBase
         }
 
         $volunteer = new Volunteers();
-        $volunteer->setfirstName($this->request->getPost("firstName", "string"));
-        $volunteer->setlastName($this->request->getPost("lastName", "string"));
-        $volunteer->setuserId($this->request->getPost("userId", "int"));
-        $volunteer->setdepartmentId($this->request->getPost("departmentId", "int"));
+        $this->setVolunteerDetails($volunteer);
 
 
         if (!$volunteer->save()) {
@@ -182,10 +179,7 @@ class VolunteersController extends ControllerBase
         }
 
         $volunteer->setupdateTime(getCurrentDateTimeStamp());
-        $volunteer->setfirstName($this->request->getPost("firstName", "string"));
-        $volunteer->setlastName($this->request->getPost("lastName", "string"));
-        $volunteer->setuserId($this->request->getPost("userId", "int"));
-        $volunteer->setdepartmentId($this->request->getPost("departmentId", "int"));
+        $this->setVolunteerDetails($volunteer);
 
 
         if (!$volunteer->save()) {
@@ -250,5 +244,16 @@ class VolunteersController extends ControllerBase
             'controller' => "volunteers",
             'action' => "index"
         ]);
+    }
+
+    /**
+     * @param Volunteers $volunteer
+     */
+    public function setVolunteerDetails(Volunteers $volunteer): void
+    {
+        $volunteer->setfirstName($this->request->getPost("firstName", "string"));
+        $volunteer->setlastName($this->request->getPost("lastName", "string"));
+        $volunteer->setuserId($this->request->getPost("userId", "int"));
+        $volunteer->setdepartmentId($this->request->getPost("departmentId", "int"));
     }
 }

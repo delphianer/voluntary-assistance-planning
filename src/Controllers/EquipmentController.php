@@ -126,9 +126,7 @@ class EquipmentController extends ControllerBase
         }
 
         $equipment = new Equipment();
-        $equipment->setdescShort($this->request->getPost("desc_short", "string"));
-        $equipment->setdescLong($this->request->getPost("desc_long", "string"));
-        $equipment->settotalCount($this->request->getPost("total_count", "int"));
+        $this->setEquipmentDetails($equipment);
 
 
         if (!$equipment->save()) {
@@ -182,9 +180,7 @@ class EquipmentController extends ControllerBase
         }
 
         $equipment->setupdateTime(getCurrentDateTimeStamp());
-        $equipment->setdescShort($this->request->getPost("desc_short", "string"));
-        $equipment->setdescLong($this->request->getPost("desc_long", "string"));
-        $equipment->settotalCount($this->request->getPost("total_count", "int"));
+        $this->setEquipmentDetails($equipment);
 
         if (!$equipment->save()){
             foreach ($equipment->getMessages() as $message) {
@@ -247,5 +243,15 @@ class EquipmentController extends ControllerBase
             'controller' => "equipment",
             'action' => "index"
         ]);
+    }
+
+    /**
+     * @param $equipment
+     */
+    public function setEquipmentDetails($equipment): void
+    {
+        $equipment->setdescShort($this->request->getPost("desc_short", "string"));
+        $equipment->setdescLong($this->request->getPost("desc_long", "string"));
+        $equipment->settotalCount($this->request->getPost("total_count", "int"));
     }
 }
