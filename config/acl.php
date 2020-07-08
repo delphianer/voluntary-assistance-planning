@@ -47,8 +47,8 @@ return [
         'departments' => $actions_std,
         'equipment' => $actions_std,
         'locations' => $actions_std,
-        'vehicleporperties' => $actions_std,
-        'vehicle' => $actions_std,
+        'vehicleproperties' => $actions_std,
+        'vehicles' => $actions_std,
         'volunteers' => $actions_std,
         // todo: setup all dimensions
     ],

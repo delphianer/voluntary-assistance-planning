@@ -15,25 +15,25 @@ class Equipment extends \Phalcon\Mvc\Model
      *
      * @var string
      */
-    protected $create_time;
+    public $create_time;
 
     /**
      *
      * @var string
      */
-    protected $update_time;
+    public $update_time;
 
     /**
      *
      * @var string
      */
-    protected $desc_short;
+    public $desc_short;
 
     /**
      *
      * @var string
      */
-    protected $desc_long;
+    public $desc_long;
 
     /**
      *

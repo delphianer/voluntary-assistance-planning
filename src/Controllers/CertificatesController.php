@@ -57,7 +57,7 @@ class CertificatesController extends ControllerBase
             return;
         }
 
-        $this->view->setVar('extraTitle', "Found certificates :: ");
+        $this->view->setVar('extraTitle', "Found certificates");
         $this->view->page = $paginate;
     }
 
@@ -69,7 +69,7 @@ class CertificatesController extends ControllerBase
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
-        $this->view->setVar('extraTitle', "New Certificates :: ");
+        $this->view->setVar('extraTitle', "New Certificates");
     }
 
     /**

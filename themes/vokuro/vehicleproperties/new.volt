@@ -7,7 +7,8 @@
 {{ flash.output() }}
 
 <form action="{{ url("vehicleproperties/create") }}" class="form-horizontal" method="post">
-    <div class="form-group">
+
+<div class="form-group">
     <label for="fieldVehiclesid" class="col-sm-2 control-label">VehiclesId</label>
     <div class="col-sm-10">
         {{ text_field("vehiclesId", "type" : "numeric", "class" : "form-control", "id" : "fieldVehiclesid") }}

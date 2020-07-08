@@ -7,19 +7,6 @@
 {{ flash.output() }}
 
 <form action="{{ url("equipment/create") }}" class="form-horizontal" method="post">
-    <div class="form-group">
-    <label for="fieldCreateTime" class="col-sm-2 control-label">Create Of Time</label>
-    <div class="col-sm-10">
-        {{ text_field("create_time", "size" : 30, "class" : "form-control", "id" : "fieldCreateTime") }}
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="fieldUpdateTime" class="col-sm-2 control-label">Update Of Time</label>
-    <div class="col-sm-10">
-        {{ text_field("update_time", "size" : 30, "class" : "form-control", "id" : "fieldUpdateTime") }}
-    </div>
-</div>
 
 <div class="form-group">
     <label for="fieldDescShort" class="col-sm-2 control-label">Desc Of Short</label>

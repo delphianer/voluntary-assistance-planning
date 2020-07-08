@@ -1,32 +1,32 @@
 {%-
-set menuRights = [
+set menuPermissions = [
     'Home':null,
-    'Manage' : 'equipment',
-    'Manage People': 'clients',
-    'Admin': 'users',
-    'SU': 'permissions'
+    'Manage master data' : 'equipment',
+    'Manage people': 'clients',
+    'Admin page': 'users',
+    'Super User': 'permissions'
 ]    -%}
 
 {%-
 set menus = [
     'Home': null,
-    'Manage' : [
+    'Manage master data' : [
         'Certificates' : 'certificates',
         'Departments' : 'departments',
         'Equipment' : 'equipment',
         'Locations' : 'locations',
         'Vehicles' : 'vehicles',
-        'Vehicleproperties' : 'vehicleproperties'
+        'Vehicle Properties' : 'vehicleproperties'
         ],
-    'Manage People': [
+    'Manage people': [
         'Clients' : 'clients',
         'Volunteers' : 'volunteers'
         ],
-    'Admin': [
+    'Admin page': [
         'Users': 'users',
         'Profiles': 'profiles'
         ],
-    'SU': [
+    'Super User': [
         'Permissions': 'permissions'
         ]
 ] -%}
@@ -43,7 +43,10 @@ set menus = [
             {%- for key, value in menus %}
                 {% if isAnArray( value) %}
                     {# dump(value) #}
-                    {% if acl.isAllowed( userRole, menuRights[key], "index") %}
+                    {% if acl.isAllowed( userRole,
+                                         menuPermissions[key],
+                                         "index")
+                    %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{ key }}

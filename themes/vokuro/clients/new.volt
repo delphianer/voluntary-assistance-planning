@@ -7,6 +7,7 @@
 {{ flash.output() }}
 
 <form action="{{ url("clients/create") }}" class="form-horizontal" method="post">
+
 <div class="form-group">
     <label for="fieldDescShort" class="col-sm-2 control-label">Desc Of Short</label>
     <div class="col-sm-10">
