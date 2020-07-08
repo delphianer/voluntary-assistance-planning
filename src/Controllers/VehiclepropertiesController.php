@@ -9,7 +9,7 @@ use Phalcon\Paginator\Adapter\Model;
 use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Vehicleproperties;
 use function Vokuro\getCurrentDateTimeStamp;
-use function Vokuro\translateYesNo;
+use function Vokuro\translateFromYesNo;
 
 class VehiclepropertiesController extends ControllerBase
 {
@@ -259,7 +259,7 @@ class VehiclepropertiesController extends ControllerBase
         $vehicleproperty->setvehiclesId($this->request->getPost("vehiclesId", "int"));
         $vehicleproperty->setdescShort($this->request->getPost("desc_short", "string"));
         $vehicleproperty->setdescLong($this->request->getPost("desc_long", "string"));
-        $vehicleproperty->setisNumeric(translateYesNo($this->request->getPost("is_numeric", "int")));
+        $vehicleproperty->setisNumeric(translateFromYesNo($this->request->getPost("is_numeric", "string")));
         $vehicleproperty->setvalueString($this->request->getPost("value_string", "string"));
         $vehicleproperty->setvalueNumeric($this->request->getPost("value_numeric", "float"));
     }

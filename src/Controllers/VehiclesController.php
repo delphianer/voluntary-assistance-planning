@@ -9,7 +9,7 @@ use Phalcon\Paginator\Adapter\Model;
 use Vokuro\Forms\UsersForm;
 use Vokuro\Models\Vehicles;
 use function Vokuro\getCurrentDateTimeStamp;
-use function Vokuro\translateYesNo;
+use function Vokuro\translateFromYesNo;
 
 class VehiclesController extends ControllerBase
 {
@@ -260,9 +260,9 @@ class VehiclesController extends ControllerBase
         $vehicle->setdescLong($this->request->getPost("desc_long", "string"));
         $vehicle->settechnicalInspection($this->request->getPost("technicalInspection", "DateTime"));
         $vehicle->setseatCount($this->request->getPost("seatCount", "int"));
-        $vehicle->setisAmbulance(translateYesNo($this->request->getPost("isAmbulance", "string")));
-        $vehicle->sethasFlashingLights(translateYesNo($this->request->getPost("hasFlashingLights", "string")));
-        $vehicle->sethasRadioCom(translateYesNo($this->request->getPost("hasRadioCom", "string")));
-        $vehicle->sethasDigitalRadioCom(translateYesNo($this->request->getPost("hasDigitalRadioCom", "string")));
+        $vehicle->setisAmbulance(translateFromYesNo($this->request->getPost("isAmbulance", "string")));
+        $vehicle->sethasFlashingLights(translateFromYesNo($this->request->getPost("hasFlashingLights", "string")));
+        $vehicle->sethasRadioCom(translateFromYesNo($this->request->getPost("hasRadioCom", "string")));
+        $vehicle->sethasDigitalRadioCom(translateFromYesNo($this->request->getPost("hasDigitalRadioCom", "string")));
     }
 }

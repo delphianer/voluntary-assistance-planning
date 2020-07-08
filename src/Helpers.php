@@ -49,8 +49,16 @@ function getCurrentDateTimeStamp()
 /**
  * @return string
  */
-function translateYesNo(int $oneZero)
+function translateFromYesNo(string $yes)
 {
-    return ($oneZero == 1) ? 'Y' : 'N';
+    return ($yes == 'Yes') ? 'Y' : 'N';
+}
+
+/**
+ * @return string
+ */
+function translateToYesNo(string $yes)
+{
+    return ($yes == 'Y') ? 'Yes' : 'No';
 }
 
