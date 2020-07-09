@@ -96,8 +96,8 @@ CREATE TABLE IF NOT EXISTS `vokuro`.`vehicles` (
   `seatCount` INT NOT NULL DEFAULT 0,
   `isAmbulance` VARCHAR(1) NOT NULL DEFAULT 'N',
   `hasFlashingLights` VARCHAR(1) NOT NULL DEFAULT 'N',
-  `hasRadioCom` VARCHAR(1) NOT NULL,
-  `hasDigitalRadioCom` VARCHAR(1) NOT NULL,
+  `hasRadioCom` VARCHAR(1) NOT NULL DEFAULT 'N',
+  `hasDigitalRadioCom` VARCHAR(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
