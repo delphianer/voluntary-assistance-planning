@@ -114,15 +114,9 @@ class ClientsController extends ControllerBase
      */
     public function createAction()
     {
-        $form = new UsersForm();
-
         if (!$this->request->isPost()) {
-            // forward:
-            //$this->dispatcher->forward([ 'controller' => "clients",'action' => 'index']);
-            foreach ($form->getMessages() as $message) {
-                $this->flash->error((string) $message);
-            }
-            //return;
+            $this->dispatcher->forward([ 'controller' => "clients",'action' => 'index']);
+            return;
         }
 
         $client = new Clients();

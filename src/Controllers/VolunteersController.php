@@ -53,7 +53,7 @@ class VolunteersController extends ControllerBase
         );
 
         $this->view->setVar('page', $paginator->paginate());
-        $this->view->setVar('extraTitle', "Found volunteers :: ");
+        $this->view->setVar('extraTitle', "Found volunteers");
     }
 
     /**

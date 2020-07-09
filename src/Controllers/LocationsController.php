@@ -118,15 +118,9 @@ class LocationsController extends ControllerBase
      */
     public function createAction()
     {
-        $form = new UsersForm();
-
         if (!$this->request->isPost()) {
-            // forward:
-            //$this->dispatcher->forward([ 'controller' => "locations",'action' => 'index']);
-            foreach ($form->getMessages() as $message) {
-                $this->flash->error((string) $message);
-            }
-            //return;
+            $this->dispatcher->forward([ 'controller' => "locations",'action' => 'index']);
+            return;
         }
 
         $location = new Locations();

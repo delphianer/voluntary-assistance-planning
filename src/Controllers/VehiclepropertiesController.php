@@ -6,7 +6,7 @@ namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model;
-use Vokuro\Forms\UsersForm;
+use Vokuro\Forms\Form;
 use Vokuro\Models\Vehicleproperties;
 use function Vokuro\getCurrentDateTimeStamp;
 use function Vokuro\translateFromYesNo;
@@ -118,16 +118,9 @@ class VehiclepropertiesController extends ControllerBase
      */
     public function createAction()
     {
-        // TODO-011: remove UserForm in multiple classes where not necessary
-        $form = new UsersForm();
-
         if (!$this->request->isPost()) {
-            // forward:
-            //$this->dispatcher->forward([ 'controller' => "vehicleproperties",'action' => 'index']);
-            foreach ($form->getMessages() as $message) {
-                $this->flash->error((string) $message);
-            }
-            //return;
+            $this->dispatcher->forward([ 'controller' => "vehicleproperties",'action' => 'index']);
+            return;
         }
 
         $vehiclepropertie = new Vehicleproperties();

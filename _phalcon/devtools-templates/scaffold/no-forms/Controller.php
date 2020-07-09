@@ -5,20 +5,26 @@ declare(strict_types=1);
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Paginator\Adapter\Model;
-use Vokuro\Forms\UsersForm;
+use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
 $useFullyQualifiedModelName$
+use function Vokuro\getCurrentDateTimeStamp;
 
 class $className$Controller extends ControllerBase
 {
+    /**
+     * initialize this Controller
+     */
+    public function initialize()
+    {
+        // todo: check if private fits and remove this todo
+        $this->view->setTemplateBefore('private');
+    }
+
     /**
      * Index action
      */
     public function indexAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         $this->view->setVar('extraTitle', "Search $plural$");
     }
 
@@ -27,37 +33,31 @@ class $className$Controller extends ControllerBase
      */
     public function searchAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
-        $numberPage = $this->request->getQuery('page', 'int', 1);
-        $parameters = Criteria::fromInput($this->di, '$fullyQualifiedModelName$', $_GET)->getParams();
-        $parameters['order'] = "$pk$";
+        $builder = Criteria::fromInput($this->getDI(), $className$::class, $this->request->getQuery());
+        // todo: decide if id fits best sort criteria
+        $builder->orderBy("id");
 
-        $paginator   = new Model(
-            [
-                'model'      => '$fullyQualifiedModelName$',
-                'parameters' => $parameters,
-                'limit'      => 10,
-                'page'       => $numberPage,
-            ]
-        );
-
-        $paginate = $paginator->paginate();
-
-        if (0 === $paginate->getTotalItems()) {
-            $this->flash->notice("The search did not find any $plural$");
-
+        $count = $className$::count($builder->getParams());
+        if ($count === 0) {
+            $this->flash->notice('The search did not find any $plural$');
             $this->dispatcher->forward([
                 "controller" => "$plural$",
-                "action" => "index"
+                'action' => 'index',
             ]);
 
             return;
         }
 
+        $paginator   = new Paginator(
+            [
+                'builder'   => $builder->createBuilder(),
+                'limit'     => 10,
+                'page'      => $this->request->getQuery('page', 'int', 1),
+            ]
+        );
+
+        $this->view->setVar('page', $paginator->paginate());
         $this->view->setVar('extraTitle', "Found $plural$");
-        $this->view->page = $paginate;
     }
 
     /**
@@ -65,9 +65,6 @@ class $className$Controller extends ControllerBase
      */
     public function newAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         $this->view->setVar('extraTitle', "New $className$");
     }
 
@@ -78,9 +75,6 @@ class $className$Controller extends ControllerBase
      */
     public function editAction($pkVar$)
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         if (!$this->request->isPost()) {
             $singularVar$ = $className$::findFirstBy$pk$($pkVar$);
             if (!$singularVar$) {
@@ -107,18 +101,15 @@ class $className$Controller extends ControllerBase
      */
     public function createAction()
     {
-        $form = new UsersForm();
-
-        if (!$this->request->isPost()) {
-            // forward:
-            //$this->dispatcher->forward([ 'controller' => "$plural$",'action' => 'index']);
-            foreach ($form->getMessages() as $message) {
-                $this->flash->error((string) $message);
-            }
-            //return;
+        if (!$this->request->isPost()) { // post should go to NewAction
+            $this->dispatcher->forward([ 'controller' => "$plural$",'action' => 'index']);
+            return;
         }
 
         $singularVar$ = new $className$();
+        // todo: change last update time, maybe delete create time
+        // todo: refactor what can be refactored :)
+        // $singularVar$->setupdateTime(getCurrentDateTimeStamp());
         $assignInputFromRequestCreate$
 
         if (!$singularVar$->save()) {
@@ -171,6 +162,9 @@ class $className$Controller extends ControllerBase
             return;
         }
 
+        // todo: change last update time, maybe delete create time
+        // todo: refactor what can be refactored :)
+        // $singularVar$->setupdateTime(getCurrentDateTimeStamp());
         $assignInputFromRequestUpdate$
 
         if (!$singularVar$->save()) {

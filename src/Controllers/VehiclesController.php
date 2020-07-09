@@ -13,14 +13,16 @@ use function Vokuro\translateFromYesNo;
 
 class VehiclesController extends ControllerBase
 {
+    public function initialize(): void
+    {
+        $this->view->setTemplateBefore('private');
+    }
+
     /**
      * Index action
      */
     public function indexAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         $this->view->setVar('extraTitle', "Search vehicles");
     }
 
@@ -29,11 +31,8 @@ class VehiclesController extends ControllerBase
      */
     public function searchAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         $numberPage = $this->request->getQuery('page', 'int', 1);
-        $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Vehicles', $_GET)->getParams();
+        $parameters = Criteria::fromInput($this->di, Vehicles::class, $_GET)->getParams();
         $parameters['order'] = "id";
 
         $paginator   = new Model(
@@ -67,9 +66,6 @@ class VehiclesController extends ControllerBase
      */
     public function newAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         $this->view->setVar('extraTitle', "New Vehicles");
     }
 
@@ -80,9 +76,6 @@ class VehiclesController extends ControllerBase
      */
     public function editAction($id)
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         if (!$this->request->isPost()) {
             $vehicle = Vehicles::findFirstByid($id);
             if (!$vehicle) {
@@ -120,15 +113,9 @@ class VehiclesController extends ControllerBase
      */
     public function createAction()
     {
-        $form = new UsersForm();
-
-        if (!$this->request->isPost()) {
-            // forward:
-            //$this->dispatcher->forward([ 'controller' => "vehicles",'action' => 'index']);
-            foreach ($form->getMessages() as $message) {
-                $this->flash->error((string) $message);
-            }
-            //return;
+        if (!$this->request->isPost()) { // should go to "new"
+            $this->dispatcher->forward([ 'controller' => "vehicles",'action' => 'index']);
+            return;
         }
 
         $vehicle = new Vehicles();
