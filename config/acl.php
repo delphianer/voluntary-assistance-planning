@@ -50,6 +50,7 @@ return [
         'vehicleproperties' => $actions_std,
         'vehicles' => $actions_std,
         'volunteers' => $actions_std,
+        'volunteerscertificateslink'  => $actions_std,
         // todo: setup all dimensions
     ],
 ];
