@@ -37,13 +37,8 @@ class AssetsProvider implements ServiceProviderInterface
 
             $assetManager->collection('css')
                 ->addCss(
-                    '//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css?dc=' . self::VERSION,
-                    false,
-                    false,
-                    [
+                    '/css/bootstrap-4.3.1.min.css?dc=' . self::VERSION, true, true, [
                         "media"       => "screen,projection",
-                        "integrity"   => "sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T",
-                        "crossorigin" => "anonymous"
                     ]
                 )
                 ->addCss('/css/style.css?dc=' . self::VERSION, true, true, [
@@ -51,19 +46,8 @@ class AssetsProvider implements ServiceProviderInterface
                 ]);
 
             $assetManager->collection('js')
-                ->addJs('//code.jquery.com/jquery-3.3.1.slim.min.js?dc=' . self::VERSION, false, true, [
-                    "integrity"   => "sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo",
-                    "crossorigin" => "anonymous"
-                ])
-                ->addJs(
-                    '//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js?dc=' . self::VERSION,
-                    false,
-                    true,
-                    [
-                        "integrity"   => "sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM",
-                        "crossorigin" => "anonymous"
-                    ]
-                );
+                ->addJs('/js/jquery-3.3.1.slim.min.js?dc=' . self::VERSION, true, true, [])
+                ->addJs('/js/bootstrap-4.3.1.min.js?dc=' . self::VERSION, true, true, []);
 
             return $assetManager;
         });
