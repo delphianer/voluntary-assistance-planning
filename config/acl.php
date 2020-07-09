@@ -16,6 +16,7 @@ $actions_std = [
     'new',
     'create',
     'edit',
+    'save',
     'delete',
 ];
 
