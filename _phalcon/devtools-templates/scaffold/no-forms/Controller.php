@@ -109,7 +109,7 @@ class $className$Controller extends ControllerBase
         $singularVar$ = new $className$();
         // todo: change last update time, maybe delete create time
         // todo: refactor what can be refactored :)
-        // $singularVar$->setupdateTime(getCurrentDateTimeStamp());
+        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
         $assignInputFromRequestCreate$
 
         if (!$singularVar$->save()) {
@@ -165,6 +165,7 @@ class $className$Controller extends ControllerBase
         // todo: change last update time, maybe delete create time
         // todo: refactor what can be refactored :)
         // $singularVar$->setupdateTime(getCurrentDateTimeStamp());
+        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
         $assignInputFromRequestUpdate$
 
         if (!$singularVar$->save()) {
