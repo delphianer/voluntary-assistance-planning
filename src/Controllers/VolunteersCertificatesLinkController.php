@@ -24,7 +24,7 @@ class VolunteersCertificatesLinkController extends ControllerBase
      */
     public function indexAction()
     {
-        $this->view->setVar('extraTitle', "Search volunteers_certificates_link");
+        $this->view->setVar('extraTitle', "Search Certificate-Setup");
     }
 
     /**
@@ -33,8 +33,7 @@ class VolunteersCertificatesLinkController extends ControllerBase
     public function searchAction()
     {
         $builder = Criteria::fromInput($this->getDI(), VolunteersCertificatesLink::class, $this->request->getQuery());
-
-        $builder->orderBy("id");
+        $builder->orderBy("validUntil desc");
 
         $count = VolunteersCertificatesLink::count($builder->getParams());
         if ($count === 0) {
@@ -111,14 +110,7 @@ class VolunteersCertificatesLinkController extends ControllerBase
         }
 
         $volunteers_certificates_link = new VolunteersCertificatesLink();
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // $volunteers_certificates_link->setupdateTime(getCurrentDateTimeStamp());
-        $volunteers_certificates_link->setcreateTime($this->request->getPost("create_time", "int"));
-        $volunteers_certificates_link->setupdateTime($this->request->getPost("update_time", "int"));
-        $volunteers_certificates_link->setvolunteersId($this->request->getPost("volunteersId", "int"));
-        $volunteers_certificates_link->setcertificatesId($this->request->getPost("certificatesId", "int"));
-        $volunteers_certificates_link->setvalidUntil($this->request->getPost("validUntil", "int"));
+        $this->setTableDetails($volunteers_certificates_link);
 
 
         if (!$volunteers_certificates_link->save()) {
@@ -171,14 +163,8 @@ class VolunteersCertificatesLinkController extends ControllerBase
             return;
         }
 
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // $volunteers_certificates_link->setupdateTime(getCurrentDateTimeStamp());
-        $volunteers_certificates_link->setcreateTime($this->request->getPost("create_time", "int"));
-        $volunteers_certificates_link->setupdateTime($this->request->getPost("update_time", "int"));
-        $volunteers_certificates_link->setvolunteersId($this->request->getPost("volunteersId", "int"));
-        $volunteers_certificates_link->setcertificatesId($this->request->getPost("certificatesId", "int"));
-        $volunteers_certificates_link->setvalidUntil($this->request->getPost("validUntil", "int"));
+        $volunteers_certificates_link->setupdateTime(getCurrentDateTimeStamp());
+        $this->setTableDetails($volunteers_certificates_link);
 
 
         if (!$volunteers_certificates_link->save()) {
@@ -243,5 +229,15 @@ class VolunteersCertificatesLinkController extends ControllerBase
             'controller' => "volunteers_certificates_link",
             'action' => "index"
         ]);
+    }
+
+    /**
+     * @param VolunteersCertificatesLink $volunteers_certificates_link
+     */
+    public function setTableDetails(VolunteersCertificatesLink $volunteers_certificates_link): void
+    {
+        $volunteers_certificates_link->setvolunteersId($this->request->getPost("volunteersId", "int"));
+        $volunteers_certificates_link->setcertificatesId($this->request->getPost("certificatesId", "int"));
+        $volunteers_certificates_link->setvalidUntil($this->request->getPost("validUntil", "int"));
     }
 }
