@@ -45,7 +45,7 @@ class ControllerBase extends Controller
             // Get the current identity
             $identity = $this->auth->getIdentity();
 
-            $this->view->setVar('userRole', $identity['profile']);
+            $this->view->setVar('userRole', is_array($identity) ? $identity['profile'] : 'Guest');
 
             // If there is no identity available the user is redirected to index/index
             if (!is_array($identity)) {
