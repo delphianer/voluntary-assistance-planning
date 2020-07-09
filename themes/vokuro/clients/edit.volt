@@ -9,7 +9,7 @@
 {{ flash.output() }}
 
 
-<form class="form-horizontal" method="post">
+<form action="{{ url(dispatcher.getControllerName() ~ "/save") }}" class="form-horizontal" method="post">
 
 
 <div class="form-group">
