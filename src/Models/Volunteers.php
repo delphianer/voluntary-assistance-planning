@@ -220,7 +220,18 @@ class Volunteers extends \Phalcon\Mvc\Model
             'id',
             'Vokuro\Models\VolunteersCertificatesLink',
             'volunteersId',
-            ['alias' => 'VolunteersCertificatesLink']);
+            ['alias' => 'VolunteersCertificatesLink']
+        );
+
+        $this->hasOne('userId', Users::class, 'id', [
+            'alias'    => 'user',
+            'reusable' => true,
+        ]);
+
+        $this->hasOne('departmentId', Departments::class, 'id', [
+            'alias'    => 'department',
+            'reusable' => true,
+        ]);
     }
 
     /**
@@ -244,5 +255,4 @@ class Volunteers extends \Phalcon\Mvc\Model
     {
         return parent::findFirst($parameters);
     }
-
 }

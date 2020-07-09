@@ -5,22 +5,23 @@ declare(strict_types=1);
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Paginator\Adapter\Model;
-use Vokuro\Forms\UsersForm;
+use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
 use Vokuro\Forms\VolunteersForm;
 use Vokuro\Models\Volunteers;
 use function Vokuro\getCurrentDateTimeStamp;
 
 class VolunteersController extends ControllerBase
 {
+    public function initialize()
+    {
+        $this->view->setTemplateBefore('private');
+    }
+
     /**
      * Index action
      */
     public function indexAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         $this->view->setVar('extraTitle', "Search volunteers :: ");
     }
 
@@ -29,37 +30,30 @@ class VolunteersController extends ControllerBase
      */
     public function searchAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
-        $numberPage = $this->request->getQuery('page', 'int', 1);
-        $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Volunteers', $_GET)->getParams();
-        $parameters['order'] = "id";
+        $builder = Criteria::fromInput($this->getDI(), Volunteers::class, $this->request->getQuery());
+        $builder->orderBy("id");
 
-        $paginator   = new Model(
-            [
-                'model'      => '\Vokuro\Models\Volunteers',
-                'parameters' => $parameters,
-                'limit'      => 10,
-                'page'       => $numberPage,
-            ]
-        );
-
-        $paginate = $paginator->paginate();
-
-        if (0 === $paginate->getTotalItems()) {
-            $this->flash->notice("The search did not find any volunteers");
-
+        $count = Volunteers::count($builder->getParams());
+        if ($count === 0) {
+            $this->flash->notice('The search did not find any volunteers');
             $this->dispatcher->forward([
                 "controller" => "volunteers",
-                "action" => "index"
+                'action' => 'index',
             ]);
 
             return;
         }
 
+        $paginator   = new Paginator(
+            [
+                'builder'   => $builder->createBuilder(),
+                'limit'     => 10,
+                'page'      => $this->request->getQuery('page', 'int', 1),
+            ]
+        );
+
+        $this->view->setVar('page', $paginator->paginate());
         $this->view->setVar('extraTitle', "Found volunteers :: ");
-        $this->view->page = $paginate;
     }
 
     /**
@@ -67,9 +61,6 @@ class VolunteersController extends ControllerBase
      */
     public function newAction() // preparation of "create"-Process
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         $this->view->setVar('extraTitle', "New Volunteers :: ");
 
         $form = new VolunteersForm();
@@ -86,9 +77,6 @@ class VolunteersController extends ControllerBase
         $form = new VolunteersForm();
         $this->view->setVar('form', $form);
 
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         if (!$this->request->isPost()) {
             $volunteer = Volunteers::findFirstByid($id);
             if (!$volunteer) {
