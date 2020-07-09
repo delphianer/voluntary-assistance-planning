@@ -9,7 +9,7 @@
 {{ flash.output() }}
 
 
-<form class="form-horizontal" method="post">
+<form  action="{{ url("$plural$/save") }}" class="form-horizontal" method="post">
 
     $captureFields$
 
