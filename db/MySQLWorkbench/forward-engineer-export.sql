@@ -170,6 +170,35 @@ CREATE TABLE IF NOT EXISTS `vokuro`.`clients` (
 ENGINE = InnoDB;
 
 
+
+-- -----------------------------------------------------
+-- Table `vokuro`.`appointments`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `vokuro`.`appointments` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `create_userId` INT NULL,
+  `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_userId` INT NULL,
+  `shortDescription` VARCHAR(60) UNIQUE NULL,
+  `longDescription` VARCHAR(5000) NULL,
+  `start` DATETIME NULL,
+  `end` DATETIME NULL,
+  `locationId` INT NULL,
+  `mainDepartmentId` INT NULL,
+  `clientId` INT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+
+
+
+
+
+
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
