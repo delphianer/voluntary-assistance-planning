@@ -24,18 +24,18 @@
         </tr>
     </thead>
     <tbody>
-    {% for equipment in page.getItems() %}
+    {% for equipment in page.items %}
         <tr>
-            <td>{{ equipment['id'] }}</td>
-            <td>{{ equipment['create_time'] }}</td>
-            <td>{{ equipment['update_time'] }}</td>
-            <td>{{ equipment['desc_short'] }}</td>
-            <td>{{ equipment['desc_long'] }}</td>
-            <td>{{ equipment['total_count'] }}</td>
+            <td>{{ equipment.id }}</td>
+            <td>{{ equipment.create_time }}</td>
+            <td>{{ equipment.update_time }}</td>
+            <td>{{ equipment.desc_short }}</td>
+            <td>{{ equipment.desc_long }}</td>
+            <td>{{ equipment.total_count }}</td>
 
 
-            <td class="td-width-12">{{ link_to( url("equipment/edit") ~ equipment['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
-            <td class="td-width-12">{{ link_to( url("equipment/delete") ~ equipment['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
+            <td class="td-width-12">{{ link_to( url("equipment/edit/") ~ equipment.id, '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
+            <td class="td-width-12">{{ link_to( url("equipment/delete/") ~ equipment.id, '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
         </tr>
     {% else %}
         <tr>

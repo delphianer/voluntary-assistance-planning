@@ -5,21 +5,25 @@ declare(strict_types=1);
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Paginator\Adapter\Model;
-use Vokuro\Forms\UsersForm;
+use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
 use Vokuro\Models\Equipment;
 use function Vokuro\getCurrentDateTimeStamp;
 
 class EquipmentController extends ControllerBase
 {
     /**
+     * initialize this Controller
+     */
+    public function initialize()
+    {
+        $this->view->setTemplateBefore('private');
+    }
+
+    /**
      * Index action
      */
     public function indexAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         $this->view->setVar('extraTitle', "Search equipment");
     }
 
@@ -28,37 +32,30 @@ class EquipmentController extends ControllerBase
      */
     public function searchAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
-        $numberPage = $this->request->getQuery('page', 'int', 1);
-        $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Equipment', $_GET)->getParams();
-        $parameters['order'] = "id";
+        $builder = Criteria::fromInput($this->getDI(), Equipment::class, $this->request->getQuery());
+        $builder->orderBy("desc_short");
 
-        $paginator   = new Model(
-            [
-                'model'      => '\Vokuro\Models\Equipment',
-                'parameters' => $parameters,
-                'limit'      => 10,
-                'page'       => $numberPage,
-            ]
-        );
-
-        $paginate = $paginator->paginate();
-
-        if (0 === $paginate->getTotalItems()) {
-            $this->flash->notice("The search did not find any equipment");
-
+        $count = Equipment::count($builder->getParams());
+        if ($count === 0) {
+            $this->flash->notice('The search did not find any equipment');
             $this->dispatcher->forward([
                 "controller" => "equipment",
-                "action" => "index"
+                'action' => 'index',
             ]);
 
             return;
         }
 
+        $paginator   = new Paginator(
+            [
+                'builder'   => $builder->createBuilder(),
+                'limit'     => 10,
+                'page'      => $this->request->getQuery('page', 'int', 1),
+            ]
+        );
+
+        $this->view->setVar('page', $paginator->paginate());
         $this->view->setVar('extraTitle', "Found equipment");
-        $this->view->page = $paginate;
     }
 
     /**
@@ -66,9 +63,6 @@ class EquipmentController extends ControllerBase
      */
     public function newAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         $this->view->setVar('extraTitle', "New Equipment");
     }
 
@@ -79,9 +73,6 @@ class EquipmentController extends ControllerBase
      */
     public function editAction($id)
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         if (!$this->request->isPost()) {
             $equipment = Equipment::findFirstByid($id);
             if (!$equipment) {
@@ -96,14 +87,12 @@ class EquipmentController extends ControllerBase
             }
 
             $this->view->id = $equipment->getId();
-
             $this->tag->setDefault("id", $equipment->getId());
             $this->tag->setDefault("create_time", $equipment->getCreateTime());
             $this->tag->setDefault("update_time", $equipment->getUpdateTime());
             $this->tag->setDefault("desc_short", $equipment->getDescShort());
             $this->tag->setDefault("desc_long", $equipment->getDescLong());
             $this->tag->setDefault("total_count", $equipment->getTotalCount());
-
         }
 
         $this->view->setVar('extraTitle', "Edit Equipment");
@@ -114,7 +103,7 @@ class EquipmentController extends ControllerBase
      */
     public function createAction()
     {
-        if (!$this->request->isPost()) {
+        if (!$this->request->isPost()) { // post should go to NewAction
             $this->dispatcher->forward([ 'controller' => "equipment",'action' => 'index']);
             return;
         }
@@ -176,7 +165,8 @@ class EquipmentController extends ControllerBase
         $equipment->setupdateTime(getCurrentDateTimeStamp());
         $this->setEquipmentDetails($equipment);
 
-        if (!$equipment->save()){
+
+        if (!$equipment->save()) {
             foreach ($equipment->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -218,7 +208,6 @@ class EquipmentController extends ControllerBase
         }
 
         if (!$equipment->delete()) {
-
             foreach ($equipment->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -240,9 +229,9 @@ class EquipmentController extends ControllerBase
     }
 
     /**
-     * @param $equipment
+     * @param Equipment $equipment
      */
-    public function setEquipmentDetails($equipment): void
+    public function setEquipmentDetails(Equipment $equipment): void
     {
         $equipment->setdescShort($this->request->getPost("desc_short", "string"));
         $equipment->setdescLong($this->request->getPost("desc_long", "string"));

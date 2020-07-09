@@ -17,7 +17,7 @@ final class MasterDataControllerCest
         'certificates',
         'clients' ,
         'departments',
-         'equipment' ,
+        'equipment' ,
         'locations' ,
         'vehicleproperties',
         'vehicles' ,
@@ -29,7 +29,7 @@ final class MasterDataControllerCest
         'certificates',
         'clients' ,
         'departments',
-        //'equipment' , - bug - TODO-016
+        'equipment' ,
         'locations' ,
         'vehicles' ,
     ];

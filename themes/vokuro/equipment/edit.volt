@@ -9,7 +9,7 @@
 {{ flash.output() }}
 
 
-<form action="{{ url(dispatcher.getControllerName() ~ "/save") }}" class="form-horizontal" method="post">
+<form  action="{{ url("equipment/save") }}" class="form-horizontal" method="post">
 
     <div class="form-group">
     <label for="fieldCreateTime" class="col-sm-2 control-label">Create Of Time</label>
