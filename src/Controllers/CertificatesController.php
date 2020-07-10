@@ -98,8 +98,8 @@ class CertificatesController extends ControllerBase
             $this->view->id = $certificate->getId();
 
             $this->tag->setDefault("id", $certificate->getId());
-            $this->tag->setDefault("desc_short", $certificate->getDescShort());
-            $this->tag->setDefault("desc_long", $certificate->getDescLong());
+            $this->tag->setDefault("label", $certificate->getLabel());
+            $this->tag->setDefault("description", $certificate->getDescription());
 
         }
 
@@ -118,8 +118,8 @@ class CertificatesController extends ControllerBase
 
         $certificate = new Certificates();
         $certificate->setupdateTime(getCurrentDateTimeStamp());
-        $certificate->setdescShort($this->request->getPost("desc_short", "string"));
-        $certificate->setdescLong($this->request->getPost("desc_long", "string"));
+        $certificate->setLabel($this->request->getPost("label", "string"));
+        $certificate->setDescription($this->request->getPost("description", "string"));
 
         if (!$certificate->save()) {
             foreach ($certificate->getMessages() as $message) {
@@ -172,8 +172,8 @@ class CertificatesController extends ControllerBase
         }
 
         $certificate->setupdateTime(getCurrentDateTimeStamp());
-        $certificate->setdescShort($this->request->getPost("desc_short", "string"));
-        $certificate->setdescLong($this->request->getPost("desc_long", "string"));
+        $certificate->setLabel($this->request->getPost("label", "string"));
+        $certificate->setDescription($this->request->getPost("description", "string"));
 
         if (!$certificate->save()) {
             foreach ($certificate->getMessages() as $message) {

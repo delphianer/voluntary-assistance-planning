@@ -13,8 +13,8 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Desc Of Short</th>
-            <th>Desc Of Long</th>
+            <th>Label</th>
+            <th>Description</th>
 
             <th></th>
             <th></th>
@@ -24,8 +24,8 @@
     {% for department in page.getItems() %}
         <tr>
             <td>{{ department['id'] }}</td>
-            <td>{{ department['desc_short'] }}</td>
-            <td>{{ department['desc_long'] }}</td>
+            <td>{{ department['label'] }}</td>
+            <td>{{ department['description'] }}</td>
 
             <td class="td-width-12">{{ link_to( url("departments/edit/") ~ department['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
             <td class="td-width-12">{{ link_to( url("departments/delete/") ~ department['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>

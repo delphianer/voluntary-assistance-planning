@@ -13,8 +13,8 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Desc Of Short</th>
-            <th>Desc Of Long</th>
+            <th>Label</th>
+            <th>Description</th>
             <th>ContactInformation</th>
 
             <th></th>
@@ -25,8 +25,8 @@
     {% for client in page.getItems() %}
         <tr>
             <td>{{ client['id'] }}</td>
-            <td>{{ client['desc_short'] }}</td>
-            <td>{{ client['desc_long'] }}</td>
+            <td>{{ client['label'] }}</td>
+            <td>{{ client['description'] }}</td>
             <td>{{ client['contactInformation'] }}</td>
 
 

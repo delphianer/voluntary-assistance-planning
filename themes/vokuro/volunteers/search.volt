@@ -30,7 +30,7 @@
             <td>{{ volunteer.firstName }}</td>
             <td>{{ volunteer.lastName }}</td>
             <td>{{ volunteer.user !== null ? volunteer.user.name : 'N/A' }}</td>
-            <td>{{ volunteer.department !== null ? volunteer.department.desc_short : 'N/A' }}</td>
+            <td>{{ volunteer.department !== null ? volunteer.department.label : 'N/A' }}</td>
 
 
             <td class="td-width-12">{{ link_to( url("volunteers/edit/") ~ volunteer.id , '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>

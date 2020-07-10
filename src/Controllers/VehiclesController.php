@@ -94,8 +94,8 @@ class VehiclesController extends ControllerBase
             $this->tag->setDefault("id", $vehicle->getId());
             $this->tag->setDefault("create_time", $vehicle->getCreateTime());
             $this->tag->setDefault("update_time", $vehicle->getUpdateTime());
-            $this->tag->setDefault("desc_short", $vehicle->getDescShort());
-            $this->tag->setDefault("desc_long", $vehicle->getDescLong());
+            $this->tag->setDefault("label", $vehicle->getLabel());
+            $this->tag->setDefault("description", $vehicle->getDescription());
             $this->tag->setDefault("technicalInspection", $vehicle->getTechnicalinspection());
             $this->tag->setDefault("seatCount", $vehicle->getSeatcount());
             $this->tag->setDefault("isAmbulance", $vehicle->getIsambulance());
@@ -243,8 +243,8 @@ class VehiclesController extends ControllerBase
      */
     public function setVehicleDetails($vehicle): void
     {
-        $vehicle->setdescShort($this->request->getPost("desc_short", "string"));
-        $vehicle->setdescLong($this->request->getPost("desc_long", "string"));
+        $vehicle->setLabel($this->request->getPost("label", "string"));
+        $vehicle->setDescription($this->request->getPost("description", "string"));
         $vehicle->settechnicalInspection($this->request->getPost("technicalInspection", "DateTime"));
         $vehicle->setseatCount($this->request->getPost("seatCount", "int"));
         $vehicle->setisAmbulance(translateFromYesNo($this->request->getPost("isAmbulance", "string")));

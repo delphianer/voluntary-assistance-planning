@@ -82,7 +82,7 @@ class VolunteersForm extends Form
         $this->add(new Select('departmentId', $departments, [
             'using'      => [
                 'id',
-                'desc_short',
+                'label',
             ],
             'useEmpty'   => true,
             'emptyText'  => 'No Department yet',

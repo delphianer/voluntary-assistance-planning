@@ -13,8 +13,8 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Desc Of Short</th>
-            <th>Desc Of Long</th>
+            <th>Label</th>
+            <th>Description</th>
 
             <th></th>
             <th></th>
@@ -24,8 +24,8 @@
     {% for certificate in page.getItems() %}
         <tr>
             <td>{{ certificate['id'] }}</td>
-            <td>{{ certificate['desc_short'] }}</td>
-            <td>{{ certificate['desc_long'] }}</td>
+            <td>{{ certificate['label'] }}</td>
+            <td>{{ certificate['description'] }}</td>
 
 
             <td class="td-width-12">{{ link_to( url("certificates/edit/") ~ certificate['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>

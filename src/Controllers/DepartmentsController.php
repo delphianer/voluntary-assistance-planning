@@ -100,8 +100,8 @@ class DepartmentsController extends ControllerBase
             $this->tag->setDefault("id", $department->getId());
             $this->tag->setDefault("create_time", $department->getCreateTime());
             $this->tag->setDefault("update_time", $department->getUpdateTime());
-            $this->tag->setDefault("desc_short", $department->getDescShort());
-            $this->tag->setDefault("desc_long", $department->getDescLong());
+            $this->tag->setDefault("label", $department->getLabel());
+            $this->tag->setDefault("description", $department->getDescription());
 
         }
 
@@ -244,7 +244,7 @@ class DepartmentsController extends ControllerBase
      */
     public function setDepartmentDetails(Departments $department): void
     {
-        $department->setdescShort($this->request->getPost("desc_short", "string"));
-        $department->setdescLong($this->request->getPost("desc_long", "string"));
+        $department->setLabel($this->request->getPost("label", "string"));
+        $department->setDescription($this->request->getPost("description", "string"));
     }
 }

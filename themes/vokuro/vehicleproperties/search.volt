@@ -14,8 +14,8 @@
         <tr>
             <th>Id</th>
             <th>VehiclesId</th>
-            <th>Desc Of Short</th>
-            <th>Desc Of Long</th>
+            <th>Label</th>
+            <th>Description</th>
             <th>Is Of Numeric</th>
             <th>Value Of String</th>
             <th>Value Of Numeric</th>
@@ -29,8 +29,8 @@
         <tr>
             <td>{{ vehiclepropertie['id'] }}</td>
             <td>{{ vehiclepropertie['vehiclesId'] }}</td>
-            <td>{{ vehiclepropertie['desc_short'] }}</td>
-            <td>{{ vehiclepropertie['desc_long'] }}</td>
+            <td>{{ vehiclepropertie['label'] }}</td>
+            <td>{{ vehiclepropertie['description'] }}</td>
             <td>{{ vehiclepropertie['is_numeric'] }}</td>
             <td>{{ vehiclepropertie['value_string'] }}</td>
             <td>{{ vehiclepropertie['value_numeric'] }}</td>

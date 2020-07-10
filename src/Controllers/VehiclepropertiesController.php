@@ -102,8 +102,8 @@ class VehiclepropertiesController extends ControllerBase
             $this->tag->setDefault("vehiclesId", $vehiclepropertie->getVehiclesid());
             $this->tag->setDefault("create_time", $vehiclepropertie->getCreateTime());
             $this->tag->setDefault("update_time", $vehiclepropertie->getUpdateTime());
-            $this->tag->setDefault("desc_short", $vehiclepropertie->getDescShort());
-            $this->tag->setDefault("desc_long", $vehiclepropertie->getDescLong());
+            $this->tag->setDefault("label", $vehiclepropertie->getLabel());
+            $this->tag->setDefault("description", $vehiclepropertie->getDescription());
             $this->tag->setDefault("is_numeric", $vehiclepropertie->getIsNumeric());
             $this->tag->setDefault("value_string", $vehiclepropertie->getValueString());
             $this->tag->setDefault("value_numeric", $vehiclepropertie->getValueNumeric());
@@ -250,8 +250,8 @@ class VehiclepropertiesController extends ControllerBase
     public function setVehiclePropertyDetails($vehicleproperty): void
     {
         $vehicleproperty->setvehiclesId($this->request->getPost("vehiclesId", "int"));
-        $vehicleproperty->setdescShort($this->request->getPost("desc_short", "string"));
-        $vehicleproperty->setdescLong($this->request->getPost("desc_long", "string"));
+        $vehicleproperty->setLabel($this->request->getPost("label", "string"));
+        $vehicleproperty->setDescription($this->request->getPost("description", "string"));
         $vehicleproperty->setisNumeric(translateFromYesNo($this->request->getPost("is_numeric", "string")));
         $vehicleproperty->setvalueString($this->request->getPost("value_string", "string"));
         $vehicleproperty->setvalueNumeric($this->request->getPost("value_numeric", "float"));

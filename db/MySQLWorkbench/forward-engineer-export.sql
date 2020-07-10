@@ -21,11 +21,11 @@ CREATE TABLE IF NOT EXISTS `vokuro`.`equipment` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `desc_short` VARCHAR(60) NULL,
-  `desc_long` VARCHAR(500) NULL,
+  `label` VARCHAR(60) NULL,
+  `description` VARCHAR(5000) NULL,
   `total_count` INT UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `desc_short_UNIQUE` (`desc_short` ASC) )
+  UNIQUE INDEX `label_UNIQUE` (`label` ASC) )
 ENGINE = InnoDB;
 
 
@@ -52,8 +52,8 @@ CREATE TABLE IF NOT EXISTS `vokuro`.`certificates` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `desc_short` VARCHAR(60) UNIQUE NULL,
-  `desc_long` VARCHAR(60) NULL,
+  `label` VARCHAR(60) UNIQUE NULL,
+  `description` VARCHAR(5000) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -90,8 +90,8 @@ CREATE TABLE IF NOT EXISTS `vokuro`.`vehicles` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `desc_short` VARCHAR(60) UNIQUE NOT NULL,
-  `desc_long` VARCHAR(500) NULL,
+  `label` VARCHAR(60) UNIQUE NOT NULL,
+  `description` VARCHAR(5000) NULL,
   `technicalInspection` DATE NULL,
   `seatCount` INT NOT NULL DEFAULT 0,
   `isAmbulance` VARCHAR(1) NOT NULL DEFAULT 'N',
@@ -109,8 +109,8 @@ CREATE TABLE IF NOT EXISTS `vokuro`.`departments` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `desc_short` VARCHAR(60) UNIQUE NULL,
-  `desc_long` VARCHAR(500) NULL,
+  `label` VARCHAR(60) UNIQUE NULL,
+  `description` VARCHAR(5000) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -123,10 +123,10 @@ CREATE TABLE IF NOT EXISTS `vokuro`.`vehicleProperties` (
   `vehiclesId` INT NOT NULL,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `desc_short` VARCHAR(60) UNIQUE NULL,
-  `desc_long` VARCHAR(500) NULL,
+  `label` VARCHAR(60) UNIQUE NULL,
+  `description` VARCHAR(500) NULL,
   `is_numeric` VARCHAR(1) NOT NULL DEFAULT 'N',
-  `value_string` VARCHAR(500) NULL,
+  `value_string` VARCHAR(5000) NULL,
   `value_numeric` DECIMAL(12,5) NULL,
   PRIMARY KEY (`id`, `vehiclesId`),
   INDEX `FKVehicles_idx` (`vehiclesId` ASC) ,
@@ -145,8 +145,8 @@ CREATE TABLE IF NOT EXISTS `vokuro`.`locations` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `desc_short` VARCHAR(60) UNIQUE NULL,
-  `desc_long` VARCHAR(500) NULL,
+  `label` VARCHAR(60) UNIQUE NULL,
+  `description` VARCHAR(5000) NULL,
   `street` VARCHAR(100) NULL,
   `additionalText` VARCHAR(100) NULL,
   `postalcode` VARCHAR(10) NULL,
@@ -163,8 +163,8 @@ CREATE TABLE IF NOT EXISTS `vokuro`.`clients` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `desc_short` VARCHAR(60) UNIQUE NULL,
-  `desc_long` VARCHAR(500) NULL,
+  `label` VARCHAR(60) UNIQUE NULL,
+  `description` VARCHAR(5000) NULL,
   `contactInformation` VARCHAR(500) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
@@ -180,8 +180,8 @@ CREATE TABLE IF NOT EXISTS `vokuro`.`appointments` (
   `create_userId` INT NULL,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_userId` INT NULL,
-  `shortDescription` VARCHAR(60) UNIQUE NULL,
-  `longDescription` VARCHAR(5000) NULL,
+  `label` VARCHAR(60) UNIQUE NULL,
+  `description` VARCHAR(5000) NULL,
   `start` DATETIME NULL,
   `end` DATETIME NULL,
   `locationId` INT NULL,

@@ -100,8 +100,8 @@ class LocationsController extends ControllerBase
             $this->tag->setDefault("id", $location->getId());
             $this->tag->setDefault("create_time", $location->getCreateTime());
             $this->tag->setDefault("update_time", $location->getUpdateTime());
-            $this->tag->setDefault("desc_short", $location->getDescShort());
-            $this->tag->setDefault("desc_long", $location->getDescLong());
+            $this->tag->setDefault("label", $location->getLabel());
+            $this->tag->setDefault("description", $location->getDescription());
             $this->tag->setDefault("street", $location->getStreet());
             $this->tag->setDefault("additionalText", $location->getAdditionaltext());
             $this->tag->setDefault("postalcode", $location->getPostalcode());
@@ -249,8 +249,8 @@ class LocationsController extends ControllerBase
      */
     public function setLocationDetails($location): void
     {
-        $location->setdescShort($this->request->getPost("desc_short", "string"));
-        $location->setdescLong($this->request->getPost("desc_long", "string"));
+        $location->setLabel($this->request->getPost("label", "string"));
+        $location->setDescription($this->request->getPost("description", "string"));
         $location->setstreet($this->request->getPost("street", "string"));
         $location->setadditionalText($this->request->getPost("additionalText", "string"));
         $location->setpostalcode($this->request->getPost("postalcode", "string"));

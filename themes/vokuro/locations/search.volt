@@ -13,8 +13,8 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Desc Of Short</th>
-            <th>Desc Of Long</th>
+            <th>Label</th>
+            <th>Description</th>
             <th>Street</th>
             <th>AdditionalText</th>
             <th>Postalcode</th>
@@ -29,8 +29,8 @@
     {% for location in page.getItems() %}
         <tr>
             <td>{{ location['id'] }}</td>
-            <td>{{ location['desc_short'] }}</td>
-            <td>{{ location['desc_long'] }}</td>
+            <td>{{ location['label'] }}</td>
+            <td>{{ location['description'] }}</td>
             <td>{{ location['street'] }}</td>
             <td>{{ location['additionalText'] }}</td>
             <td>{{ location['postalcode'] }}</td>

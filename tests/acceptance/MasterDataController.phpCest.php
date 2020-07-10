@@ -102,9 +102,9 @@ final class MasterDataControllerCest
         foreach ($this->tblsWithDescriptionAndID as $tbl) {
             $I->wantToTest("Create new ".$tbl);
             $I->amOnPage('/'.$tbl.'/new');
-            $I->fillField('desc_short', $testEntryShortDesc);
+            $I->fillField('label', $testEntryShortDesc);
             $I->seeInCurrentUrl('/'.$tbl.'/new');
-            $I->see('Desc Of Short');
+            $I->see('Label');
             $I->dontSeeInSource('name="id"');
             $I->seeInSource('value="Save"');
             $I->click('//form/*[@type="submit"]');
@@ -112,7 +112,7 @@ final class MasterDataControllerCest
             $I->see('was created successfully');
 
             $I->wantToTest("Search new created ".$tbl);
-            $I->seeInField('desc_short', $testEntryShortDesc);
+            $I->seeInField('label', $testEntryShortDesc);
             $I->click('//input[@type="submit"]');
             $I->see($testEntryShortDesc);
 
@@ -127,15 +127,15 @@ final class MasterDataControllerCest
             $I->click(Locator::combine('a[class="btn btn-sm btn-outline-warning"]', '//tbody/tr/td/a[0]'));
             // stay edit:
             $I->seeInCurrentUrl('/'.$tbl.'/edit/'.$id);
-            $I->seeInField('desc_short', $testEntryShortDesc);
+            $I->seeInField('label', $testEntryShortDesc);
             $testEntryShortDescEdited = $testEntryShortDesc. '.edited';
-            $I->fillField('desc_short', $testEntryShortDescEdited);
+            $I->fillField('label', $testEntryShortDescEdited);
             $I->click('//input[@type="submit"]');
             $I->seeInCurrentUrl('/'.$tbl.'/save');
             $I->see('was updated successfully');
 
             $I->wantToTest("Search entry again ".$testEntryShortDescEdited);
-            $I->amOnPage('/'.$tbl.'/search?desc_short='.$testEntryShortDescEdited);
+            $I->amOnPage('/'.$tbl.'/search?label='.$testEntryShortDescEdited);
             $I->see($testEntryShortDescEdited);
 
             $I->wantToTest("delete entry with ID '.$id.' -> ".$testEntryShortDescEdited);

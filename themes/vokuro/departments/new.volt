@@ -9,16 +9,16 @@
 <form action="{{ url("departments/create") }}" class="form-horizontal" method="post">
 
 <div class="form-group">
-    <label for="fieldDescShort" class="col-sm-2 control-label">Desc Of Short</label>
+    <label for="fieldLabel" class="col-sm-2 control-label">Label</label>
     <div class="col-sm-10">
-        {{ text_field("desc_short", "size" : 30, "class" : "form-control", "id" : "fieldDescShort") }}
+        {{ text_field("label", "size" : 30, "class" : "form-control", "id" : "fieldLabel") }}
     </div>
 </div>
 
 <div class="form-group">
-    <label for="fieldDescLong" class="col-sm-2 control-label">Desc Of Long</label>
+    <label for="fieldDescription" class="col-sm-2 control-label">Description</label>
     <div class="col-sm-10">
-        {{ text_field("desc_long", "size" : 30, "class" : "form-control", "id" : "fieldDescLong") }}
+        {{ text_field("description", "size" : 30, "class" : "form-control", "id" : "fieldDescription") }}
     </div>
 </div>
 

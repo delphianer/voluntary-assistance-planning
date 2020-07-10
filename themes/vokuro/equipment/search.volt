@@ -15,8 +15,8 @@
             <th>Id</th>
             <th>Create Of Time</th>
             <th>Update Of Time</th>
-            <th>Desc Of Short</th>
-            <th>Desc Of Long</th>
+            <th>Label</th>
+            <th>Description</th>
             <th>Total Of Count</th>
 
             <th></th>
@@ -29,8 +29,8 @@
             <td>{{ equipment.id }}</td>
             <td>{{ equipment.create_time }}</td>
             <td>{{ equipment.update_time }}</td>
-            <td>{{ equipment.desc_short }}</td>
-            <td>{{ equipment.desc_long }}</td>
+            <td>{{ equipment.label }}</td>
+            <td>{{ equipment.description }}</td>
             <td>{{ equipment.total_count }}</td>
 
 

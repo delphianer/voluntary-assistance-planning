@@ -100,8 +100,8 @@ class ClientsController extends ControllerBase
             $this->tag->setDefault("id", $client->getId());
             $this->tag->setDefault("create_time", $client->getCreateTime());
             $this->tag->setDefault("update_time", $client->getUpdateTime());
-            $this->tag->setDefault("desc_short", $client->getDescShort());
-            $this->tag->setDefault("desc_long", $client->getDescLong());
+            $this->tag->setDefault("label", $client->getLabel());
+            $this->tag->setDefault("description", $client->getDescription());
             $this->tag->setDefault("contactInformation", $client->getContactinformation());
 
         }
@@ -245,8 +245,8 @@ class ClientsController extends ControllerBase
      */
     public function setClientDetails(Clients $client): void
     {
-        $client->setdescShort($this->request->getPost("desc_short", "string"));
-        $client->setdescLong($this->request->getPost("desc_long", "string"));
+        $client->setLabel($this->request->getPost("label", "string"));
+        $client->setDescription($this->request->getPost("description", "string"));
         $client->setcontactInformation($this->request->getPost("contactInformation", "string"));
     }
 }

@@ -33,7 +33,7 @@ class EquipmentController extends ControllerBase
     public function searchAction()
     {
         $builder = Criteria::fromInput($this->getDI(), Equipment::class, $this->request->getQuery());
-        $builder->orderBy("desc_short");
+        $builder->orderBy("label");
 
         $count = Equipment::count($builder->getParams());
         if ($count === 0) {
@@ -90,8 +90,8 @@ class EquipmentController extends ControllerBase
             $this->tag->setDefault("id", $equipment->getId());
             $this->tag->setDefault("create_time", $equipment->getCreateTime());
             $this->tag->setDefault("update_time", $equipment->getUpdateTime());
-            $this->tag->setDefault("desc_short", $equipment->getDescShort());
-            $this->tag->setDefault("desc_long", $equipment->getDescLong());
+            $this->tag->setDefault("label", $equipment->getLabel());
+            $this->tag->setDefault("description", $equipment->getDescription());
             $this->tag->setDefault("total_count", $equipment->getTotalCount());
         }
 
@@ -233,8 +233,8 @@ class EquipmentController extends ControllerBase
      */
     public function setEquipmentDetails(Equipment $equipment): void
     {
-        $equipment->setdescShort($this->request->getPost("desc_short", "string"));
-        $equipment->setdescLong($this->request->getPost("desc_long", "string"));
+        $equipment->setLabel($this->request->getPost("label", "string"));
+        $equipment->setDescription($this->request->getPost("description", "string"));
         $equipment->settotalCount($this->request->getPost("total_count", "int"));
     }
 }

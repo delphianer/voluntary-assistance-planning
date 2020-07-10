@@ -13,8 +13,8 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Desc Of Short</th>
-            <th>Desc Of Long</th>
+            <th>Label</th>
+            <th>Description</th>
             <th>TechnicalInspection</th>
             <th>SeatCount</th>
             <th>IsAmbulance</th>
@@ -30,8 +30,8 @@
     {% for vehicle in page.getItems() %}
         <tr>
             <td>{{ vehicle['id'] }}</td>
-            <td>{{ vehicle['desc_short'] }}</td>
-            <td>{{ vehicle['desc_long'] }}</td>
+            <td>{{ vehicle['label'] }}</td>
+            <td>{{ vehicle['description'] }}</td>
             <td>{{ vehicle['technicalInspection'] }}</td>
             <td>{{ vehicle['seatCount'] }}</td>
             <td>{{ vehicle['isAmbulance'] }}</td>

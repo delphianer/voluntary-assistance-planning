@@ -27,13 +27,13 @@ class Clients extends \Phalcon\Mvc\Model
      *
      * @var string
      */
-    protected $desc_short;
+    protected $label;
 
     /**
      *
      * @var string
      */
-    protected $desc_long;
+    protected $description;
 
     /**
      *
@@ -81,27 +81,27 @@ class Clients extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Method to set the value of field desc_short
+     * Method to set the value of field label
      *
-     * @param string $desc_short
+     * @param string $label
      * @return $this
      */
-    public function setDescShort($desc_short)
+    public function setLabel($label)
     {
-        $this->desc_short = $desc_short;
+        $this->label = $label;
 
         return $this;
     }
 
     /**
-     * Method to set the value of field desc_long
+     * Method to set the value of field description
      *
-     * @param string $desc_long
+     * @param string $description
      * @return $this
      */
-    public function setDescLong($desc_long)
+    public function setDescription($description)
     {
-        $this->desc_long = $desc_long;
+        $this->description = $description;
 
         return $this;
     }
@@ -150,23 +150,23 @@ class Clients extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Returns the value of field desc_short
+     * Returns the value of field label
      *
      * @return string
      */
-    public function getDescShort()
+    public function getLabel()
     {
-        return $this->desc_short;
+        return $this->label;
     }
 
     /**
-     * Returns the value of field desc_long
+     * Returns the value of field description
      *
      * @return string
      */
-    public function getDescLong()
+    public function getDescription()
     {
-        return $this->desc_long;
+        return $this->description;
     }
 
     /**
