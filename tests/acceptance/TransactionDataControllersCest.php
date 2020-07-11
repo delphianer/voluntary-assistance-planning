@@ -9,6 +9,12 @@ class TransactionDataControllersCest
 
     private $transactionDataModels = [
         'appointments',
+        'operations',
+        'operationshifts',
+        'OperationshiftsDepartmentsLink',
+        'OperationshiftsEquipmentLink',
+        'OperationshiftsVehiclesLink',
+        'OpshdeplVolunteersLink',
     ];
 
 
