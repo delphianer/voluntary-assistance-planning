@@ -29,19 +29,19 @@
     <tbody>
     {% for operationshifts_departments_link in page.getItems() %}
         <tr>
-            <td>{{ operationshifts_departments_link['id'] }}</td>
-            <td>{{ operationshifts_departments_link['operationShiftId'] }}</td>
-            <td>{{ operationshifts_departments_link['departmentId'] }}</td>
-            <td>{{ operationshifts_departments_link['create_time'] }}</td>
-            <td>{{ operationshifts_departments_link['update_time'] }}</td>
-            <td>{{ operationshifts_departments_link['shortDescription'] }}</td>
-            <td>{{ operationshifts_departments_link['longDescription'] }}</td>
-            <td>{{ operationshifts_departments_link['numberVolunteersNeeded'] }}</td>
-            <td>{{ operationshifts_departments_link['minimumCertificateRanking'] }}</td>
+            <td>{{ operationshifts_departments_link.id. }}</td>
+            <td>{{ operationshifts_departments_link.operationShiftId }}</td>
+            <td>{{ operationshifts_departments_link.departmentId }}</td>
+            <td>{{ operationshifts_departments_link.create_time }}</td>
+            <td>{{ operationshifts_departments_link.update_time }}</td>
+            <td>{{ operationshifts_departments_link.shortDescription }}</td>
+            <td>{{ operationshifts_departments_link.longDescription }}</td>
+            <td>{{ operationshifts_departments_link.numberVolunteersNeeded }}</td>
+            <td>{{ operationshifts_departments_link.minimumCertificateRanking }}</td>
 
 
-            <td class="td-width-12">{{ link_to( url("operationshifts_departments_link/edit/") ~ operationshifts_departments_link['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
-            <td class="td-width-12">{{ link_to( url("operationshifts_departments_link/delete/") ~ operationshifts_departments_link['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
+            <td class="td-width-12">{{ link_to( url("operationshifts_departments_link/edit/") ~ operationshifts_departments_link.id, '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
+            <td class="td-width-12">{{ link_to( url("operationshifts_departments_link/delete/") ~ operationshifts_departments_link.id, '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
         </tr>
     {% else %}
         <tr>

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -16,7 +16,6 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
      */
     public function initialize()
     {
-        // todo: check if private fits and remove this todo
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
@@ -36,8 +35,7 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
     public function searchAction()
     {
         $builder = Criteria::fromInput($this->getDI(), OperationshiftsVehiclesLink::class, $this->request->getQuery());
-        // todo: decide if id fits best sort criteria
-        $builder->orderBy("id");
+        $builder->orderBy("shortDescription");
 
         $count = OperationshiftsVehiclesLink::count($builder->getParams());
         if ($count === 0) {
@@ -99,7 +97,7 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
             $this->tag->setDefault("update_time", $operationshifts_vehicles_link->getUpdateTime());
             $this->tag->setDefault("shortDescription", $operationshifts_vehicles_link->getShortdescription());
             $this->tag->setDefault("longDescription", $operationshifts_vehicles_link->getLongdescription());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit OperationshiftsVehiclesLink");
@@ -116,16 +114,8 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
         }
 
         $operationshifts_vehicles_link = new OperationshiftsVehiclesLink();
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
-        $operationshifts_vehicles_link->setoperationShiftId($this->request->getPost("operationShiftId", "int"));
-        $operationshifts_vehicles_link->setvehicleId($this->request->getPost("vehicleId", "int"));
-        $operationshifts_vehicles_link->setcreateTime($this->request->getPost("create_time", "int"));
-        $operationshifts_vehicles_link->setupdateTime($this->request->getPost("update_time", "int"));
-        $operationshifts_vehicles_link->setshortDescription($this->request->getPost("shortDescription", "int"));
-        $operationshifts_vehicles_link->setlongDescription($this->request->getPost("longDescription", "int"));
-        
+        $this->setDetails($operationshifts_vehicles_link);
+
 
         if (!$operationshifts_vehicles_link->save()) {
             foreach ($operationshifts_vehicles_link->getMessages() as $message) {
@@ -177,17 +167,9 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
             return;
         }
 
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // $operationshifts_vehicles_link->setupdateTime(getCurrentDateTimeStamp());
-        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
-        $operationshifts_vehicles_link->setoperationShiftId($this->request->getPost("operationShiftId", "int"));
-        $operationshifts_vehicles_link->setvehicleId($this->request->getPost("vehicleId", "int"));
-        $operationshifts_vehicles_link->setcreateTime($this->request->getPost("create_time", "int"));
-        $operationshifts_vehicles_link->setupdateTime($this->request->getPost("update_time", "int"));
-        $operationshifts_vehicles_link->setshortDescription($this->request->getPost("shortDescription", "int"));
-        $operationshifts_vehicles_link->setlongDescription($this->request->getPost("longDescription", "int"));
-        
+        $operationshifts_vehicles_link->setupdateTime(getCurrentDateTimeStamp());
+        $this->setDetails($operationshifts_vehicles_link);
+
 
         if (!$operationshifts_vehicles_link->save()) {
 
@@ -251,5 +233,16 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
             'controller' => "operationshifts_vehicles_link",
             'action' => "index"
         ]);
+    }
+
+    /**
+     * @param OperationshiftsVehiclesLink $operationshifts_vehicles_link
+     */
+    public function setDetails(OperationshiftsVehiclesLink $operationshifts_vehicles_link): void
+    {
+        $operationshifts_vehicles_link->setoperationShiftId($this->request->getPost("operationShiftId", "int"));
+        $operationshifts_vehicles_link->setvehicleId($this->request->getPost("vehicleId", "int"));
+        $operationshifts_vehicles_link->setshortDescription($this->request->getPost("shortDescription", "string"));
+        $operationshifts_vehicles_link->setlongDescription($this->request->getPost("longDescription", "string"));
     }
 }

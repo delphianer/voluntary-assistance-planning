@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -16,7 +16,6 @@ class OpshdeplVolunteersLinkController extends ControllerBase
      */
     public function initialize()
     {
-        // todo: check if private fits and remove this todo
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
@@ -36,8 +35,7 @@ class OpshdeplVolunteersLinkController extends ControllerBase
     public function searchAction()
     {
         $builder = Criteria::fromInput($this->getDI(), OpshdeplVolunteersLink::class, $this->request->getQuery());
-        // todo: decide if id fits best sort criteria
-        $builder->orderBy("id");
+        $builder->orderBy("shortDescription");
 
         $count = OpshdeplVolunteersLink::count($builder->getParams());
         if ($count === 0) {
@@ -100,7 +98,7 @@ class OpshdeplVolunteersLinkController extends ControllerBase
             $this->tag->setDefault("opDepNeedId", $opshdepl_volunteers_link->getOpdepneedid());
             $this->tag->setDefault("volunteersId", $opshdepl_volunteers_link->getVolunteersid());
             $this->tag->setDefault("volCurrentMaximumCertRank", $opshdepl_volunteers_link->getVolcurrentmaximumcertrank());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit OpshdeplVolunteersLink");
@@ -117,17 +115,8 @@ class OpshdeplVolunteersLinkController extends ControllerBase
         }
 
         $opshdepl_volunteers_link = new OpshdeplVolunteersLink();
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
-        $opshdepl_volunteers_link->setcreateTime($this->request->getPost("create_time", "int"));
-        $opshdepl_volunteers_link->setupdateTime($this->request->getPost("update_time", "int"));
-        $opshdepl_volunteers_link->setshortDescription($this->request->getPost("shortDescription", "int"));
-        $opshdepl_volunteers_link->setlongDescription($this->request->getPost("longDescription", "int"));
-        $opshdepl_volunteers_link->setopDepNeedId($this->request->getPost("opDepNeedId", "int"));
-        $opshdepl_volunteers_link->setvolunteersId($this->request->getPost("volunteersId", "int"));
-        $opshdepl_volunteers_link->setvolCurrentMaximumCertRank($this->request->getPost("volCurrentMaximumCertRank", "int"));
-        
+        $this->setDetails($opshdepl_volunteers_link);
+
 
         if (!$opshdepl_volunteers_link->save()) {
             foreach ($opshdepl_volunteers_link->getMessages() as $message) {
@@ -179,18 +168,9 @@ class OpshdeplVolunteersLinkController extends ControllerBase
             return;
         }
 
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // $opshdepl_volunteers_link->setupdateTime(getCurrentDateTimeStamp());
-        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
-        $opshdepl_volunteers_link->setcreateTime($this->request->getPost("create_time", "int"));
-        $opshdepl_volunteers_link->setupdateTime($this->request->getPost("update_time", "int"));
-        $opshdepl_volunteers_link->setshortDescription($this->request->getPost("shortDescription", "int"));
-        $opshdepl_volunteers_link->setlongDescription($this->request->getPost("longDescription", "int"));
-        $opshdepl_volunteers_link->setopDepNeedId($this->request->getPost("opDepNeedId", "int"));
-        $opshdepl_volunteers_link->setvolunteersId($this->request->getPost("volunteersId", "int"));
-        $opshdepl_volunteers_link->setvolCurrentMaximumCertRank($this->request->getPost("volCurrentMaximumCertRank", "int"));
-        
+        $opshdepl_volunteers_link->setupdateTime(getCurrentDateTimeStamp());
+        $this->setDetails($opshdepl_volunteers_link);
+
 
         if (!$opshdepl_volunteers_link->save()) {
 
@@ -254,5 +234,17 @@ class OpshdeplVolunteersLinkController extends ControllerBase
             'controller' => "opshdepl_volunteers_link",
             'action' => "index"
         ]);
+    }
+
+    /**
+     * @param OpshdeplVolunteersLink $opshdepl_volunteers_link
+     */
+    public function setDetails(OpshdeplVolunteersLink $opshdepl_volunteers_link): void
+    {
+        $opshdepl_volunteers_link->setshortDescription($this->request->getPost("shortDescription", "string"));
+        $opshdepl_volunteers_link->setlongDescription($this->request->getPost("longDescription", "string"));
+        $opshdepl_volunteers_link->setopDepNeedId($this->request->getPost("opDepNeedId", "int"));
+        $opshdepl_volunteers_link->setvolunteersId($this->request->getPost("volunteersId", "int"));
+        $opshdepl_volunteers_link->setvolCurrentMaximumCertRank($this->request->getPost("volCurrentMaximumCertRank", "int"));
     }
 }

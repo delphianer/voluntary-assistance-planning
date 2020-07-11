@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -16,7 +16,6 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
      */
     public function initialize()
     {
-        // todo: check if private fits and remove this todo
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
@@ -36,8 +35,7 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
     public function searchAction()
     {
         $builder = Criteria::fromInput($this->getDI(), OperationshiftsDepartmentsLink::class, $this->request->getQuery());
-        // todo: decide if id fits best sort criteria
-        $builder->orderBy("id");
+        $builder->orderBy("numberVolunteersNeeded desc");
 
         $count = OperationshiftsDepartmentsLink::count($builder->getParams());
         if ($count === 0) {
@@ -101,7 +99,7 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
             $this->tag->setDefault("longDescription", $operationshifts_departments_link->getLongdescription());
             $this->tag->setDefault("numberVolunteersNeeded", $operationshifts_departments_link->getNumbervolunteersneeded());
             $this->tag->setDefault("minimumCertificateRanking", $operationshifts_departments_link->getMinimumcertificateranking());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit OperationshiftsDepartmentsLink");
@@ -118,18 +116,8 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
         }
 
         $operationshifts_departments_link = new OperationshiftsDepartmentsLink();
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
-        $operationshifts_departments_link->setoperationShiftId($this->request->getPost("operationShiftId", "int"));
-        $operationshifts_departments_link->setdepartmentId($this->request->getPost("departmentId", "int"));
-        $operationshifts_departments_link->setcreateTime($this->request->getPost("create_time", "int"));
-        $operationshifts_departments_link->setupdateTime($this->request->getPost("update_time", "int"));
-        $operationshifts_departments_link->setshortDescription($this->request->getPost("shortDescription", "int"));
-        $operationshifts_departments_link->setlongDescription($this->request->getPost("longDescription", "int"));
-        $operationshifts_departments_link->setnumberVolunteersNeeded($this->request->getPost("numberVolunteersNeeded", "int"));
-        $operationshifts_departments_link->setminimumCertificateRanking($this->request->getPost("minimumCertificateRanking", "int"));
-        
+        $this->setDetails($operationshifts_departments_link);
+
 
         if (!$operationshifts_departments_link->save()) {
             foreach ($operationshifts_departments_link->getMessages() as $message) {
@@ -181,19 +169,9 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
             return;
         }
 
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // $operationshifts_departments_link->setupdateTime(getCurrentDateTimeStamp());
-        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
-        $operationshifts_departments_link->setoperationShiftId($this->request->getPost("operationShiftId", "int"));
-        $operationshifts_departments_link->setdepartmentId($this->request->getPost("departmentId", "int"));
-        $operationshifts_departments_link->setcreateTime($this->request->getPost("create_time", "int"));
-        $operationshifts_departments_link->setupdateTime($this->request->getPost("update_time", "int"));
-        $operationshifts_departments_link->setshortDescription($this->request->getPost("shortDescription", "int"));
-        $operationshifts_departments_link->setlongDescription($this->request->getPost("longDescription", "int"));
-        $operationshifts_departments_link->setnumberVolunteersNeeded($this->request->getPost("numberVolunteersNeeded", "int"));
-        $operationshifts_departments_link->setminimumCertificateRanking($this->request->getPost("minimumCertificateRanking", "int"));
-        
+        $operationshifts_departments_link->setupdateTime(getCurrentDateTimeStamp());
+        $this->setDetails($operationshifts_departments_link);
+
 
         if (!$operationshifts_departments_link->save()) {
 
@@ -257,5 +235,18 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
             'controller' => "operationshifts_departments_link",
             'action' => "index"
         ]);
+    }
+
+    /**
+     * @param OperationshiftsDepartmentsLink $operationshifts_departments_link
+     */
+    public function setDetails(OperationshiftsDepartmentsLink $operationshifts_departments_link): void
+    {
+        $operationshifts_departments_link->setoperationShiftId($this->request->getPost("operationShiftId", "int"));
+        $operationshifts_departments_link->setdepartmentId($this->request->getPost("departmentId", "int"));
+        $operationshifts_departments_link->setshortDescription($this->request->getPost("shortDescription", "string"));
+        $operationshifts_departments_link->setlongDescription($this->request->getPost("longDescription", "string"));
+        $operationshifts_departments_link->setnumberVolunteersNeeded($this->request->getPost("numberVolunteersNeeded", "int"));
+        $operationshifts_departments_link->setminimumCertificateRanking($this->request->getPost("minimumCertificateRanking", "int"));
     }
 }

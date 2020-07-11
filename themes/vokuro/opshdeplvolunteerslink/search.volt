@@ -28,18 +28,18 @@
     <tbody>
     {% for opshdepl_volunteers_link in page.getItems() %}
         <tr>
-            <td>{{ opshdepl_volunteers_link['id'] }}</td>
-            <td>{{ opshdepl_volunteers_link['create_time'] }}</td>
-            <td>{{ opshdepl_volunteers_link['update_time'] }}</td>
-            <td>{{ opshdepl_volunteers_link['shortDescription'] }}</td>
-            <td>{{ opshdepl_volunteers_link['longDescription'] }}</td>
-            <td>{{ opshdepl_volunteers_link['opDepNeedId'] }}</td>
-            <td>{{ opshdepl_volunteers_link['volunteersId'] }}</td>
-            <td>{{ opshdepl_volunteers_link['volCurrentMaximumCertRank'] }}</td>
+            <td>{{ opshdepl_volunteers_link.id }}</td>
+            <td>{{ opshdepl_volunteers_link.create_time }}</td>
+            <td>{{ opshdepl_volunteers_link.update_time }}</td>
+            <td>{{ opshdepl_volunteers_link.shortDescription }}</td>
+            <td>{{ opshdepl_volunteers_link.longDescription }}</td>
+            <td>{{ opshdepl_volunteers_link.opDepNeedId }}</td>
+            <td>{{ opshdepl_volunteers_link.volunteersId }}</td>
+            <td>{{ opshdepl_volunteers_link.volCurrentMaximumCertRank }}</td>
 
 
-            <td class="td-width-12">{{ link_to( url("opshdepl_volunteers_link/edit/") ~ opshdepl_volunteers_link['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
-            <td class="td-width-12">{{ link_to( url("opshdepl_volunteers_link/delete/") ~ opshdepl_volunteers_link['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
+            <td class="td-width-12">{{ link_to( url("opshdepl_volunteers_link/edit/") ~ opshdepl_volunteers_link.id, '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
+            <td class="td-width-12">{{ link_to( url("opshdepl_volunteers_link/delete/") ~ opshdepl_volunteers_link.id, '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
         </tr>
     {% else %}
         <tr>

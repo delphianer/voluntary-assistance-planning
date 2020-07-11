@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -16,7 +16,6 @@ class OperationsController extends ControllerBase
      */
     public function initialize()
     {
-        // todo: check if private fits and remove this todo
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
@@ -36,8 +35,7 @@ class OperationsController extends ControllerBase
     public function searchAction()
     {
         $builder = Criteria::fromInput($this->getDI(), Operations::class, $this->request->getQuery());
-        // todo: decide if id fits best sort criteria
-        $builder->orderBy("id");
+        $builder->orderBy("shortDescription");
 
         $count = Operations::count($builder->getParams());
         if ($count === 0) {
@@ -101,7 +99,7 @@ class OperationsController extends ControllerBase
             $this->tag->setDefault("shortDescription", $operation->getShortdescription());
             $this->tag->setDefault("longDescription", $operation->getLongdescription());
             $this->tag->setDefault("mainDepartmentId", $operation->getMaindepartmentid());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit Operations");
@@ -118,18 +116,9 @@ class OperationsController extends ControllerBase
         }
 
         $operation = new Operations();
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
-        $operation->setclientId($this->request->getPost("clientId", "int"));
-        $operation->setcreateTime($this->request->getPost("create_time", "int"));
-        $operation->setcreateUserId($this->request->getPost("create_userId", "int"));
-        $operation->setupdateTime($this->request->getPost("update_time", "int"));
-        $operation->setupdateUserId($this->request->getPost("update_userId", "int"));
-        $operation->setshortDescription($this->request->getPost("shortDescription", "int"));
-        $operation->setlongDescription($this->request->getPost("longDescription", "int"));
-        $operation->setmainDepartmentId($this->request->getPost("mainDepartmentId", "int"));
-        
+        $operation->setcreateUserId($this->auth->getUser()->id);
+        $this->setOperationDetails($operation);
+
 
         if (!$operation->save()) {
             foreach ($operation->getMessages() as $message) {
@@ -181,19 +170,9 @@ class OperationsController extends ControllerBase
             return;
         }
 
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // $operation->setupdateTime(getCurrentDateTimeStamp());
-        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
-        $operation->setclientId($this->request->getPost("clientId", "int"));
-        $operation->setcreateTime($this->request->getPost("create_time", "int"));
-        $operation->setcreateUserId($this->request->getPost("create_userId", "int"));
-        $operation->setupdateTime($this->request->getPost("update_time", "int"));
-        $operation->setupdateUserId($this->request->getPost("update_userId", "int"));
-        $operation->setshortDescription($this->request->getPost("shortDescription", "int"));
-        $operation->setlongDescription($this->request->getPost("longDescription", "int"));
-        $operation->setmainDepartmentId($this->request->getPost("mainDepartmentId", "int"));
-        
+        $operation->setupdateTime(getCurrentDateTimeStamp());
+        $this->setOperationDetails($operation);
+
 
         if (!$operation->save()) {
 
@@ -257,5 +236,17 @@ class OperationsController extends ControllerBase
             'controller' => "operations",
             'action' => "index"
         ]);
+    }
+
+    /**
+     * @param Operations $operation
+     */
+    public function setOperationDetails(Operations $operation): void
+    {
+        $operation->setclientId($this->request->getPost("clientId", "int"));
+        $operation->setupdateUserId($this->auth->getUser()->id);
+        $operation->setshortDescription($this->request->getPost("shortDescription", "string"));
+        $operation->setlongDescription($this->request->getPost("longDescription", "string"));
+        $operation->setmainDepartmentId($this->request->getPost("mainDepartmentId", "int"));
     }
 }

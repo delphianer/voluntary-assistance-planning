@@ -21,6 +21,8 @@
             <th>Update Of UserId</th>
             <th>ShortDescription</th>
             <th>LongDescription</th>
+            <th>Start</th>
+            <th>End</th>
 
             <th></th>
             <th></th>
@@ -29,19 +31,21 @@
     <tbody>
     {% for operationshift in page.getItems() %}
         <tr>
-            <td>{{ operationshift['id'] }}</td>
-            <td>{{ operationshift['operationId'] }}</td>
-            <td>{{ operationshift['locationId'] }}</td>
-            <td>{{ operationshift['create_time'] }}</td>
-            <td>{{ operationshift['create_userId'] }}</td>
-            <td>{{ operationshift['update_time'] }}</td>
-            <td>{{ operationshift['update_userId'] }}</td>
-            <td>{{ operationshift['shortDescription'] }}</td>
-            <td>{{ operationshift['longDescription'] }}</td>
+            <td>{{ operationshift.id }}</td>
+            <td>{{ operationshift.operationId }}</td>
+            <td>{{ operationshift.locationId }}</td>
+            <td>{{ operationshift.create_time }}</td>
+            <td>{{ operationshift.create_userId }}</td>
+            <td>{{ operationshift.update_time }}</td>
+            <td>{{ operationshift.update_userId }}</td>
+            <td>{{ operationshift.shortDescription }}</td>
+            <td>{{ operationshift.longDescription }}</td>
+            <td>{{ operationshift.start }}</td>
+            <td>{{ operationshift.end }}</td>
 
 
-            <td class="td-width-12">{{ link_to( url("operationshifts/edit/") ~ operationshift['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
-            <td class="td-width-12">{{ link_to( url("operationshifts/delete/") ~ operationshift['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
+            <td class="td-width-12">{{ link_to( url("operationshifts/edit/") ~ operationshift.id, '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
+            <td class="td-width-12">{{ link_to( url("operationshifts/delete/") ~ operationshift.id, '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
         </tr>
     {% else %}
         <tr>

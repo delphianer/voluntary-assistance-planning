@@ -29,19 +29,19 @@
     <tbody>
     {% for operation in page.getItems() %}
         <tr>
-            <td>{{ operation['id'] }}</td>
-            <td>{{ operation['clientId'] }}</td>
-            <td>{{ operation['create_time'] }}</td>
-            <td>{{ operation['create_userId'] }}</td>
-            <td>{{ operation['update_time'] }}</td>
-            <td>{{ operation['update_userId'] }}</td>
-            <td>{{ operation['shortDescription'] }}</td>
-            <td>{{ operation['longDescription'] }}</td>
-            <td>{{ operation['mainDepartmentId'] }}</td>
+            <td>{{ operation.id }}</td>
+            <td>{{ operation.clientId }}</td>
+            <td>{{ operation.create_time }}</td>
+            <td>{{ operation.create_userId }}</td>
+            <td>{{ operation.update_time }}</td>
+            <td>{{ operation.update_userId }}</td>
+            <td>{{ operation.shortDescription }}</td>
+            <td>{{ operation.longDescription }}</td>
+            <td>{{ operation.mainDepartmentId }}</td>
 
 
-            <td class="td-width-12">{{ link_to( url("operations/edit/") ~ operation['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
-            <td class="td-width-12">{{ link_to( url("operations/delete/") ~ operation['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
+            <td class="td-width-12">{{ link_to( url("operations/edit/") ~ operation.id, '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
+            <td class="td-width-12">{{ link_to( url("operations/delete/") ~ operation.id, '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
         </tr>
     {% else %}
         <tr>

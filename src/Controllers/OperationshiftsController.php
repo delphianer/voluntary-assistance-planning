@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -16,7 +16,6 @@ class OperationshiftsController extends ControllerBase
      */
     public function initialize()
     {
-        // todo: check if private fits and remove this todo
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
@@ -36,8 +35,7 @@ class OperationshiftsController extends ControllerBase
     public function searchAction()
     {
         $builder = Criteria::fromInput($this->getDI(), Operationshifts::class, $this->request->getQuery());
-        // todo: decide if id fits best sort criteria
-        $builder->orderBy("id");
+        $builder->orderBy("start");
 
         $count = Operationshifts::count($builder->getParams());
         if ($count === 0) {
@@ -101,7 +99,9 @@ class OperationshiftsController extends ControllerBase
             $this->tag->setDefault("update_userId", $operationshift->getUpdateUserid());
             $this->tag->setDefault("shortDescription", $operationshift->getShortdescription());
             $this->tag->setDefault("longDescription", $operationshift->getLongdescription());
-            
+            $this->tag->setDefault("start", $operationshift->getStart());
+            $this->tag->setDefault("end", $operationshift->getEnd());
+
         }
 
         $this->view->setVar('extraTitle', "Edit Operationshifts");
@@ -118,18 +118,10 @@ class OperationshiftsController extends ControllerBase
         }
 
         $operationshift = new Operationshifts();
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
-        $operationshift->setoperationId($this->request->getPost("operationId", "int"));
-        $operationshift->setlocationId($this->request->getPost("locationId", "int"));
-        $operationshift->setcreateTime($this->request->getPost("create_time", "int"));
-        $operationshift->setcreateUserId($this->request->getPost("create_userId", "int"));
-        $operationshift->setupdateTime($this->request->getPost("update_time", "int"));
-        $operationshift->setupdateUserId($this->request->getPost("update_userId", "int"));
-        $operationshift->setshortDescription($this->request->getPost("shortDescription", "int"));
-        $operationshift->setlongDescription($this->request->getPost("longDescription", "int"));
-        
+        $operationshift->setupdateUserId($this->auth->getUser()->id);
+        $operationshift->setcreateUserId($this->auth->getUser()->id);
+        $this->setOperationShiftDetails($operationshift);
+
 
         if (!$operationshift->save()) {
             foreach ($operationshift->getMessages() as $message) {
@@ -181,19 +173,10 @@ class OperationshiftsController extends ControllerBase
             return;
         }
 
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // $operationshift->setupdateTime(getCurrentDateTimeStamp());
-        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
-        $operationshift->setoperationId($this->request->getPost("operationId", "int"));
-        $operationshift->setlocationId($this->request->getPost("locationId", "int"));
-        $operationshift->setcreateTime($this->request->getPost("create_time", "int"));
-        $operationshift->setcreateUserId($this->request->getPost("create_userId", "int"));
-        $operationshift->setupdateTime($this->request->getPost("update_time", "int"));
-        $operationshift->setupdateUserId($this->request->getPost("update_userId", "int"));
-        $operationshift->setshortDescription($this->request->getPost("shortDescription", "int"));
-        $operationshift->setlongDescription($this->request->getPost("longDescription", "int"));
-        
+        $operationshift->setupdateTime(getCurrentDateTimeStamp());
+        $operationshift->setupdateUserId($this->auth->getUser()->id);
+        $this->setOperationShiftDetails($operationshift);
+
 
         if (!$operationshift->save()) {
 
@@ -257,5 +240,18 @@ class OperationshiftsController extends ControllerBase
             'controller' => "operationshifts",
             'action' => "index"
         ]);
+    }
+
+    /**
+     * @param Operationshifts $operationshift
+     */
+    public function setOperationShiftDetails(Operationshifts $operationshift): void
+    {
+        $operationshift->setoperationId($this->request->getPost("operationId", "int"));
+        $operationshift->setlocationId($this->request->getPost("locationId", "int"));
+        $operationshift->setshortDescription($this->request->getPost("shortDescription", "string"));
+        $operationshift->setlongDescription($this->request->getPost("longDescription", "string"));
+        $operationshift->setstart($this->request->getPost("start", "int"));
+        $operationshift->setend($this->request->getPost("end", "int"));
     }
 }

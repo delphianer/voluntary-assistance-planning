@@ -27,17 +27,17 @@
     <tbody>
     {% for operationshifts_equipment_link in page.getItems() %}
         <tr>
-            <td>{{ operationshifts_equipment_link['id'] }}</td>
-            <td>{{ operationshifts_equipment_link['operationShiftId'] }}</td>
-            <td>{{ operationshifts_equipment_link['equipmentId'] }}</td>
-            <td>{{ operationshifts_equipment_link['create_time'] }}</td>
-            <td>{{ operationshifts_equipment_link['update_time'] }}</td>
-            <td>{{ operationshifts_equipment_link['shortDescription'] }}</td>
-            <td>{{ operationshifts_equipment_link['longDescription'] }}</td>
+            <td>{{ operationshifts_equipment_link.id }}</td>
+            <td>{{ operationshifts_equipment_link.operationShiftId }}</td>
+            <td>{{ operationshifts_equipment_link.equipmentId }}</td>
+            <td>{{ operationshifts_equipment_link.create_time }}</td>
+            <td>{{ operationshifts_equipment_link.update_time }}</td>
+            <td>{{ operationshifts_equipment_link.shortDescription }}</td>
+            <td>{{ operationshifts_equipment_link.longDescription }}</td>
 
 
-            <td class="td-width-12">{{ link_to( url("operationshifts_equipment_link/edit/") ~ operationshifts_equipment_link['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
-            <td class="td-width-12">{{ link_to( url("operationshifts_equipment_link/delete/") ~ operationshifts_equipment_link['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
+            <td class="td-width-12">{{ link_to( url("operationshifts_equipment_link/edit/") ~ operationshifts_equipment_link.id, '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
+            <td class="td-width-12">{{ link_to( url("operationshifts_equipment_link/delete/") ~ operationshifts_equipment_link.id, '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
         </tr>
     {% else %}
         <tr>

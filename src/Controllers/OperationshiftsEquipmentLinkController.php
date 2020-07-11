@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -16,7 +16,6 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
      */
     public function initialize()
     {
-        // todo: check if private fits and remove this todo
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
@@ -36,8 +35,7 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
     public function searchAction()
     {
         $builder = Criteria::fromInput($this->getDI(), OperationshiftsEquipmentLink::class, $this->request->getQuery());
-        // todo: decide if id fits best sort criteria
-        $builder->orderBy("id");
+        $builder->orderBy("shortDescription");
 
         $count = OperationshiftsEquipmentLink::count($builder->getParams());
         if ($count === 0) {
@@ -99,7 +97,7 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
             $this->tag->setDefault("update_time", $operationshifts_equipment_link->getUpdateTime());
             $this->tag->setDefault("shortDescription", $operationshifts_equipment_link->getShortdescription());
             $this->tag->setDefault("longDescription", $operationshifts_equipment_link->getLongdescription());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit OperationshiftsEquipmentLink");
@@ -116,16 +114,8 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
         }
 
         $operationshifts_equipment_link = new OperationshiftsEquipmentLink();
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
-        $operationshifts_equipment_link->setoperationShiftId($this->request->getPost("operationShiftId", "int"));
-        $operationshifts_equipment_link->setequipmentId($this->request->getPost("equipmentId", "int"));
-        $operationshifts_equipment_link->setcreateTime($this->request->getPost("create_time", "int"));
-        $operationshifts_equipment_link->setupdateTime($this->request->getPost("update_time", "int"));
-        $operationshifts_equipment_link->setshortDescription($this->request->getPost("shortDescription", "int"));
-        $operationshifts_equipment_link->setlongDescription($this->request->getPost("longDescription", "int"));
-        
+        $this->setDetails($operationshifts_equipment_link);
+
 
         if (!$operationshifts_equipment_link->save()) {
             foreach ($operationshifts_equipment_link->getMessages() as $message) {
@@ -177,17 +167,9 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
             return;
         }
 
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // $operationshifts_equipment_link->setupdateTime(getCurrentDateTimeStamp());
-        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
-        $operationshifts_equipment_link->setoperationShiftId($this->request->getPost("operationShiftId", "int"));
-        $operationshifts_equipment_link->setequipmentId($this->request->getPost("equipmentId", "int"));
-        $operationshifts_equipment_link->setcreateTime($this->request->getPost("create_time", "int"));
-        $operationshifts_equipment_link->setupdateTime($this->request->getPost("update_time", "int"));
-        $operationshifts_equipment_link->setshortDescription($this->request->getPost("shortDescription", "int"));
-        $operationshifts_equipment_link->setlongDescription($this->request->getPost("longDescription", "int"));
-        
+        $operationshifts_equipment_link->setupdateTime(getCurrentDateTimeStamp());
+        $this->setDetails($operationshifts_equipment_link);
+
 
         if (!$operationshifts_equipment_link->save()) {
 
@@ -251,5 +233,18 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
             'controller' => "operationshifts_equipment_link",
             'action' => "index"
         ]);
+    }
+
+    /**
+     * @param OperationshiftsEquipmentLink $operationshifts_equipment_link
+     */
+    public function setDetails(OperationshiftsEquipmentLink $operationshifts_equipment_link): void
+    {
+        $operationshifts_equipment_link->setoperationShiftId($this->request->getPost("operationShiftId", "int"));
+        $operationshifts_equipment_link->setequipmentId($this->request->getPost("equipmentId", "int"));
+        $operationshifts_equipment_link->setcreateTime($this->request->getPost("create_time", "int"));
+        $operationshifts_equipment_link->setupdateTime($this->request->getPost("update_time", "int"));
+        $operationshifts_equipment_link->setshortDescription($this->request->getPost("shortDescription", "int"));
+        $operationshifts_equipment_link->setlongDescription($this->request->getPost("longDescription", "int"));
     }
 }
