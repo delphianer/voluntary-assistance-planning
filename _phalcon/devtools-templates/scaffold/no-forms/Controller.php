@@ -111,6 +111,7 @@ class $className$Controller extends ControllerBase
         $singularVar$ = new $className$();
         // todo: change last update time, maybe delete create time
         // todo: refactor what can be refactored :)
+        // $singularVar$->setcreateUserId($this->auth->getUser()->id);
         // todo: check datatypes! they may be wrong (DevTools V4.0.3)
         $assignInputFromRequestCreate$
 
@@ -167,6 +168,7 @@ class $className$Controller extends ControllerBase
         // todo: change last update time, maybe delete create time
         // todo: refactor what can be refactored :)
         // $singularVar$->setupdateTime(getCurrentDateTimeStamp());
+        // $singularVar$->setupdateUserId($this->auth->getUser()->id);
         // todo: check datatypes! they may be wrong (DevTools V4.0.3)
         $assignInputFromRequestUpdate$
 
