@@ -26,16 +26,14 @@
 <div class="form-group">
     <label for="fieldStart" class="col-sm-2 control-label">Start</label>
     <div class="col-sm-10">
-        <input type="datetime-local" class="form-control" size="30" name="start" id="fieldStart" value="">
-        {# date_field("start", "size" : 30, "class" : "form-control", "id" : "fieldStart") #}
+        {{ text_field("start", "size" : 30, "class" : "form-control", "id" : "fieldStart") }}
     </div>
 </div>
 
 <div class="form-group">
     <label for="fieldEnd" class="col-sm-2 control-label">End</label>
     <div class="col-sm-10">
-        <input type="datetime-local" class="form-control" size="30" name="end" id="fieldEnd" value="">
-        {# date_field("end", "size" : 30, "class" : "form-control", "id" : "fieldEnd") #}
+        {{ text_field("end", "size" : 30, "class" : "form-control", "id" : "fieldEnd") }}
     </div>
 </div>
 
