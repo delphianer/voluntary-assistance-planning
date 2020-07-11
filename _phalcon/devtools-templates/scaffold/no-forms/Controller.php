@@ -17,7 +17,9 @@ class $className$Controller extends ControllerBase
     public function initialize()
     {
         // todo: check if private fits and remove this todo
-        $this->view->setTemplateBefore('private');
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
     }
 
     /**
