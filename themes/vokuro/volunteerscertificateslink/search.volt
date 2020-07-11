@@ -12,8 +12,6 @@
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
-            <th>Create Of Time</th>
-            <th>Update Of Time</th>
             <th>VolunteersId</th>
             <th>CertificatesId</th>
             <th>ValidUntil</th>
@@ -25,8 +23,6 @@
     <tbody>
     {% for volunteers_certificates_link in page.getItems() %}
         <tr>
-            <td>{{ volunteers_certificates_link['create_time'] }}</td>
-            <td>{{ volunteers_certificates_link['update_time'] }}</td>
             <td>{{ volunteers_certificates_link['volunteersId'] }}</td>
             <td>{{ volunteers_certificates_link['certificatesId'] }}</td>
             <td>{{ volunteers_certificates_link['validUntil'] }}</td>

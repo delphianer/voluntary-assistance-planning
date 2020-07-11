@@ -13,8 +13,6 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Create Of Time</th>
-            <th>Update Of Time</th>
             <th>Label</th>
             <th>Description</th>
             <th>Total Of Count</th>
@@ -27,8 +25,6 @@
     {% for equipment in page.items %}
         <tr>
             <td>{{ equipment.id }}</td>
-            <td>{{ equipment.create_time }}</td>
-            <td>{{ equipment.update_time }}</td>
             <td>{{ equipment.label }}</td>
             <td>{{ equipment.description }}</td>
             <td>{{ equipment.total_count }}</td>
