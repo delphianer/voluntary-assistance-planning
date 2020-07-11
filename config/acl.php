@@ -43,6 +43,8 @@ return [
             'index',
         ],
         // vap own defines:
+        'appointments' => $actions_std,
+        'operations' => $actions_std,
         'certificates' => $actions_std,
         'clients' => $actions_std,
         'departments' => $actions_std,

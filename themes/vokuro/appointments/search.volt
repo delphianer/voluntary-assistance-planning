@@ -32,22 +32,22 @@
     <tbody>
     {% for appointment in page.getItems() %}
         <tr>
-            <td>{{ appointment['id'] }}</td>
-            <td>{{ appointment['create_time'] }}</td>
-            <td>{{ appointment['create_userId'] }}</td>
-            <td>{{ appointment['update_time'] }}</td>
-            <td>{{ appointment['update_userId'] }}</td>
-            <td>{{ appointment['label'] }}</td>
-            <td>{{ appointment['description'] }}</td>
-            <td>{{ appointment['start'] }}</td>
-            <td>{{ appointment['end'] }}</td>
-            <td>{{ appointment['locationId'] }}</td>
-            <td>{{ appointment['mainDepartmentId'] }}</td>
-            <td>{{ appointment['clientId'] }}</td>
+            <td>{{ appointment.id }}</td>
+            <td>{{ appointment.create_time }}</td>
+            <td>{{ appointment.create_userId }}</td>
+            <td>{{ appointment.update_time }}</td>
+            <td>{{ appointment.update_userId }}</td>
+            <td>{{ appointment.label }}</td>
+            <td>{{ appointment.description }}</td>
+            <td>{{ appointment.start }}</td>
+            <td>{{ appointment.end }}</td>
+            <td>{{ appointment.locationId }}</td>
+            <td>{{ appointment.mainDepartmentId }}</td>
+            <td>{{ appointment.clientId }}</td>
 
 
-            <td class="td-width-12">{{ link_to( url("appointments/edit/") ~ appointment['id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
-            <td class="td-width-12">{{ link_to( url("appointments/delete/") ~ appointment['id'], '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
+            <td class="td-width-12">{{ link_to( url("appointments/edit/") ~ appointment.id, '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
+            <td class="td-width-12">{{ link_to( url("appointments/delete/") ~ appointment.id, '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
         </tr>
     {% else %}
         <tr>

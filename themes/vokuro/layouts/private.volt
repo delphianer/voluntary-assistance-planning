@@ -1,6 +1,7 @@
 {%-
 set menuPermissions = [
     'Home':null,
+    'List': 'noAccess',
     'Manage master data' : 'equipment',
     'Manage people': 'clients',
     'Admin page': 'users',
@@ -10,6 +11,10 @@ set menuPermissions = [
 {%-
 set menus = [
     'Home': null,
+    'Appointments': 'appointments',
+    'Operations': 'operations',
+    'List': [
+        ],
     'Manage master data' : [
         'Certificates' : 'certificates',
         'Departments' : 'departments',
@@ -17,6 +22,10 @@ set menus = [
         'Locations' : 'locations',
         'Vehicles' : 'vehicles',
         'Vehicle Properties' : 'vehicleproperties'
+        ],
+    'Manage people': [
+        'Clients' : 'clients',
+        'Volunteers' : 'volunteers'
         ],
     'Manage people': [
         'Clients' : 'clients',
@@ -42,7 +51,6 @@ set menus = [
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             {%- for key, value in menus %}
                 {% if isAnArray( value) %}
-                    {# dump(value) #}
                     {% if acl.isAllowed( userRole,
                                          menuPermissions[key],
                                          "index")

@@ -7,33 +7,7 @@
 {{ flash.output() }}
 
 <form action="{{ url("appointments/create") }}" class="form-horizontal" method="post">
-    <div class="form-group">
-    <label for="fieldCreateTime" class="col-sm-2 control-label">Create Of Time</label>
-    <div class="col-sm-10">
-        {{ text_field("create_time", "size" : 30, "class" : "form-control", "id" : "fieldCreateTime") }}
-    </div>
-</div>
 
-<div class="form-group">
-    <label for="fieldCreateUserid" class="col-sm-2 control-label">Create Of UserId</label>
-    <div class="col-sm-10">
-        {{ text_field("create_userId", "type" : "numeric", "class" : "form-control", "id" : "fieldCreateUserid") }}
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="fieldUpdateTime" class="col-sm-2 control-label">Update Of Time</label>
-    <div class="col-sm-10">
-        {{ text_field("update_time", "size" : 30, "class" : "form-control", "id" : "fieldUpdateTime") }}
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="fieldUpdateUserid" class="col-sm-2 control-label">Update Of UserId</label>
-    <div class="col-sm-10">
-        {{ text_field("update_userId", "type" : "numeric", "class" : "form-control", "id" : "fieldUpdateUserid") }}
-    </div>
-</div>
 
 <div class="form-group">
     <label for="fieldLabel" class="col-sm-2 control-label">Label</label>
@@ -52,14 +26,16 @@
 <div class="form-group">
     <label for="fieldStart" class="col-sm-2 control-label">Start</label>
     <div class="col-sm-10">
-        {{ text_field("start", "size" : 30, "class" : "form-control", "id" : "fieldStart") }}
+        <input type="datetime-local" class="form-control" size="30" name="start" id="fieldStart" value="">
+        {# date_field("start", "size" : 30, "class" : "form-control", "id" : "fieldStart") #}
     </div>
 </div>
 
 <div class="form-group">
     <label for="fieldEnd" class="col-sm-2 control-label">End</label>
     <div class="col-sm-10">
-        {{ text_field("end", "size" : 30, "class" : "form-control", "id" : "fieldEnd") }}
+        <input type="datetime-local" class="form-control" size="30" name="end" id="fieldEnd" value="">
+        {# date_field("end", "size" : 30, "class" : "form-control", "id" : "fieldEnd") #}
     </div>
 </div>
 

@@ -1,9 +1,10 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
+use http\Client\Curl\User;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
 use Vokuro\Models\Appointments;
@@ -16,8 +17,9 @@ class AppointmentsController extends ControllerBase
      */
     public function initialize()
     {
-        // todo: check if private fits and remove this todo
-        $this->view->setTemplateBefore('private');
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
     }
 
     /**
@@ -34,8 +36,10 @@ class AppointmentsController extends ControllerBase
     public function searchAction()
     {
         $builder = Criteria::fromInput($this->getDI(), Appointments::class, $this->request->getQuery());
-        // todo: decide if id fits best sort criteria
-        $builder->orderBy("id");
+        if ($builder->getConditions() == null) { // no conditions? -> restrict to future-appointments
+            $builder->conditions('start >= DATE_FORMAT(NOW(),\'%Y-%m-%d 00:00:00\')'); // in the future
+        }
+        $builder->orderBy("start");
 
         $count = Appointments::count($builder->getParams());
         if ($count === 0) {
@@ -102,7 +106,6 @@ class AppointmentsController extends ControllerBase
             $this->tag->setDefault("locationId", $appointment->getLocationid());
             $this->tag->setDefault("mainDepartmentId", $appointment->getMaindepartmentid());
             $this->tag->setDefault("clientId", $appointment->getClientid());
-            
         }
 
         $this->view->setVar('extraTitle', "Edit Appointments");
@@ -119,21 +122,9 @@ class AppointmentsController extends ControllerBase
         }
 
         $appointment = new Appointments();
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // $appointment->setupdateTime(getCurrentDateTimeStamp());
-        $appointment->setcreateTime($this->request->getPost("create_time", "int"));
-        $appointment->setcreateUserId($this->request->getPost("create_userId", "int"));
-        $appointment->setupdateTime($this->request->getPost("update_time", "int"));
-        $appointment->setupdateUserId($this->request->getPost("update_userId", "int"));
-        $appointment->setlabel($this->request->getPost("label", "int"));
-        $appointment->setdescription($this->request->getPost("description", "int"));
-        $appointment->setstart($this->request->getPost("start", "int"));
-        $appointment->setend($this->request->getPost("end", "int"));
-        $appointment->setlocationId($this->request->getPost("locationId", "int"));
-        $appointment->setmainDepartmentId($this->request->getPost("mainDepartmentId", "int"));
-        $appointment->setclientId($this->request->getPost("clientId", "int"));
-        
+        $appointment->setcreateUserId($this->auth->getUser()->id);
+        $this->setAppointmentDetails($appointment);
+
 
         if (!$appointment->save()) {
             foreach ($appointment->getMessages() as $message) {
@@ -185,24 +176,11 @@ class AppointmentsController extends ControllerBase
             return;
         }
 
-        // todo: change last update time, maybe delete create time
-        // todo: refactor what can be refactored :)
-        // $appointment->setupdateTime(getCurrentDateTimeStamp());
-        $appointment->setcreateTime($this->request->getPost("create_time", "int"));
-        $appointment->setcreateUserId($this->request->getPost("create_userId", "int"));
-        $appointment->setupdateTime($this->request->getPost("update_time", "int"));
-        $appointment->setupdateUserId($this->request->getPost("update_userId", "int"));
-        $appointment->setlabel($this->request->getPost("label", "int"));
-        $appointment->setdescription($this->request->getPost("description", "int"));
-        $appointment->setstart($this->request->getPost("start", "int"));
-        $appointment->setend($this->request->getPost("end", "int"));
-        $appointment->setlocationId($this->request->getPost("locationId", "int"));
-        $appointment->setmainDepartmentId($this->request->getPost("mainDepartmentId", "int"));
-        $appointment->setclientId($this->request->getPost("clientId", "int"));
-        
+        $appointment->setupdateTime(getCurrentDateTimeStamp());
+        $this->setAppointmentDetails($appointment);
+
 
         if (!$appointment->save()) {
-
             foreach ($appointment->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -244,7 +222,6 @@ class AppointmentsController extends ControllerBase
         }
 
         if (!$appointment->delete()) {
-
             foreach ($appointment->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -263,5 +240,21 @@ class AppointmentsController extends ControllerBase
             'controller' => "appointments",
             'action' => "index"
         ]);
+    }
+
+    /**
+     * @param Appointments $appointment
+     * @throws \Vokuro\Plugins\Auth\Exception
+     */
+    public function setAppointmentDetails(Appointments $appointment): void
+    {
+        $appointment->setupdateUserId($this->auth->getUser()->id);
+        $appointment->setlabel($this->request->getPost("label", "string"));
+        $appointment->setdescription($this->request->getPost("description", "string"));
+        $appointment->setstart($this->request->getPost("start", "DateTime"));
+        $appointment->setend($this->request->getPost("end", "DateTime"));
+        $appointment->setlocationId($this->request->getPost("locationId", "int"));
+        $appointment->setmainDepartmentId($this->request->getPost("mainDepartmentId", "int"));
+        $appointment->setclientId($this->request->getPost("clientId", "int"));
     }
 }
