@@ -13,7 +13,7 @@ final class MasterDataControllerCest
      */
     private $cookie = null;
 
-    private $masterDataTables = [
+    private $masterDataModels = [
         'certificates',
         'clients' ,
         'departments',
@@ -25,7 +25,7 @@ final class MasterDataControllerCest
         'volunteerscertificateslink' ,
     ];
 
-    private $tblsWithDescriptionAndID = [
+    private $modelsWithDescriptionAndID = [
         'certificates',
         'clients' ,
         'departments',
@@ -34,9 +34,9 @@ final class MasterDataControllerCest
         'vehicles' ,
     ];
 
-    // todo-019: 'volunteers',
+    // todo-019: 'volunteers' ,
     // todo-019: 'volunteerscertificateslink' ,
-    // todo-019: 'vehicleproperties',
+    // todo-019: 'vehicleproperties' ,
 
     /**
      * @param AcceptanceTester $I
@@ -50,7 +50,7 @@ final class MasterDataControllerCest
      */
     public function testIndexAsGuest(AcceptanceTester $I): void
     {
-        foreach ($this->masterDataTables as $tbl) {
+        foreach ($this->masterDataModels as $tbl) {
             $I->wantToTest("Dimension as Guest: ".$tbl);
             $I->amOnPage('/'.$tbl);
             $I->see('You don\'t have access to this module: private');
@@ -82,7 +82,7 @@ final class MasterDataControllerCest
     {
         $I->setCookie('PHPSESSID', $this->cookie);
 
-        foreach ($this->masterDataTables as $tbl) {
+        foreach ($this->masterDataModels as $tbl) {
             $I->wantToTest("Dimension as AdminUser: ".$tbl);
             $I->amOnPage('/'.$tbl);
             $I->dontSee('You don\'t have access to this module: private');
@@ -99,7 +99,7 @@ final class MasterDataControllerCest
         $I->setCookie('PHPSESSID', $this->cookie);
         $testEntryShortDesc = 'simpleTestEntry'.date("Ymd.his");
 
-        foreach ($this->tblsWithDescriptionAndID as $tbl) {
+        foreach ($this->modelsWithDescriptionAndID as $tbl) {
             $I->wantToTest("Create new ".$tbl);
             $I->amOnPage('/'.$tbl.'/new');
             $I->fillField('label', $testEntryShortDesc);
