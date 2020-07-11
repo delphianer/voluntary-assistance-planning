@@ -13,13 +13,19 @@ use function Vokuro\getCurrentDateTimeStamp;
 class ClientsController extends ControllerBase
 {
     /**
-     * Index action
+     * init method
      */
-    public function indexAction()
+    public function initialize()
     {
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
+    }
+    /**
+     * Index action
+     */
+    public function indexAction()
+    {
         $this->view->setVar('extraTitle', "Search clients");
     }
 
@@ -28,9 +34,6 @@ class ClientsController extends ControllerBase
      */
     public function searchAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         $numberPage = $this->request->getQuery('page', 'int', 1);
         $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Clients', $_GET)->getParams();
         $parameters['order'] = "id";
@@ -66,9 +69,6 @@ class ClientsController extends ControllerBase
      */
     public function newAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         $this->view->setVar('extraTitle', "New Clients");
     }
 
@@ -79,9 +79,6 @@ class ClientsController extends ControllerBase
      */
     public function editAction($id)
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         if (!$this->request->isPost()) {
             $client = Clients::findFirstByid($id);
             if (!$client) {

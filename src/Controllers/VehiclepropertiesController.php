@@ -14,13 +14,21 @@ use function Vokuro\translateFromYesNo;
 class VehiclepropertiesController extends ControllerBase
 {
     /**
-     * Index action
+     * init method
      */
-    public function indexAction()
+    public function initialize()
     {
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
+    }
+
+
+    /**
+     * Index action
+     */
+    public function indexAction()
+    {
         $this->view->setVar('extraTitle', "Search vehicleproperties");
     }
 
@@ -29,9 +37,6 @@ class VehiclepropertiesController extends ControllerBase
      */
     public function searchAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         $numberPage = $this->request->getQuery('page', 'int', 1);
         $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Vehicleproperties', $_GET)->getParams();
         $parameters['order'] = "id";
@@ -67,9 +72,6 @@ class VehiclepropertiesController extends ControllerBase
      */
     public function newAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         $this->view->setVar('extraTitle', "New Vehicleproperties");
     }
 
@@ -80,9 +82,6 @@ class VehiclepropertiesController extends ControllerBase
      */
     public function editAction($id)
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         if (!$this->request->isPost()) {
             $vehiclepropertie = Vehicleproperties::findFirstByid($id);
             if (!$vehiclepropertie) {

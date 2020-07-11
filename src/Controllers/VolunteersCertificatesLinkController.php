@@ -12,11 +12,13 @@ use function Vokuro\getCurrentDateTimeStamp;
 class VolunteersCertificatesLinkController extends ControllerBase
 {
     /**
-     * initialize this Controller
+     * init method
      */
     public function initialize()
     {
-        $this->view->setTemplateBefore('private');
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
     }
 
     /**

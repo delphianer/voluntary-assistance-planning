@@ -13,9 +13,14 @@ use function Vokuro\translateFromYesNo;
 
 class VehiclesController extends ControllerBase
 {
-    public function initialize(): void
+    /**
+     * init method
+     */
+    public function initialize()
     {
-        $this->view->setTemplateBefore('private');
+        if ($this->session->has('auth-identity')) {
+            $this->view->setTemplateBefore('private');
+        }
     }
 
     /**

@@ -13,13 +13,20 @@ use function Vokuro\getCurrentDateTimeStamp;
 class CertificatesController extends ControllerBase
 {
     /**
-     * Index action
+     * init method
      */
-    public function indexAction()
+    public function initialize()
     {
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
+    }
+
+    /**
+     * Index action
+     */
+    public function indexAction()
+    {
         $this->view->setVar('extraTitle', "Search certificates :: ");
     }
 
@@ -28,9 +35,6 @@ class CertificatesController extends ControllerBase
      */
     public function searchAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         $numberPage = $this->request->getQuery('page', 'int', 1);
         $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Certificates', $_GET)->getParams();
         $parameters['order'] = "id";
@@ -66,9 +70,6 @@ class CertificatesController extends ControllerBase
      */
     public function newAction()
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         $this->view->setVar('extraTitle', "New Certificates");
     }
 
@@ -79,9 +80,6 @@ class CertificatesController extends ControllerBase
      */
     public function editAction($id)
     {
-        if ($this->session->has('auth-identity')) {
-            $this->view->setTemplateBefore('private');
-        }
         if (!$this->request->isPost()) {
             $certificate = Certificates::findFirstByid($id);
             if (!$certificate) {
@@ -217,7 +215,6 @@ class CertificatesController extends ControllerBase
         }
 
         if (!$certificate->delete()) {
-
             foreach ($certificate->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
