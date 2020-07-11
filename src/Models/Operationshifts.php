@@ -60,6 +60,18 @@ class Operationshifts extends \Phalcon\Mvc\Model
     protected $longDescription;
 
     /**
+     *
+     * @var string
+     */
+    protected $start;
+
+    /**
+     *
+     * @var string
+     */
+    protected $end;
+
+    /**
      * Method to set the value of field id
      *
      * @param integer $id
@@ -177,6 +189,32 @@ class Operationshifts extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Method to set the value of field start
+     *
+     * @param string $start
+     * @return $this
+     */
+    public function setStart($start)
+    {
+        $this->start = $start;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field end
+     *
+     * @param string $end
+     * @return $this
+     */
+    public function setEnd($end)
+    {
+        $this->end = $end;
+
+        return $this;
+    }
+
+    /**
      * Returns the value of field id
      *
      * @return integer
@@ -264,6 +302,26 @@ class Operationshifts extends \Phalcon\Mvc\Model
     public function getLongDescription()
     {
         return $this->longDescription;
+    }
+
+    /**
+     * Returns the value of field start
+     *
+     * @return string
+     */
+    public function getStart()
+    {
+        return $this->start;
+    }
+
+    /**
+     * Returns the value of field end
+     *
+     * @return string
+     */
+    public function getEnd()
+    {
+        return $this->end;
     }
 
     /**
