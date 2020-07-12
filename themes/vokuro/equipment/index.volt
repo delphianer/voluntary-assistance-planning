@@ -1,4 +1,37 @@
-<h1 class="mt-3">Search equipment</h1>
+{% extends 'layouts/inheritance/masterindex.volt' %}
+
+{% block title %}Search equipment{% endblock %}
+
+{% block inputelements %}
+
+<div class="form-group">
+    <label for="fieldLabel" class="col-sm-2 control-label">Label</label>
+    <div class="col-sm-10">
+        {{ text_field("label", "size" : 30, "class" : "form-control", "id" : "fieldLabel") }}
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldDescription" class="col-sm-2 control-label">Description</label>
+    <div class="col-sm-10">
+        {{ text_field("description", "size" : 30, "class" : "form-control", "id" : "fieldDescription") }}
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldTotalCount" class="col-sm-2 control-label">Total Of Count</label>
+    <div class="col-sm-10">
+        {{ text_field("total_count", "type" : "numeric", "class" : "form-control", "id" : "fieldTotalCount") }}
+    </div>
+</div>
+
+{{ hidden_field("id") }}
+
+{% endblock %}
+
+{#
+
+<h1 class="mt-3"></h1>
 
 <div class="btn-group mb-5" role="group">
     {{ link_to(url("equipment/new"), "Create equipment", 'class': 'btn btn-primary') }}
@@ -45,3 +78,4 @@
         </div>
     </div>
 </form>
+#}
