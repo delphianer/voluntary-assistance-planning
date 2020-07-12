@@ -1,22 +1,22 @@
 <?php
 declare(strict_types=1);
 
-//
+// 
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Paginator\Adapter\Model;
-use Vokuro\Forms\UsersForm;
+use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
 use Vokuro\Models\Certificates;
 use function Vokuro\getCurrentDateTimeStamp;
 
 class CertificatesController extends ControllerBase
 {
     /**
-     * init method
+     * initialize this Controller
      */
     public function initialize()
     {
+        // todo: check if private fits and remove this todo
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
@@ -27,7 +27,7 @@ class CertificatesController extends ControllerBase
      */
     public function indexAction()
     {
-        $this->view->setVar('extraTitle', "Search certificates :: ");
+        $this->view->setVar('extraTitle', "Search certificates");
     }
 
     /**
@@ -35,34 +35,30 @@ class CertificatesController extends ControllerBase
      */
     public function searchAction()
     {
-        $numberPage = $this->request->getQuery('page', 'int', 1);
-        $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Certificates', $_GET)->getParams();
-        $parameters['order'] = "id";
+        $builder = Criteria::fromInput($this->getDI(), Certificates::class, $this->request->getQuery());
+        $builder->orderBy("label");
 
-        $paginator   = new Model(
-            [
-                'model'      => '\Vokuro\Models\Certificates',
-                'parameters' => $parameters,
-                'limit'      => 10,
-                'page'       => $numberPage,
-            ]
-        );
-
-        $paginate = $paginator->paginate();
-
-        if (0 === $paginate->getTotalItems()) {
-            $this->flash->notice("The search did not find any certificates");
-
+        $count = Certificates::count($builder->getParams());
+        if ($count === 0) {
+            $this->flash->notice('The search did not find any certificates');
             $this->dispatcher->forward([
                 "controller" => "certificates",
-                "action" => "index"
+                'action' => 'index',
             ]);
 
             return;
         }
 
+        $paginator   = new Paginator(
+            [
+                'builder'   => $builder->createBuilder(),
+                'limit'     => 10,
+                'page'      => $this->request->getQuery('page', 'int', 1),
+            ]
+        );
+
+        $this->view->setVar('page', $paginator->paginate());
         $this->view->setVar('extraTitle', "Found certificates");
-        $this->view->page = $paginate;
     }
 
     /**
@@ -98,10 +94,10 @@ class CertificatesController extends ControllerBase
             $this->tag->setDefault("id", $certificate->getId());
             $this->tag->setDefault("label", $certificate->getLabel());
             $this->tag->setDefault("description", $certificate->getDescription());
-
+            
         }
 
-        $this->view->setVar('extraTitle', "Edit Certificates :: ");
+        $this->view->setVar('extraTitle', "Edit Certificates");
     }
 
     /**
@@ -109,7 +105,7 @@ class CertificatesController extends ControllerBase
      */
     public function createAction()
     {
-        if (!$this->request->isPost()) {
+        if (!$this->request->isPost()) { // post should go to NewAction
             $this->dispatcher->forward([ 'controller' => "certificates",'action' => 'index']);
             return;
         }

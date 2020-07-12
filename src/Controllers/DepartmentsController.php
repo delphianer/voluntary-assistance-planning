@@ -1,19 +1,18 @@
 <?php
 declare(strict_types=1);
 
-//
+// 
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Paginator\Adapter\Model;
-use Vokuro\Forms\UsersForm;
+use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
 use Vokuro\Models\Departments;
 use function Vokuro\getCurrentDateTimeStamp;
 
 class DepartmentsController extends ControllerBase
 {
     /**
-     * init method
+     * initialize this Controller
      */
     public function initialize()
     {
@@ -35,34 +34,31 @@ class DepartmentsController extends ControllerBase
      */
     public function searchAction()
     {
-        $numberPage = $this->request->getQuery('page', 'int', 1);
-        $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Departments', $_GET)->getParams();
-        $parameters['order'] = "id";
+        $builder = Criteria::fromInput($this->getDI(), Departments::class, $this->request->getQuery());
+        // todo: decide if id fits best sort criteria
+        $builder->orderBy("label");
 
-        $paginator   = new Model(
-            [
-                'model'      => '\Vokuro\Models\Departments',
-                'parameters' => $parameters,
-                'limit'      => 10,
-                'page'       => $numberPage,
-            ]
-        );
-
-        $paginate = $paginator->paginate();
-
-        if (0 === $paginate->getTotalItems()) {
-            $this->flash->notice("The search did not find any departments");
-
+        $count = Departments::count($builder->getParams());
+        if ($count === 0) {
+            $this->flash->notice('The search did not find any departments');
             $this->dispatcher->forward([
                 "controller" => "departments",
-                "action" => "index"
+                'action' => 'index',
             ]);
 
             return;
         }
 
+        $paginator   = new Paginator(
+            [
+                'builder'   => $builder->createBuilder(),
+                'limit'     => 10,
+                'page'      => $this->request->getQuery('page', 'int', 1),
+            ]
+        );
+
+        $this->view->setVar('page', $paginator->paginate());
         $this->view->setVar('extraTitle', "Found departments");
-        $this->view->page = $paginate;
     }
 
     /**
@@ -100,7 +96,7 @@ class DepartmentsController extends ControllerBase
             $this->tag->setDefault("update_time", $department->getUpdateTime());
             $this->tag->setDefault("label", $department->getLabel());
             $this->tag->setDefault("description", $department->getDescription());
-
+            
         }
 
         $this->view->setVar('extraTitle', "Edit Departments");
@@ -111,7 +107,7 @@ class DepartmentsController extends ControllerBase
      */
     public function createAction()
     {
-        if (!$this->request->isPost()) {
+        if (!$this->request->isPost()) { // post should go to NewAction
             $this->dispatcher->forward([ 'controller' => "departments",'action' => 'index']);
             return;
         }

@@ -66,7 +66,7 @@ final class AppointmentsControllerCest
         $I->setCookie('PHPSESSID', $this->cookie);
 
         $I->amOnPage('/appointments/new');
-        $I->see('Create appointments');
+        $I->see('Create new appointment');
     }
 
     /**

@@ -1,12 +1,8 @@
-<h1 class="mt-3">Create locations</h1>
+{% extends 'layouts/inheritance/masternew.volt' %}
 
-<div class="btn-group mb-5" role="group">
-    {{ link_to(url("locations"), "&larr; Go Back", "class": "btn btn-warning") }}
-</div>
+{% block title %}Create $singular${% endblock %}
 
-{{ flash.output() }}
-
-<form action="{{ url("locations/create") }}" class="form-horizontal" method="post">
+{% block inputelements %}
 
 <div class="form-group">
     <label for="fieldLabel" class="col-sm-2 control-label">Label</label>
@@ -59,5 +55,4 @@
 
 
 
-    {{ submit_button("Save", "class": "btn btn-success") }}
-</form>
+{% endblock %}

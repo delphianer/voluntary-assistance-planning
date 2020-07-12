@@ -1,19 +1,17 @@
 <?php
 declare(strict_types=1);
 
-//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Paginator\Adapter\Model;
-use Vokuro\Forms\UsersForm;
+use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
 use Vokuro\Models\Locations;
 use function Vokuro\getCurrentDateTimeStamp;
 
 class LocationsController extends ControllerBase
 {
     /**
-     * init method
+     * initialize this Controller
      */
     public function initialize()
     {
@@ -35,34 +33,30 @@ class LocationsController extends ControllerBase
      */
     public function searchAction()
     {
-        $numberPage = $this->request->getQuery('page', 'int', 1);
-        $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Locations', $_GET)->getParams();
-        $parameters['order'] = "id";
+        $builder = Criteria::fromInput($this->getDI(), Locations::class, $this->request->getQuery());
+        $builder->orderBy("label");
 
-        $paginator   = new Model(
-            [
-                'model'      => '\Vokuro\Models\Locations',
-                'parameters' => $parameters,
-                'limit'      => 10,
-                'page'       => $numberPage,
-            ]
-        );
-
-        $paginate = $paginator->paginate();
-
-        if (0 === $paginate->getTotalItems()) {
-            $this->flash->notice("The search did not find any locations");
-
+        $count = Locations::count($builder->getParams());
+        if ($count === 0) {
+            $this->flash->notice('The search did not find any locations');
             $this->dispatcher->forward([
                 "controller" => "locations",
-                "action" => "index"
+                'action' => 'index',
             ]);
 
             return;
         }
 
+        $paginator   = new Paginator(
+            [
+                'builder'   => $builder->createBuilder(),
+                'limit'     => 10,
+                'page'      => $this->request->getQuery('page', 'int', 1),
+            ]
+        );
+
+        $this->view->setVar('page', $paginator->paginate());
         $this->view->setVar('extraTitle', "Found locations");
-        $this->view->page = $paginate;
     }
 
     /**
@@ -116,7 +110,7 @@ class LocationsController extends ControllerBase
      */
     public function createAction()
     {
-        if (!$this->request->isPost()) {
+        if (!$this->request->isPost()) { // post should go to NewAction
             $this->dispatcher->forward([ 'controller' => "locations",'action' => 'index']);
             return;
         }

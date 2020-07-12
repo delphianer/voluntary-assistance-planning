@@ -186,6 +186,7 @@ class Clients extends \Phalcon\Mvc\Model
     {
         $this->setSchema("vokuro");
         $this->setSource("clients");
+        $this->hasMany('id', 'Vokuro\Models\Operations', 'clientId', ['alias' => 'Operations']);
     }
 
     /**

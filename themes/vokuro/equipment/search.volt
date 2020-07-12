@@ -16,6 +16,7 @@
     {% for equipment in page.items %}
 
         {% set rowData = [] %}
+
         {% set foo = arrayPush(rowData , equipment.id) %}
         {% set foo = arrayPush(rowData , equipment.label) %}
         {% set foo = arrayPush(rowData , equipment.description) %}

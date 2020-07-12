@@ -1,12 +1,24 @@
-<h1 class="mt-3">Create departments</h1>
+{% extends 'layouts/inheritance/masternew.volt' %}
 
-<div class="btn-group mb-5" role="group">
-    {{ link_to(url("departments"), "&larr; Go Back", "class": "btn btn-warning") }}
+{% block title %}Create $singular${% endblock %}
+
+{% block inputelements %}
+
+{# TODO: remove not necessary columns and this comment #}
+
+<div class="form-group">
+    <label for="fieldCreateTime" class="col-sm-2 control-label">Create Of Time</label>
+    <div class="col-sm-10">
+        {{ text_field("create_time", "size" : 30, "class" : "form-control", "id" : "fieldCreateTime") }}
+    </div>
 </div>
 
-{{ flash.output() }}
-
-<form action="{{ url("departments/create") }}" class="form-horizontal" method="post">
+<div class="form-group">
+    <label for="fieldUpdateTime" class="col-sm-2 control-label">Update Of Time</label>
+    <div class="col-sm-10">
+        {{ text_field("update_time", "size" : 30, "class" : "form-control", "id" : "fieldUpdateTime") }}
+    </div>
+</div>
 
 <div class="form-group">
     <label for="fieldLabel" class="col-sm-2 control-label">Label</label>
@@ -24,5 +36,4 @@
 
 
 
-    {{ submit_button("Save", "class": "btn btn-success") }}
-</form>
+{% endblock %}

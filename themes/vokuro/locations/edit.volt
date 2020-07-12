@@ -1,15 +1,8 @@
-<h1 class="mt-3">Edit locations</h1>
+{% extends 'layouts/inheritance/masteredit.volt' %}
 
-<div class="btn-group mb-5" role="group">
-    {{ link_to(url("locations"), "&larr; Go Back", "class": "btn btn-warning") }}
-</div>
+{% block title %}Edit $singular${% endblock %}
 
-{{ content() }}
-
-{{ flash.output() }}
-
-
-<form action="{{ url(dispatcher.getControllerName() ~ "/save") }}" class="form-horizontal" method="post">
+{% block inputelements %}
 
 <div class="form-group">
     <label for="fieldLabel" class="col-sm-2 control-label">Label</label>
@@ -62,11 +55,6 @@
 
 
 
-    {{ hidden_field("id") }}
+{{ hidden_field("id") }}
 
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            {{ submit_button('Save', 'class': 'btn btn-big btn-success') }}
-        </div>
-    </div>
-</form>
+{% endblock %}

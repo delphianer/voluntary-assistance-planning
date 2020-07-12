@@ -302,6 +302,7 @@ class Locations extends \Phalcon\Mvc\Model
     {
         $this->setSchema("vokuro");
         $this->setSource("locations");
+        $this->hasMany('id', 'Vokuro\Models\Operationshifts', 'locationId', ['alias' => 'Operationshifts']);
     }
 
     /**

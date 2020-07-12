@@ -157,6 +157,7 @@ class Departments extends \Phalcon\Mvc\Model
     {
         $this->setSchema("vokuro");
         $this->setSource("departments");
+        $this->hasMany('id', 'Vokuro\Models\OperationshiftsDepartmentsLink', 'departmentId', ['alias' => 'OperationshiftsDepartmentsLink']);
     }
 
     /**

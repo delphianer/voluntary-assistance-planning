@@ -1,19 +1,18 @@
 <?php
 declare(strict_types=1);
 
-//
+// 
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Paginator\Adapter\Model;
-use Vokuro\Forms\UsersForm;
+use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
 use Vokuro\Models\Clients;
 use function Vokuro\getCurrentDateTimeStamp;
 
 class ClientsController extends ControllerBase
 {
     /**
-     * init method
+     * initialize this Controller
      */
     public function initialize()
     {
@@ -21,6 +20,7 @@ class ClientsController extends ControllerBase
             $this->view->setTemplateBefore('private');
         }
     }
+
     /**
      * Index action
      */
@@ -34,34 +34,30 @@ class ClientsController extends ControllerBase
      */
     public function searchAction()
     {
-        $numberPage = $this->request->getQuery('page', 'int', 1);
-        $parameters = Criteria::fromInput($this->di, '\Vokuro\Models\Clients', $_GET)->getParams();
-        $parameters['order'] = "id";
+        $builder = Criteria::fromInput($this->getDI(), Clients::class, $this->request->getQuery());
+        $builder->orderBy("label");
 
-        $paginator   = new Model(
-            [
-                'model'      => '\Vokuro\Models\Clients',
-                'parameters' => $parameters,
-                'limit'      => 10,
-                'page'       => $numberPage,
-            ]
-        );
-
-        $paginate = $paginator->paginate();
-
-        if (0 === $paginate->getTotalItems()) {
-            $this->flash->notice("The search did not find any clients");
-
+        $count = Clients::count($builder->getParams());
+        if ($count === 0) {
+            $this->flash->notice('The search did not find any clients');
             $this->dispatcher->forward([
                 "controller" => "clients",
-                "action" => "index"
+                'action' => 'index',
             ]);
 
             return;
         }
 
+        $paginator   = new Paginator(
+            [
+                'builder'   => $builder->createBuilder(),
+                'limit'     => 10,
+                'page'      => $this->request->getQuery('page', 'int', 1),
+            ]
+        );
+
+        $this->view->setVar('page', $paginator->paginate());
         $this->view->setVar('extraTitle', "Found clients");
-        $this->view->page = $paginate;
     }
 
     /**
@@ -95,12 +91,10 @@ class ClientsController extends ControllerBase
             $this->view->id = $client->getId();
 
             $this->tag->setDefault("id", $client->getId());
-            $this->tag->setDefault("create_time", $client->getCreateTime());
-            $this->tag->setDefault("update_time", $client->getUpdateTime());
             $this->tag->setDefault("label", $client->getLabel());
             $this->tag->setDefault("description", $client->getDescription());
             $this->tag->setDefault("contactInformation", $client->getContactinformation());
-
+            
         }
 
         $this->view->setVar('extraTitle', "Edit Clients");
@@ -111,7 +105,7 @@ class ClientsController extends ControllerBase
      */
     public function createAction()
     {
-        if (!$this->request->isPost()) {
+        if (!$this->request->isPost()) { // post should go to NewAction
             $this->dispatcher->forward([ 'controller' => "clients",'action' => 'index']);
             return;
         }
@@ -217,6 +211,7 @@ class ClientsController extends ControllerBase
         }
 
         if (!$client->delete()) {
+
             foreach ($client->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
