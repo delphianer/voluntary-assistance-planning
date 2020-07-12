@@ -19,7 +19,7 @@
 </div>
 
 <div class="form-group">
-    <label for="fieldTotalCount" class="col-sm-2 control-label">Total Of Count</label>
+    <label for="fieldTotalCount" class="col-sm-2 control-label">Number available on stock</label>
     <div class="col-sm-10">
         {{ text_field("total_count", "type" : "numeric", "class" : "form-control", "id" : "fieldTotalCount") }}
     </div>

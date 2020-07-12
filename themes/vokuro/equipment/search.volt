@@ -2,31 +2,26 @@
 
 {% block title %}Search result{% endblock %}
 
-{% block tableheader %}
-            <th>Id</th>
-            <th>Label</th>
-            <th>Description</th>
-            <th>Total Of Count</th>
-{% endblock %}
+{% block datatable %}
 
-{% block tablebody %}
+    {% set rowIDIndex = 0 %}
+
+    {% set tableHeadingData = [
+            'Id',
+            'Label',
+            'Description',
+            'Number on stock'
+        ] %}
 
     {% for equipment in page.items %}
-        <tr>
-            <td>{{ equipment.id }}</td>
-            <td>{{ equipment.label }}</td>
-            <td>{{ equipment.description }}</td>
-            <td>{{ equipment.total_count }}</td>
 
-            <td class="td-width-12">{{ link_to( url("equipment/edit/") ~ equipment.id, '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
-            <td class="td-width-12">{{ link_to( url("equipment/delete/") ~ equipment.id, '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
-        </tr>
-    {% else %}
-        <tr>
-            <td colspan="10">
-                No equipment are recorded
-            </td>
-        </tr>
+        {% set rowData = [] %}
+        {% set foo = arrayPush(rowData , equipment.id) %}
+        {% set foo = arrayPush(rowData , equipment.label) %}
+        {% set foo = arrayPush(rowData , equipment.description) %}
+        {% set foo = arrayPush(rowData , equipment.total_count) %}
+        {% set foo = arrayPush(tableBodyData , rowData) %}
+
     {% endfor %}
 
 {% endblock %}
