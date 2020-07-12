@@ -1,23 +1,22 @@
 <?php
 declare(strict_types=1);
 
-//
+// 
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Paginator\Adapter\Model;
-use Vokuro\Forms\UsersForm;
+use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
 use Vokuro\Models\Vehicles;
 use function Vokuro\getCurrentDateTimeStamp;
-use function Vokuro\translateFromYesNo;
 
 class VehiclesController extends ControllerBase
 {
     /**
-     * init method
+     * initialize this Controller
      */
     public function initialize()
     {
+        // todo: check if private fits and remove this todo
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
@@ -36,34 +35,31 @@ class VehiclesController extends ControllerBase
      */
     public function searchAction()
     {
-        $numberPage = $this->request->getQuery('page', 'int', 1);
-        $parameters = Criteria::fromInput($this->di, Vehicles::class, $_GET)->getParams();
-        $parameters['order'] = "id";
+        $builder = Criteria::fromInput($this->getDI(), Vehicles::class, $this->request->getQuery());
+        // todo: decide if id fits best sort criteria
+        $builder->orderBy("id");
 
-        $paginator   = new Model(
-            [
-                'model'      => '\Vokuro\Models\Vehicles',
-                'parameters' => $parameters,
-                'limit'      => 10,
-                'page'       => $numberPage,
-            ]
-        );
-
-        $paginate = $paginator->paginate();
-
-        if (0 === $paginate->getTotalItems()) {
-            $this->flash->notice("The search did not find any vehicles");
-
+        $count = Vehicles::count($builder->getParams());
+        if ($count === 0) {
+            $this->flash->notice('The search did not find any vehicles');
             $this->dispatcher->forward([
                 "controller" => "vehicles",
-                "action" => "index"
+                'action' => 'index',
             ]);
 
             return;
         }
 
+        $paginator   = new Paginator(
+            [
+                'builder'   => $builder->createBuilder(),
+                'limit'     => 10,
+                'page'      => $this->request->getQuery('page', 'int', 1),
+            ]
+        );
+
+        $this->view->setVar('page', $paginator->paginate());
         $this->view->setVar('extraTitle', "Found vehicles");
-        $this->view->page = $paginate;
     }
 
     /**
@@ -107,7 +103,7 @@ class VehiclesController extends ControllerBase
             $this->tag->setDefault("hasFlashingLights", $vehicle->getHasflashinglights());
             $this->tag->setDefault("hasRadioCom", $vehicle->getHasradiocom());
             $this->tag->setDefault("hasDigitalRadioCom", $vehicle->getHasdigitalradiocom());
-
+            
         }
 
         $this->view->setVar('extraTitle', "Edit Vehicles");
@@ -118,14 +114,27 @@ class VehiclesController extends ControllerBase
      */
     public function createAction()
     {
-        if (!$this->request->isPost()) { // should go to "new"
+        if (!$this->request->isPost()) { // post should go to NewAction
             $this->dispatcher->forward([ 'controller' => "vehicles",'action' => 'index']);
             return;
         }
 
         $vehicle = new Vehicles();
-        $this->setVehicleDetails($vehicle);
-
+        // todo: change last update time, maybe delete create time
+        // todo: refactor what can be refactored :)
+        // $vehicle->setcreateUserId($this->auth->getUser()->id);
+        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
+        $vehicle->setcreateTime($this->request->getPost("create_time", "int"));
+        $vehicle->setupdateTime($this->request->getPost("update_time", "int"));
+        $vehicle->setlabel($this->request->getPost("label", "int"));
+        $vehicle->setdescription($this->request->getPost("description", "int"));
+        $vehicle->settechnicalInspection($this->request->getPost("technicalInspection", "int"));
+        $vehicle->setseatCount($this->request->getPost("seatCount", "int"));
+        $vehicle->setisAmbulance($this->request->getPost("isAmbulance", "int"));
+        $vehicle->sethasFlashingLights($this->request->getPost("hasFlashingLights", "int"));
+        $vehicle->sethasRadioCom($this->request->getPost("hasRadioCom", "int"));
+        $vehicle->sethasDigitalRadioCom($this->request->getPost("hasDigitalRadioCom", "int"));
+        
 
         if (!$vehicle->save()) {
             foreach ($vehicle->getMessages() as $message) {
@@ -177,11 +186,25 @@ class VehiclesController extends ControllerBase
             return;
         }
 
-        $vehicle->setupdateTime(getCurrentDateTimeStamp());
-        $this->setVehicleDetails($vehicle);
-
+        // todo: change last update time, maybe delete create time
+        // todo: refactor what can be refactored :)
+        // $vehicle->setupdateTime(getCurrentDateTimeStamp());
+        // $vehicle->setupdateUserId($this->auth->getUser()->id);
+        // todo: check datatypes! they may be wrong (DevTools V4.0.3)
+        $vehicle->setcreateTime($this->request->getPost("create_time", "int"));
+        $vehicle->setupdateTime($this->request->getPost("update_time", "int"));
+        $vehicle->setlabel($this->request->getPost("label", "int"));
+        $vehicle->setdescription($this->request->getPost("description", "int"));
+        $vehicle->settechnicalInspection($this->request->getPost("technicalInspection", "int"));
+        $vehicle->setseatCount($this->request->getPost("seatCount", "int"));
+        $vehicle->setisAmbulance($this->request->getPost("isAmbulance", "int"));
+        $vehicle->sethasFlashingLights($this->request->getPost("hasFlashingLights", "int"));
+        $vehicle->sethasRadioCom($this->request->getPost("hasRadioCom", "int"));
+        $vehicle->sethasDigitalRadioCom($this->request->getPost("hasDigitalRadioCom", "int"));
+        
 
         if (!$vehicle->save()) {
+
             foreach ($vehicle->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -223,6 +246,7 @@ class VehiclesController extends ControllerBase
         }
 
         if (!$vehicle->delete()) {
+
             foreach ($vehicle->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -241,20 +265,5 @@ class VehiclesController extends ControllerBase
             'controller' => "vehicles",
             'action' => "index"
         ]);
-    }
-
-    /**
-     * @param $vehicle
-     */
-    public function setVehicleDetails($vehicle): void
-    {
-        $vehicle->setLabel($this->request->getPost("label", "string"));
-        $vehicle->setDescription($this->request->getPost("description", "string"));
-        $vehicle->settechnicalInspection($this->request->getPost("technicalInspection", "DateTime"));
-        $vehicle->setseatCount($this->request->getPost("seatCount", "int"));
-        $vehicle->setisAmbulance(translateFromYesNo($this->request->getPost("isAmbulance", "string")));
-        $vehicle->sethasFlashingLights(translateFromYesNo($this->request->getPost("hasFlashingLights", "string")));
-        $vehicle->sethasRadioCom(translateFromYesNo($this->request->getPost("hasRadioCom", "string")));
-        $vehicle->sethasDigitalRadioCom(translateFromYesNo($this->request->getPost("hasDigitalRadioCom", "string")));
     }
 }
