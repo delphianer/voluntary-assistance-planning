@@ -1,18 +1,11 @@
-<h1 class="mt-3">Search $plural$</h1>
+{% extends 'layouts/inheritance/masterindex.volt' %}
 
-<div class="btn-group mb-5" role="group">
-    {{ link_to(url("$plural$/new"), "Create $plural$", 'class': 'btn btn-primary') }}
-</div>
+{% block title %}Search $plural${% endblock %}
 
-{{ content() }}
+{% block inputelements %}
 
-{{ flash.output() }}
+{# TODO: remove not necessary columns and this comment #}
 
-<form action="{{ url("$plural$/search") }}" class="form-horizontal" method="get">
-    $captureFields$
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            {{ submit_button('Search', 'class': 'btn btn-primary') }}
-        </div>
-    </div>
-</form>
+$captureFields$
+
+{% endblock %}

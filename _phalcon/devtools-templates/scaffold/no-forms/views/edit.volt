@@ -1,23 +1,13 @@
-<h1 class="mt-3">Edit $plural$</h1>
+{% extends 'layouts/inheritance/masteredit.volt' %}
 
-<div class="btn-group mb-5" role="group">
-    {{ link_to(url("$plural$"), "&larr; Go Back", "class": "btn btn-warning") }}
-</div>
+{% block title %}Edit $singular${% endblock %}
 
-{{ content() }}
+{% block inputelements %}
 
-{{ flash.output() }}
+{# TODO: remove not necessary columns and this comment #}
 
+$captureFields$
 
-<form  action="{{ url("$plural$/save") }}" class="form-horizontal" method="post">
+{{ hidden_field("id") }}
 
-    $captureFields$
-
-    {{ hidden_field("id") }}
-
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            {{ submit_button('Save', 'class': 'btn btn-big btn-success') }}
-        </div>
-    </div>
-</form>
+{% endblock %}
