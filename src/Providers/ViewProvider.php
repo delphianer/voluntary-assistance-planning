@@ -56,6 +56,14 @@ class ViewProvider implements ServiceProviderInterface
                                 }
                          );
 
+                    $volt->getCompiler()
+                        ->addFunction(
+                                'arrayPush',
+                                function ($resolvedArgs, $exprArgs) {
+                                    return 'array_push('.$resolvedArgs.')';
+                                }
+                            );
+
                     return $volt;
                 },
             ]);
