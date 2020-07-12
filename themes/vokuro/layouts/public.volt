@@ -1,8 +1,13 @@
+{# layout for public pages #}
+
+{%- set isPublicMenu = true -%}
+
 {%- set menus = [
     'Home': 'index',
     'About': 'about'
 ] -%}
 
+{#
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     {{ link_to(null, 'class': 'navbar-brand', 'Vökuró') }}
 
@@ -33,6 +38,10 @@
         </ul>
     </div>
 </nav>
+#}
+
+{% include 'layouts/includes/header.volt' %}
+
 
 <main role="main" class="flex-shrink-0">
     <div class="container">
@@ -40,15 +49,6 @@
     </div>
 </main>
 
-<footer class="footer mt-auto py-3">
-    <div class="container">
-        <span class="text-muted">
-            Made with love by the Phalcon Team
 
-            {{ link_to("privacy", "Privacy Policy") }}
-            {{ link_to("terms", "Terms") }}
+{% include 'layouts/includes/footer.volt' %}
 
-            © {{ date("Y") }} Phalcon Team.
-        </span>
-    </div>
-</footer>
