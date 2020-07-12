@@ -111,7 +111,7 @@ final class MasterDataControllerCest
             $I->see('Label');
             $I->dontSeeInSource('name="id"');
             $I->seeInSource('value="Save"');
-            $I->click('//form/*[@type="submit"]');
+            $I->click('//input[@type="submit"]');
             $I->seeInCurrentUrl('/'.$tbl.'/create');
             $I->see('was created successfully');
 
