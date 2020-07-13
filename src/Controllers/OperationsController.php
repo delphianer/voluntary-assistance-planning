@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -99,7 +98,6 @@ class OperationsController extends ControllerBase
             $this->tag->setDefault("shortDescription", $operation->getShortdescription());
             $this->tag->setDefault("longDescription", $operation->getLongdescription());
             $this->tag->setDefault("mainDepartmentId", $operation->getMaindepartmentid());
-
         }
 
         $this->view->setVar('extraTitle', "Edit Operations");

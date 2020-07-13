@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -16,7 +16,6 @@ class CertificatesController extends ControllerBase
      */
     public function initialize()
     {
-        // todo: check if private fits and remove this todo
         if ($this->session->has('auth-identity')) {
             $this->view->setTemplateBefore('private');
         }
@@ -94,7 +93,7 @@ class CertificatesController extends ControllerBase
             $this->tag->setDefault("id", $certificate->getId());
             $this->tag->setDefault("label", $certificate->getLabel());
             $this->tag->setDefault("description", $certificate->getDescription());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit Certificates");

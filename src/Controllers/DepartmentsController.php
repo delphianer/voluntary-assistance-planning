@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// 
+//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -35,7 +35,6 @@ class DepartmentsController extends ControllerBase
     public function searchAction()
     {
         $builder = Criteria::fromInput($this->getDI(), Departments::class, $this->request->getQuery());
-        // todo: decide if id fits best sort criteria
         $builder->orderBy("label");
 
         $count = Departments::count($builder->getParams());
@@ -96,7 +95,7 @@ class DepartmentsController extends ControllerBase
             $this->tag->setDefault("update_time", $department->getUpdateTime());
             $this->tag->setDefault("label", $department->getLabel());
             $this->tag->setDefault("description", $department->getDescription());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit Departments");

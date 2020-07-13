@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -98,7 +97,7 @@ class OpshdeplVolunteersLinkController extends ControllerBase
             $this->tag->setDefault("opDepNeedId", $opshdepl_volunteers_link->getOpdepneedid());
             $this->tag->setDefault("volunteersId", $opshdepl_volunteers_link->getVolunteersid());
             $this->tag->setDefault("volCurrentMaximumCertRank", $opshdepl_volunteers_link->getVolcurrentmaximumcertrank());
-
+            
         }
 
         $this->view->setVar('extraTitle', "Edit OpshdeplVolunteersLink");

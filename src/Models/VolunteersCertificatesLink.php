@@ -157,16 +157,8 @@ class VolunteersCertificatesLink extends \Phalcon\Mvc\Model
     {
         $this->setSchema("vokuro");
         $this->setSource("volunteers_certificates_link");
-        $this->belongsTo(
-            'certificatesId',
-            'Vokuro\Models\Certificates',
-            'id',
-            ['alias' => 'Certificates']);
-        $this->belongsTo(
-            'volunteersId',
-            'Vokuro\Models\Volunteers',
-            'id',
-            ['alias' => 'Volunteers']);
+        $this->belongsTo('certificatesId', 'Vokuro\Models\Certificates', 'id', ['alias' => 'Certificates']);
+        $this->belongsTo('volunteersId', 'Vokuro\Models\Volunteers', 'id', ['alias' => 'Volunteers']);
     }
 
     /**

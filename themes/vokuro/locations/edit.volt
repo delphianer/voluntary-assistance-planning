@@ -1,6 +1,6 @@
 {% extends 'layouts/inheritance/masteredit.volt' %}
 
-{% block title %}Edit $singular${% endblock %}
+{% block title %}Edit location{% endblock %}
 
 {% block inputelements %}
 

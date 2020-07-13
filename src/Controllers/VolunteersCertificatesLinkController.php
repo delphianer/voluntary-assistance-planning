@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -12,7 +11,7 @@ use function Vokuro\getCurrentDateTimeStamp;
 class VolunteersCertificatesLinkController extends ControllerBase
 {
     /**
-     * init method
+     * initialize this Controller
      */
     public function initialize()
     {

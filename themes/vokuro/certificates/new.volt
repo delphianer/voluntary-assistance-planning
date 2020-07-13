@@ -1,6 +1,6 @@
 {% extends 'layouts/inheritance/masternew.volt' %}
 
-{% block title %}Create $singular${% endblock %}
+{% block title %}Create certificate{% endblock %}
 
 {% block inputelements %}
 

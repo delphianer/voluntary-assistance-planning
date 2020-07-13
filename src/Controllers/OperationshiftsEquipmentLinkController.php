@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -97,7 +96,7 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
             $this->tag->setDefault("update_time", $operationshifts_equipment_link->getUpdateTime());
             $this->tag->setDefault("shortDescription", $operationshifts_equipment_link->getShortdescription());
             $this->tag->setDefault("longDescription", $operationshifts_equipment_link->getLongdescription());
-
+            
         }
 
         $this->view->setVar('extraTitle', "Edit OperationshiftsEquipmentLink");

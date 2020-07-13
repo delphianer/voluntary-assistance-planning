@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-//
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -99,7 +98,6 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
             $this->tag->setDefault("longDescription", $operationshifts_departments_link->getLongdescription());
             $this->tag->setDefault("numberVolunteersNeeded", $operationshifts_departments_link->getNumbervolunteersneeded());
             $this->tag->setDefault("minimumCertificateRanking", $operationshifts_departments_link->getMinimumcertificateranking());
-
         }
 
         $this->view->setVar('extraTitle', "Edit OperationshiftsDepartmentsLink");
