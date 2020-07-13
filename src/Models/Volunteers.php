@@ -7,6 +7,12 @@ class Volunteers extends \Phalcon\Mvc\Model
 
     /**
      *
+     * @var integer
+     */
+    protected $id;
+
+    /**
+     *
      * @var string
      */
     protected $create_time;
@@ -16,12 +22,6 @@ class Volunteers extends \Phalcon\Mvc\Model
      * @var string
      */
     protected $update_time;
-
-    /**
-     *
-     * @var integer
-     */
-    protected $id;
 
     /**
      *
@@ -208,7 +208,6 @@ class Volunteers extends \Phalcon\Mvc\Model
         return $this->departmentId;
     }
 
-
     /**
      * Initialize method for model.
      */
@@ -216,6 +215,7 @@ class Volunteers extends \Phalcon\Mvc\Model
     {
         $this->setSchema("vokuro");
         $this->setSource("volunteers");
+
         $this->hasMany(
             'id',
             'Vokuro\Models\VolunteersCertificatesLink',
@@ -232,6 +232,9 @@ class Volunteers extends \Phalcon\Mvc\Model
             'alias'    => 'department',
             'reusable' => true,
         ]);
+	
+        $this->hasMany('id', 'Vokuro\Models\OpshdeplVolunteersLink', 'volunteersId', ['alias' => 'OpshdeplVolunteersLink']);
+        $this->hasMany('id', 'Vokuro\Models\VolunteersCertificatesLink', 'volunteersId', ['alias' => 'VolunteersCertificatesLink']);
     }
 
     /**
@@ -255,4 +258,5 @@ class Volunteers extends \Phalcon\Mvc\Model
     {
         return parent::findFirst($parameters);
     }
+
 }

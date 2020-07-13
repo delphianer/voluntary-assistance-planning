@@ -13,7 +13,7 @@ use function Vokuro\getCurrentDateTimeStamp;
 class VolunteersController extends ControllerBase
 {
     /**
-     * init method
+     * initialize this Controller
      */
     public function initialize()
     {
@@ -27,7 +27,10 @@ class VolunteersController extends ControllerBase
      */
     public function indexAction()
     {
-        $this->view->setVar('extraTitle', "Search volunteers :: ");
+        $form = new VolunteersForm();
+        $this->view->setVar('form', $form);
+
+        $this->view->setVar('extraTitle', "Search volunteers");
     }
 
     /**
@@ -36,7 +39,7 @@ class VolunteersController extends ControllerBase
     public function searchAction()
     {
         $builder = Criteria::fromInput($this->getDI(), Volunteers::class, $this->request->getQuery());
-        $builder->orderBy("id");
+        $builder->orderBy("firstName, lastName");
 
         $count = Volunteers::count($builder->getParams());
         if ($count === 0) {
@@ -105,7 +108,7 @@ class VolunteersController extends ControllerBase
 
         }
 
-        $this->view->setVar('extraTitle', "Edit Volunteers :: ");
+        $this->view->setVar('extraTitle', "Edit Volunteers");
     }
 
     /**
@@ -113,8 +116,9 @@ class VolunteersController extends ControllerBase
      */
     public function createAction() // the other part is "newAction"
     {
-        if (!$this->request->isPost()) {
+        if (!$this->request->isPost()) { // post should go to NewAction
             $this->dispatcher->forward([ 'controller' => "volunteers",'action' => 'index']);
+            return;
         }
 
         $volunteer = new Volunteers();
@@ -176,7 +180,6 @@ class VolunteersController extends ControllerBase
 
 
         if (!$volunteer->save()) {
-
             foreach ($volunteer->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -218,7 +221,6 @@ class VolunteersController extends ControllerBase
         }
 
         if (!$volunteer->delete()) {
-
             foreach ($volunteer->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }

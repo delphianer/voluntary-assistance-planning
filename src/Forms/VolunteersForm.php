@@ -9,6 +9,7 @@ use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
 use Phalcon\Validation\Validator\Email;
 use Phalcon\Validation\Validator\PresenceOf;
+use Vokuro\Models\Departments;
 use Vokuro\Models\Profiles;
 use Vokuro\Models\Users;
 
@@ -72,12 +73,7 @@ class VolunteersForm extends Form
             'emptyValue' => '0',
         ]));
 
-        $departments = Users::find([
-            'active = :active:',
-            'bind' => [
-                'active' => 'Y',
-            ],
-        ]);
+        $departments = Departments::find([]);
 
         $this->add(new Select('departmentId', $departments, [
             'using'      => [
@@ -90,6 +86,5 @@ class VolunteersForm extends Form
         ]));
 
         // todo-008: List Certificates from Link-Table
-
     }
 }
