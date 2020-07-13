@@ -14,9 +14,7 @@
             'AdditionalText',
             'Postalcode',
             'City',
-            'Country',
-            'Created On',
-            'Last Updated'
+            'Country'
         ] %}
 
     {% for location in page.items %}
@@ -31,8 +29,6 @@
             {% set foo = arrayPush(rowData , location.postalcode) %}
             {% set foo = arrayPush(rowData , location.city) %}
             {% set foo = arrayPush(rowData , location.country) %}
-            {% set foo = arrayPush(rowData , location.create_time) %}
-            {% set foo = arrayPush(rowData , location.update_time) %}
 
         {% set foo = arrayPush(tableBodyData , rowData) %}
 

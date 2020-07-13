@@ -1,25 +1,8 @@
-<h1 class="mt-3">Create opshdepl_volunteers_link</h1>
+{% extends 'layouts/inheritance/masternew.volt' %}
 
-<div class="btn-group mb-5" role="group">
-    {{ link_to(url("opshdepl_volunteers_link"), "&larr; Go Back", "class": "btn btn-warning") }}
-</div>
+{% block title %}Create Volunteer Commitments{% endblock %}
 
-{{ flash.output() }}
-
-<form action="{{ url("opshdepl_volunteers_link/create") }}" class="form-horizontal" method="post">
-    <div class="form-group">
-    <label for="fieldCreateTime" class="col-sm-2 control-label">Create Of Time</label>
-    <div class="col-sm-10">
-        {{ text_field("create_time", "size" : 30, "class" : "form-control", "id" : "fieldCreateTime") }}
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="fieldUpdateTime" class="col-sm-2 control-label">Update Of Time</label>
-    <div class="col-sm-10">
-        {{ text_field("update_time", "size" : 30, "class" : "form-control", "id" : "fieldUpdateTime") }}
-    </div>
-</div>
+{% block inputelements %}
 
 <div class="form-group">
     <label for="fieldShortdescription" class="col-sm-2 control-label">ShortDescription</label>
@@ -58,5 +41,4 @@
 
 
 
-    {{ submit_button("Save", "class": "btn btn-success") }}
-</form>
+{% endblock %}

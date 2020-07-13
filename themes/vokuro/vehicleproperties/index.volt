@@ -1,15 +1,10 @@
-<h1 class="mt-3">Search vehicleproperties</h1>
+{% extends 'layouts/inheritance/masterindex.volt' %}
 
-<div class="btn-group mb-5" role="group">
-    {{ link_to(url("vehicleproperties/new"), "Create vehicleproperties", 'class': 'btn btn-primary') }}
-</div>
+{% block title %}Search vehicleproperties{% endblock %}
 
-{{ content() }}
+{% block inputelements %}
 
-{{ flash.output() }}
-
-<form action="{{ url("vehicleproperties/search") }}" class="form-horizontal" method="get">
-    <div class="form-group">
+<div class="form-group">
     <label for="fieldId" class="col-sm-2 control-label">Id</label>
     <div class="col-sm-10">
         {{ text_field("id", "type" : "numeric", "class" : "form-control", "id" : "fieldId") }}
@@ -59,9 +54,5 @@
 </div>
 
 
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            {{ submit_button('Search', 'class': 'btn btn-primary') }}
-        </div>
-    </div>
-</form>
+
+{% endblock %}

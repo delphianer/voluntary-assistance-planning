@@ -1,32 +1,13 @@
-<h1 class="mt-3">Search opshdepl_volunteers_link</h1>
+{% extends 'layouts/inheritance/masterindex.volt' %}
 
-<div class="btn-group mb-5" role="group">
-    {{ link_to(url("opshdepl_volunteers_link/new"), "Create opshdepl_volunteers_link", 'class': 'btn btn-primary') }}
-</div>
+{% block title %}Search opshdepl_volunteers_link{% endblock %}
 
-{{ content() }}
+{% block inputelements %}
 
-{{ flash.output() }}
-
-<form action="{{ url("opshdepl_volunteers_link/search") }}" class="form-horizontal" method="get">
-    <div class="form-group">
+<div class="form-group">
     <label for="fieldId" class="col-sm-2 control-label">Id</label>
     <div class="col-sm-10">
         {{ text_field("id", "type" : "numeric", "class" : "form-control", "id" : "fieldId") }}
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="fieldCreateTime" class="col-sm-2 control-label">Create Of Time</label>
-    <div class="col-sm-10">
-        {{ text_field("create_time", "size" : 30, "class" : "form-control", "id" : "fieldCreateTime") }}
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="fieldUpdateTime" class="col-sm-2 control-label">Update Of Time</label>
-    <div class="col-sm-10">
-        {{ text_field("update_time", "size" : 30, "class" : "form-control", "id" : "fieldUpdateTime") }}
     </div>
 </div>
 
@@ -66,9 +47,5 @@
 </div>
 
 
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            {{ submit_button('Search', 'class': 'btn btn-primary') }}
-        </div>
-    </div>
-</form>
+
+{% endblock %}

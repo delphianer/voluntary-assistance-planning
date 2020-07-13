@@ -1,14 +1,9 @@
-<h1 class="mt-3">Search volunteers_certificates_link</h1>
+{% extends 'layouts/inheritance/masterindex.volt' %}
 
-<div class="btn-group mb-5" role="group">
-    {{ link_to(url("volunteers_certificates_link/new"), "Create volunteers_certificates_link", 'class': 'btn btn-primary') }}
-</div>
+{% block title %}Search volunteers_certificates_link{% endblock %}
 
-{{ content() }}
+{% block inputelements %}
 
-{{ flash.output() }}
-
-<form action="{{ url("volunteers_certificates_link/search") }}" class="form-horizontal" method="get">
 
 <div class="form-group">
     <label for="fieldVolunteersid" class="col-sm-2 control-label">VolunteersId</label>
@@ -32,9 +27,5 @@
 </div>
 
 
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            {{ submit_button('Search', 'class': 'btn btn-primary') }}
-        </div>
-    </div>
-</form>
+
+{% endblock %}

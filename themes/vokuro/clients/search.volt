@@ -6,16 +6,6 @@
 
     {% set rowIDIndex = 0 %}
 
-
-    {# TODO: remove not necessary columns and this comment #}
-    {# TODO: change format of header columns to an array
-        example: [
-                     'Id',
-                     'Label',
-                     'Description'
-                 ]
-        then remove this comment
-     #}
     {% set tableHeadingData = [
             'Id',
             'Label',

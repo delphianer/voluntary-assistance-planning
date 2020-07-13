@@ -1,17 +1,12 @@
-<h1 class="mt-3">Edit vehicleproperties</h1>
+{% extends 'layouts/inheritance/masteredit.volt' %}
 
-<div class="btn-group mb-5" role="group">
-    {{ link_to(url("vehicleproperties"), "&larr; Go Back", "class": "btn btn-warning") }}
-</div>
+{% block title %}Edit Vehicle Property{% endblock %}
 
-{{ content() }}
+{% block inputelements %}
 
-{{ flash.output() }}
+{# TODO: remove not necessary columns and this comment #}
 
-
-<form action="{{ url(dispatcher.getControllerName() ~ "/save") }}" class="form-horizontal" method="post">
-
-    <div class="form-group">
+<div class="form-group">
     <label for="fieldVehiclesid" class="col-sm-2 control-label">VehiclesId</label>
     <div class="col-sm-10">
         {{ text_field("vehiclesId", "type" : "numeric", "class" : "form-control", "id" : "fieldVehiclesid") }}
@@ -55,11 +50,6 @@
 
 
 
-    {{ hidden_field("id") }}
+{{ hidden_field("id") }}
 
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            {{ submit_button('Save', 'class': 'btn btn-big btn-success') }}
-        </div>
-    </div>
-</form>
+{% endblock %}

@@ -1,12 +1,8 @@
-<h1 class="mt-3">Create vehicleproperties</h1>
+{% extends 'layouts/inheritance/masternew.volt' %}
 
-<div class="btn-group mb-5" role="group">
-    {{ link_to(url("vehicleproperties"), "&larr; Go Back", "class": "btn btn-warning") }}
-</div>
+{% block title %}Create Vehicle Property{% endblock %}
 
-{{ flash.output() }}
-
-<form action="{{ url("vehicleproperties/create") }}" class="form-horizontal" method="post">
+{% block inputelements %}
 
 <div class="form-group">
     <label for="fieldVehiclesid" class="col-sm-2 control-label">VehiclesId</label>
@@ -52,5 +48,4 @@
 
 
 
-    {{ submit_button("Save", "class": "btn btn-success") }}
-</form>
+{% endblock %}

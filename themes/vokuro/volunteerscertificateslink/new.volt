@@ -1,10 +1,8 @@
-<h1 class="mt-3">Create volunteers_certificates_link</h1>
+{% extends 'layouts/inheritance/masternew.volt' %}
 
-<div class="btn-group mb-5" role="group">
-    {{ link_to(url("volunteers_certificates_link"), "&larr; Go Back", "class": "btn btn-warning") }}
-</div>
+{% block title %}Create  Volunteers Certificate{% endblock %}
 
-{{ flash.output() }}
+{% block inputelements %}
 
 
 <div class="form-group">
@@ -30,5 +28,4 @@
 
 
 
-    {{ submit_button("Save", "class": "btn btn-success") }}
-</form>
+{% endblock %}

@@ -1,48 +1,13 @@
-<h1 class="mt-3">Edit operations</h1>
+{% extends 'layouts/inheritance/masteredit.volt' %}
 
-<div class="btn-group mb-5" role="group">
-    {{ link_to(url("operations"), "&larr; Go Back", "class": "btn btn-warning") }}
-</div>
+{% block title %}Edit operation{% endblock %}
 
-{{ content() }}
+{% block inputelements %}
 
-{{ flash.output() }}
-
-
-<form  action="{{ url("operations/save") }}" class="form-horizontal" method="post">
-
-    <div class="form-group">
+<div class="form-group">
     <label for="fieldClientid" class="col-sm-2 control-label">ClientId</label>
     <div class="col-sm-10">
         {{ text_field("clientId", "type" : "numeric", "class" : "form-control", "id" : "fieldClientid") }}
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="fieldCreateTime" class="col-sm-2 control-label">Create Of Time</label>
-    <div class="col-sm-10">
-        {{ text_field("create_time", "size" : 30, "class" : "form-control", "id" : "fieldCreateTime") }}
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="fieldCreateUserid" class="col-sm-2 control-label">Create Of UserId</label>
-    <div class="col-sm-10">
-        {{ text_field("create_userId", "type" : "numeric", "class" : "form-control", "id" : "fieldCreateUserid") }}
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="fieldUpdateTime" class="col-sm-2 control-label">Update Of Time</label>
-    <div class="col-sm-10">
-        {{ text_field("update_time", "size" : 30, "class" : "form-control", "id" : "fieldUpdateTime") }}
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="fieldUpdateUserid" class="col-sm-2 control-label">Update Of UserId</label>
-    <div class="col-sm-10">
-        {{ text_field("update_userId", "type" : "numeric", "class" : "form-control", "id" : "fieldUpdateUserid") }}
     </div>
 </div>
 
@@ -69,11 +34,6 @@
 
 
 
-    {{ hidden_field("id") }}
+{{ hidden_field("id") }}
 
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            {{ submit_button('Save', 'class': 'btn btn-big btn-success') }}
-        </div>
-    </div>
-</form>
+{% endblock %}
