@@ -108,7 +108,7 @@ final class MasterDataControllerCest
             $I->amOnPage('/'.$tbl.'/new');
             $I->fillField('label', $testEntryShortDesc);
             $I->seeInCurrentUrl('/'.$tbl.'/new');
-            $I->see('Label');
+            $I->seeInSource('name="label"');
             $I->dontSeeInSource('name="id"');
             $I->seeInSource('value="Save"');
             $I->click('//input[@type="submit"]');
