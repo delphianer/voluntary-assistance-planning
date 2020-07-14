@@ -10,12 +10,19 @@
 
 <form  action="{{ url( dispatcher.getControllerName() ~ "/save") }}" class="form-horizontal" method="post">
 
-{% block inputelements %}{% endblock %}
+{% block startOfTablist %}{% endblock %}
 
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            {{ submit_button('Save', 'class': 'btn btn-success') }}
-            <button type="reset" class="btn btn-warning">Reset</button>
-        </div>
-    </div>
+            {% block inputelements %}{% endblock %}
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    {{ submit_button('Save', 'class': 'btn btn-success') }}
+                    <button type="reset" class="btn btn-warning">Reset</button>
+                </div>
+            </div>
+
+{% block endOfTablist %}{% endblock %}
+
 </form>
+
+
