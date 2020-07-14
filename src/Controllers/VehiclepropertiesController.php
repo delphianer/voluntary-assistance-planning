@@ -8,6 +8,7 @@ use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
 use Vokuro\Models\Vehicleproperties;
 use function Vokuro\getCurrentDateTimeStamp;
+use function Vokuro\translateFromYesNo;
 
 class VehiclepropertiesController extends ControllerBase
 {
