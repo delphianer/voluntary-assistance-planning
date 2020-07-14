@@ -13,14 +13,22 @@ let dateTimePicker_i18n = {
                 "Do", "Fr", "Sa.",
             ]
         }
-    }
+    },
+    timepicker:true,
+    format : 'Y-m-d H:i'
 };
 
 
 
 
 $(document).ready(function () {
+
     // appointments:
     $('#fieldStart').datetimepicker(dateTimePicker_i18n);
     $('#fieldEnd').datetimepicker(dateTimePicker_i18n);
+
+    // vehicles:
+    dateTimePicker_i18n.timepicker = false;
+    dateTimePicker_i18n.format = 'Y-m-d';
+    $('#techInspField').datetimepicker(dateTimePicker_i18n);
 });
