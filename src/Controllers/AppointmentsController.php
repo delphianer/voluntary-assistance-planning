@@ -7,11 +7,14 @@ namespace Vokuro\Controllers;
 use http\Client\Curl\User;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
+use Vokuro\DateTimePicker;
 use Vokuro\Models\Appointments;
 use function Vokuro\getCurrentDateTimeStamp;
 
 class AppointmentsController extends ControllerBase
 {
+    use DateTimePicker;
+
     /**
      * initialize this Controller
      */
@@ -28,7 +31,7 @@ class AppointmentsController extends ControllerBase
     public function indexAction()
     {
         $this->view->setVar('extraTitle', "Search appointments");
-        $this->setupFormRessources();
+        $this->setupDateTimePicker();
     }
 
     /**
@@ -71,7 +74,7 @@ class AppointmentsController extends ControllerBase
     public function newAction()
     {
         $this->view->setVar('extraTitle', "New Appointments");
-        $this->setupFormRessources();
+        $this->setupDateTimePicker();
     }
 
     /**
@@ -111,7 +114,7 @@ class AppointmentsController extends ControllerBase
         }
 
         $this->view->setVar('extraTitle', "Edit Appointments");
-        $this->setupFormRessources();
+        $this->setupDateTimePicker();
     }
 
     /**
@@ -259,12 +262,5 @@ class AppointmentsController extends ControllerBase
         $appointment->setlocationId($this->request->getPost("locationId", "int"));
         $appointment->setmainDepartmentId($this->request->getPost("mainDepartmentId", "int"));
         $appointment->setclientId($this->request->getPost("clientId", "int"));
-    }
-
-    public function setupFormRessources(): void
-    {
-        $this->assets->collection("js")->addJs("/js/jquery.datetimepicker.full.min.js", true, true);
-        $this->assets->collection("css")->addCss("/css/jquery.datetimepicker.min.css", true, true);
-        $this->assets->collection("js")->addJs("/js/activateControlls.js", true, true);
     }
 }

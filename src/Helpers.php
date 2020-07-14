@@ -62,3 +62,25 @@ function translateToYesNo(string $yes)
     return ($yes == 'Y') ? 'Yes' : 'No';
 }
 
+trait DateTimePicker
+{
+    public function setupDateTimePicker()
+    {
+        $this->assets->collection("js")->addJs("/js/jquery.datetimepicker.full.min.js", true, true);
+        $this->assets->collection("css")->addCss("/css/jquery.datetimepicker.min.css", true, true);
+        $this->assets->collection("js")->addJs("/js/activateControlls.js", true, true);
+    }
+}
+
+trait MyTimestampable
+{
+    public function beforeCreate()
+    {
+        $this->created_at = date('r');
+    }
+
+    public function beforeUpdate()
+    {
+        $this->updated_at = date('r');
+    }
+}
