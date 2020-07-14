@@ -69,10 +69,10 @@ class VolunteersController extends ControllerBase
      */
     public function newAction() // preparation of "create"-Process
     {
-        $this->view->setVar('extraTitle', "New Volunteers :: ");
-
         $form = new VolunteersForm();
         $this->view->setVar('form', $form);
+
+        $this->view->setVar('extraTitle', "New Volunteers :: ");
     }
 
     /**
@@ -82,9 +82,6 @@ class VolunteersController extends ControllerBase
      */
     public function editAction($id)
     {
-        $form = new VolunteersForm();
-        $this->view->setVar('form', $form);
-
         if (!$this->request->isPost()) {
             $volunteer = Volunteers::findFirstByid($id);
             if (!$volunteer) {
@@ -97,6 +94,10 @@ class VolunteersController extends ControllerBase
 
                 return;
             }
+            $form = new VolunteersForm($volunteer, [
+                'edit' => true,
+            ]);
+            $this->view->setVar('form', $form);
 
             $this->view->id = $volunteer->getId();
 
@@ -105,7 +106,6 @@ class VolunteersController extends ControllerBase
             $this->tag->setDefault("lastName", $volunteer->getLastname());
             $this->tag->setDefault("userId", $volunteer->getUserid());
             $this->tag->setDefault("departmentId", $volunteer->getDepartmentid());
-
         }
 
         $this->view->setVar('extraTitle', "Edit Volunteers");
@@ -248,7 +248,9 @@ class VolunteersController extends ControllerBase
     {
         $volunteer->setfirstName($this->request->getPost("firstName", "string"));
         $volunteer->setlastName($this->request->getPost("lastName", "string"));
-        $volunteer->setuserId($this->request->getPost("userId", "int"));
+        $var = $this->request->getPost("userId", "int");
+        if ($var > 0)
+            $volunteer->setuserId($var); // else null!
         $volunteer->setdepartmentId($this->request->getPost("departmentId", "int"));
     }
 }
