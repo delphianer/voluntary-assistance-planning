@@ -22,8 +22,7 @@ set menus = [
         'Departments' : 'departments',
         'Equipment' : 'equipment',
         'Locations' : 'locations',
-        'Vehicles' : 'vehicles',
-        'Vehicle Properties' : 'vehicleproperties'
+        'Vehicles' : 'vehicles'
         ],
     'Manage people': [
         'Clients' : 'clients',

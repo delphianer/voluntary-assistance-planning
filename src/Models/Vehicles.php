@@ -332,7 +332,10 @@ class Vehicles extends \Phalcon\Mvc\Model
         $this->setSchema("vokuro");
         $this->setSource("vehicles");
         $this->hasMany('id', 'Vokuro\Models\OperationshiftsVehiclesLink', 'vehicleId', ['alias' => 'OperationshiftsVehiclesLink']);
-        $this->hasMany('id', 'Vokuro\Models\Vehicleproperties', 'vehiclesId', ['alias' => 'Vehicleproperties']);
+        $this->hasMany('id',
+            'Vokuro\Models\Vehicleproperties',
+            'vehiclesId',
+            ['alias' => 'Vehicleproperties']);
     }
 
     /**
