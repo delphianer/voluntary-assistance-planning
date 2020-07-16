@@ -6,7 +6,9 @@ namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
+use Vokuro\Forms\VehiclePropertiesForm;
 use Vokuro\Models\Vehicleproperties;
+use Vokuro\Models\Vehicles;
 use function Vokuro\getCurrentDateTimeStamp;
 use function Vokuro\translateFromYesNo;
 
@@ -27,6 +29,9 @@ class VehiclepropertiesController extends ControllerBase
      */
     public function indexAction()
     {
+        $form = new VehiclePropertiesForm();
+        $this->view->setVar('form', $form);
+
         $this->view->setVar('extraTitle', "Search vehicleproperties");
     }
 
@@ -66,6 +71,26 @@ class VehiclepropertiesController extends ControllerBase
      */
     public function newAction()
     {
+        $formOptions = [];
+        $processVehiclesId = $this->dispatcher->getParam('processVehiclesId');
+        if (isset($processVehiclesId) && ($processVehiclesId > 0)) {
+            $vehiclesLabel = $this->dispatcher->getParam('vehiclesLabel');
+            $selectedVehicle = [
+                'id'=>$processVehiclesId,
+                'label'=>$vehiclesLabel,
+            ];
+            $formOptions["selectedVehicle"] = $selectedVehicle;
+            $this->view->setVar('selectedVehicle', $selectedVehicle);
+            $this->view->setVar('backAction', 'vehicles/edit/'.$processVehiclesId);
+            $this->view->setVar('backActionController', 'vehicles');
+            $this->view->setVar('backActionValue', $processVehiclesId);
+            $this->tag->setDefault("label", '');
+            $this->tag->setDefault("description", '');
+        }
+
+        $form = new VehiclePropertiesForm(null, $formOptions);
+        $this->view->setVar('form', $form);
+
         $this->view->setVar('extraTitle', "New Vehicleproperties");
     }
 
@@ -77,8 +102,8 @@ class VehiclepropertiesController extends ControllerBase
     public function editAction($id)
     {
         if (!$this->request->isPost()) {
-            $vehiclepropertie = Vehicleproperties::findFirstByid($id);
-            if (!$vehiclepropertie) {
+            $vehicleproperty = Vehicleproperties::findFirstByid($id);
+            if (!$vehicleproperty) {
                 $this->flash->error("vehiclepropertie was not found");
 
                 $this->dispatcher->forward([
@@ -89,17 +114,17 @@ class VehiclepropertiesController extends ControllerBase
                 return;
             }
 
-            $this->view->id = $vehiclepropertie->getId();
+            $this->view->id = $vehicleproperty->getId();
 
-            $this->tag->setDefault("id", $vehiclepropertie->getId());
-            $this->tag->setDefault("vehiclesId", $vehiclepropertie->getVehiclesid());
-            $this->tag->setDefault("create_time", $vehiclepropertie->getCreateTime());
-            $this->tag->setDefault("update_time", $vehiclepropertie->getUpdateTime());
-            $this->tag->setDefault("label", $vehiclepropertie->getLabel());
-            $this->tag->setDefault("description", $vehiclepropertie->getDescription());
-            $this->tag->setDefault("is_numeric", $vehiclepropertie->getIsNumeric());
-            $this->tag->setDefault("value_string", $vehiclepropertie->getValueString());
-            $this->tag->setDefault("value_numeric", $vehiclepropertie->getValueNumeric());
+            $this->tag->setDefault("id", $vehicleproperty->getId());
+            $this->tag->setDefault("vehiclesId", $vehicleproperty->getVehiclesid());
+            $this->tag->setDefault("create_time", $vehicleproperty->getCreateTime());
+            $this->tag->setDefault("update_time", $vehicleproperty->getUpdateTime());
+            $this->tag->setDefault("label", $vehicleproperty->getLabel());
+            $this->tag->setDefault("description", $vehicleproperty->getDescription());
+            $this->tag->setDefault("is_numeric", $vehicleproperty->getIsNumeric());
+            $this->tag->setDefault("value_string", $vehicleproperty->getValueString());
+            $this->tag->setDefault("value_numeric", $vehicleproperty->getValueNumeric());
         }
 
         $this->view->setVar('extraTitle', "Edit Vehicleproperties");
@@ -115,12 +140,11 @@ class VehiclepropertiesController extends ControllerBase
             return;
         }
 
-        $vehiclepropertie = new Vehicleproperties();
-        $this->setVehiclePropertyDetails($vehiclepropertie);
+        $vehicleproperty = new Vehicleproperties();
+        $this->setVehiclePropertyDetails($vehicleproperty);
 
-
-        if (!$vehiclepropertie->save()) {
-            foreach ($vehiclepropertie->getMessages() as $message) {
+        if (!$vehicleproperty->save()) {
+            foreach ($vehicleproperty->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
 
@@ -132,7 +156,20 @@ class VehiclepropertiesController extends ControllerBase
             return;
         }
 
-        $this->flash->success("vehiclepropertie was created successfully");
+        $this->flash->success("vehicleproperty was created successfully");
+
+        $backActionController = $this->request->getPost("backActionController", "string");
+        if (isset($backActionController)) {
+            $backActionValue = $this->request->getPost("backActionValue", "int");
+            $this->tag->setDefault("id", $backActionValue);
+            $this->dispatcher->forward([
+                'controller' => 'vehicles',
+                'action' => 'edit',
+                'params' => [$backActionValue]
+            ]);
+
+            return;
+        }
 
         $this->dispatcher->forward([
             'controller' => "vehicleproperties",
@@ -174,7 +211,6 @@ class VehiclepropertiesController extends ControllerBase
 
 
         if (!$vehiclepropertie->save()) {
-
             foreach ($vehiclepropertie->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }

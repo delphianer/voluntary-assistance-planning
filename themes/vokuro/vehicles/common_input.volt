@@ -1,6 +1,6 @@
 
 <div class="form-group">
-    <div class="col-sm-10 pt-4">
+    <div class="col-sm-10">
         {{ form.render('label') }}
     </div>
 </div>

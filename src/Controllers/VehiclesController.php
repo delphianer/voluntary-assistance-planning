@@ -31,7 +31,7 @@ class VehiclesController extends ControllerBase
      */
     public function indexAction()
     {
-        $form = new VehiclesForm();
+        $form = new VehiclesForm(null, ['indexAction' => true]);
         $this->view->setVar('form', $form);
 
         $this->setupDateTimePicker();
@@ -75,7 +75,7 @@ class VehiclesController extends ControllerBase
      */
     public function newAction()
     {
-        $form = new VehiclesForm();
+        $form = new VehiclesForm(null, ['newAction' => true]);
         $this->view->setVar('form', $form);
 
         $this->setupDateTimePicker();
@@ -90,7 +90,8 @@ class VehiclesController extends ControllerBase
      */
     public function editAction($id)
     {
-        if (!$this->request->isPost()) {
+        $backActionController = $this->request->getPost("backActionController", "string");
+        if (!$this->request->isPost() || isset($backActionController)) {
             $vehicle = Vehicles::findFirstByid($id);
             if (!$vehicle) {
                 $this->flash->error("vehicle was not found");
@@ -114,18 +115,19 @@ class VehiclesController extends ControllerBase
             $this->tag->setDefault("hasFlashingLights", $vehicle->getHasflashinglights());
             $this->tag->setDefault("hasRadioCom", $vehicle->getHasradiocom());
             $this->tag->setDefault("hasDigitalRadioCom", $vehicle->getHasdigitalradiocom());
+
+            $form = new VehiclesForm(null, ['editAction' => true]);
+            $this->view->setVars(
+                [
+                    'form' => $form,
+                    'vehicle' => $vehicle
+                ]
+            );
+
+            $this->setupDateTimePicker();
+
+            $this->view->setVar('extraTitle', "Edit Vehicles");
         }
-
-        $form = new VehiclesForm();
-        $this->view->setVars(
-            [
-                'form' => $form,
-                'vehicle' => $vehicle
-            ]);
-
-        $this->setupDateTimePicker();
-
-        $this->view->setVar('extraTitle', "Edit Vehicles");
     }
 
     /**
@@ -204,6 +206,18 @@ class VehiclesController extends ControllerBase
                 'controller' => "vehicles",
                 'action' => 'edit',
                 'params' => [$vehicle->getId()]
+            ]);
+
+            return;
+        }
+
+        $submitAction = $this->request->getPost("submitAction");
+        if ($submitAction == 'goToProperty') {
+            $this->dispatcher->setParam('processVehiclesId', $vehicle->getId());
+            $this->dispatcher->setParam('vehiclesLabel', $vehicle->getLabel());
+            $this->dispatcher->forward([
+                'controller' => "vehicleproperties",
+                'action' => 'new'
             ]);
 
             return;

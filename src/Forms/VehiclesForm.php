@@ -21,7 +21,7 @@ class VehiclesForm extends Form
     public function initialize($entity = null, array $options = [])
     {
         // In edition the id is hidden
-        if (!empty($options['edit'])) {
+        if (!empty($options['editAction'])) {
             $id = new Hidden('id');
         } else {
             $id = new Text('id');
@@ -71,10 +71,18 @@ class VehiclesForm extends Form
 
         $this->add($seatCount);
 
-        $yesNoFieldOptions = [
-            'N'=> 'No',
-            'Y' => 'Yes',
-        ];
+        if (!empty($options['indexAction'])) {
+            $yesNoFieldOptions = [
+                ''=>'...',
+                'N'=> 'No',
+                'Y' => 'Yes',
+            ];
+        } else {
+            $yesNoFieldOptions = [
+                'N'=> 'No',
+                'Y' => 'Yes',
+            ];
+        }
 
         $yesNoFieldAttributes = [
             'class' => 'form-control'
@@ -84,37 +92,5 @@ class VehiclesForm extends Form
         $this->add(new Select('hasFlashingLights', $yesNoFieldOptions, $yesNoFieldAttributes));
         $this->add(new Select('hasRadioCom', $yesNoFieldOptions, $yesNoFieldAttributes));
         $this->add(new Select('hasDigitalRadioCom', $yesNoFieldOptions, $yesNoFieldAttributes));
-
-        // todo-008: List Certificates from Link-Table
-        /*
-        $users = Users::find([
-            'active = :active:',
-            'bind' => [
-                'active' => 'Y',
-            ],
-        ]);
-
-        $this->add(new Select('userId', $users, [
-            'using'      => [
-                'id',
-                'name',
-            ],
-            'useEmpty'   => true,
-            'emptyText'  => 'No Account yet',
-            'emptyValue' => '0',
-        ]));
-
-        $departments = Departments::find([]);
-
-        $this->add(new Select('departmentId', $departments, [
-            'using'      => [
-                'id',
-                'label',
-            ],
-            'useEmpty'   => true,
-            'emptyText'  => 'No Department yet',
-            'emptyValue' => '0',
-        ]));
-        */
     }
 }

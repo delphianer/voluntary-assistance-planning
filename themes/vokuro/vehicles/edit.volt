@@ -15,7 +15,7 @@
     </ul>
 
 
-    <div class="tab-content">
+    <div class="tab-content mt-3">
         <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
 
 {% endblock %}
@@ -42,6 +42,7 @@
                 <thead>
                 <tr>
                     <th>Property</th>
+                    <th>numeric</th>
                     <th>Value</th>
                     <th></th>
                     <th></th>
@@ -54,12 +55,15 @@
                 {% for property in vehicle.Vehicleproperties %}
                     <tr>
                         <td>{{ property.label }}</td>
+                        <td>{{ property.is_numeric }}</td>
 
                         {% if property.is_numeric == 'Y' %}
-                        <td>{{ property.value_string }}</td>
+
+                        <td>{{ property.value_numeric }}</td>
 
                         {% else %}
-                        <td>{{ property.value_numeric }}</td>
+
+                        <td>{{ property.value_string }}</td>
 
                         {% endif %}
 
@@ -67,17 +71,17 @@
                         <td>del : {{ property.id }}</td>
 
                         {% if isAllowedToEdit %}
-                        <td class="td-width-12">{{ link_to( url("vehicleproperties/create?vehiclesId=") ~ vehicle.id ~ "&id=" ~ property.id, '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
+                        <td class="td-width-12">{{ link_to( url("vehicleproperties/edit?processVehiclesId=") ~ vehicle.id ~ "&id=" ~ property.id, '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
                         {% endif %}
 
                         {% if isAllowedToDelete %}
-                        <td class="td-width-12">{{ link_to( url("vehicleproperties/create?vehiclesId=") ~ vehicle.id ~ "&id=" ~ property.id, '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
+                        <td class="td-width-12">{{ link_to( url("vehicleproperties/delete?processVehiclesId=") ~ vehicle.id ~ "&id=" ~ property.id, '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
                         {% endif %}
 
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="3" class="text-center">No additional properties found</td>
+                        <td colspan="4" class="text-center">No additional properties found</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -85,7 +89,8 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    {{ link_to( url("vehicleproperties/create?vehiclesId=") ~ vehicle.id, '<i class="icon-pencil"></i> New Property', "class": "btn btn-sm btn-outline-warning") }}
+                    <button type="submit" class="btn btn-sm btn-outline-primary"
+                            name="submitAction" value="goToProperty">Add new property</button>
                 </div>
             </div>
 
