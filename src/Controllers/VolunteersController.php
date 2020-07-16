@@ -6,12 +6,17 @@ namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
+use Vokuro\DateTimePicker;
 use Vokuro\Forms\VolunteersForm;
+use Vokuro\Models\Certificates;
 use Vokuro\Models\Volunteers;
+use Vokuro\Models\VolunteersCertificatesLink;
 use function Vokuro\getCurrentDateTimeStamp;
 
 class VolunteersController extends ControllerBase
 {
+    use DateTimePicker;
+
     /**
      * initialize this Controller
      */
@@ -60,7 +65,8 @@ class VolunteersController extends ControllerBase
             ]
         );
 
-        $this->view->setVar('page', $paginator->paginate());
+        $page = $paginator->paginate();
+        $this->view->setVar('page', $page);
         $this->view->setVar('extraTitle', "Found volunteers");
     }
 
@@ -72,7 +78,7 @@ class VolunteersController extends ControllerBase
         $form = new VolunteersForm();
         $this->view->setVar('form', $form);
 
-        $this->view->setVar('extraTitle', "New Volunteers :: ");
+        $this->view->setVar('extraTitle', "New Volunteers");
     }
 
     /**
@@ -82,7 +88,12 @@ class VolunteersController extends ControllerBase
      */
     public function editAction($id)
     {
-        if (!$this->request->isPost()) {
+        $volunteerId = $this->dispatcher->getParam('volunteerId');
+        if (isset($volunteerId)) {
+            $id = $volunteerId;
+        }
+
+        if (!$this->request->isPost() || isset($volunteerId)) {
             $volunteer = Volunteers::findFirstByid($id);
             if (!$volunteer) {
                 $this->flash->error("volunteer was not found");
@@ -106,8 +117,19 @@ class VolunteersController extends ControllerBase
             $this->tag->setDefault("lastName", $volunteer->getLastname());
             $this->tag->setDefault("userId", $volunteer->getUserid());
             $this->tag->setDefault("departmentId", $volunteer->getDepartmentid());
-        }
 
+            // todo: go on with this: volCertLnkId
+            $volCertLnkId = $this->dispatcher->getParam('volCertLnkId');
+            if (isset($volCertLnkId) && ($volCertLnkId > 0)) {
+                $cert = VolunteersCertificatesLink::findFirst(['id' => $volCertLnkId]);
+                $this->tag->setDefault("volCertLnkId", $cert->getId());
+                $this->tag->setDefault("certificate", $cert->getCertificatesId());
+                $this->tag->setDefault("certValidUntil", $cert->getValidUntil());
+            }
+        }
+        $this->setupDateTimePicker();
+
+        $this->view->setVar('volunteer', $volunteer);
         $this->view->setVar('extraTitle', "Edit Volunteers");
     }
 
@@ -178,7 +200,6 @@ class VolunteersController extends ControllerBase
         $volunteer->setupdateTime(getCurrentDateTimeStamp());
         $this->setVolunteerDetails($volunteer);
 
-
         if (!$volunteer->save()) {
             foreach ($volunteer->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
@@ -190,6 +211,10 @@ class VolunteersController extends ControllerBase
                 'params' => [$volunteer->getId()]
             ]);
 
+            return;
+        }
+
+        if ($this->handeledSubmitCertificate(($this->request->getPost("submitAction", "string")), $volunteer)) {
             return;
         }
 
@@ -249,8 +274,81 @@ class VolunteersController extends ControllerBase
         $volunteer->setfirstName($this->request->getPost("firstName", "string"));
         $volunteer->setlastName($this->request->getPost("lastName", "string"));
         $var = $this->request->getPost("userId", "int");
-        if ($var > 0)
+        if ($var > 0) {
             $volunteer->setuserId($var); // else null!
+        }
         $volunteer->setdepartmentId($this->request->getPost("departmentId", "int"));
+    }
+
+    /**
+     * @param $submitAction
+     * @param Volunteers $volunteer
+     * @return bool
+     */
+    private function handeledSubmitCertificate($submitAction, $volunteer)
+    {
+        if ($submitAction == 'submit') { // nothing to change
+            return false;
+        }
+
+        if ($submitAction == 'saveCertDefinition') {
+            $volCertLnkId = $this->request->getPost("volCertLnkId", "int");
+            if (isset($volCertLnkId) && ($volCertLnkId > 0)) {
+                $cert = VolunteersCertificatesLink::findFirst(['id' => $volCertLnkId]);
+            } else {
+                $cert = new VolunteersCertificatesLink();
+                $cert->setCreateTime(getCurrentDateTimeStamp());
+            }
+            $cert->setUpdateTime(getCurrentDateTimeStamp());
+            $cert->setVolunteersId($volunteer->getId());
+            $cert->setCertificatesId($this->request->getPost("certificate", "int"));
+            $cert->setValidUntil($this->request->getPost("certValidUntil", "DateTime"));
+            if (!$cert->save()) {
+                foreach ($cert->getMessages() as $message) {
+                    $this->flash->error($message->getMessage());
+                }
+            }
+            $this->dispatcher->setParam('volunteerId', $volunteer->getId());
+            $this->dispatcher->forward([
+                'controller' => "volunteers",
+                'action' => 'edit'
+            ]);
+            return true;
+        }
+
+        // edit existing certificate
+        if (preg_match('/^edit\d/', $submitAction)) {
+            $volCertLnkId = preg_replace('/^edit/', '', $submitAction);
+            $this->dispatcher->setParam('volunteerId', $volunteer->getId());
+            $this->dispatcher->setParam('volCertLnkId', $volCertLnkId);
+            $this->dispatcher->forward([
+                'controller' => "volunteers",
+                'action' => 'edit'
+            ]);
+
+            return true;
+        }
+
+        // todo: delete existing property
+        if (preg_match('/^del\d/', $submitAction)) {
+            $volCertLnkId = preg_replace('/^del/', '', $submitAction);
+
+            if (isset($volCertLnkId) && ($volCertLnkId > 0)) {
+                $cert = VolunteersCertificatesLink::findFirst(['id' => $volCertLnkId]);
+                if (!$cert->delete()) {
+                    foreach ($cert->getMessages() as $message) {
+                        $this->flash->error($message->getMessage());
+                    }
+                }
+            }
+            $this->dispatcher->setParam('volunteerId', $volunteer->getId());
+            $this->dispatcher->forward([
+                'controller' => "volunteers",
+                'action' => 'edit'
+            ]);
+
+            return true;
+        }
+        return false;
     }
 }

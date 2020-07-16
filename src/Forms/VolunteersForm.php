@@ -9,10 +9,10 @@ use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
 use Phalcon\Validation\Validator\Email;
 use Phalcon\Validation\Validator\PresenceOf;
+use Vokuro\Models\Certificates;
 use Vokuro\Models\Departments;
 use Vokuro\Models\Profiles;
 use Vokuro\Models\Users;
-
 
 class VolunteersForm extends Form
 {
@@ -23,17 +23,23 @@ class VolunteersForm extends Form
      */
     public function initialize($entity = null, array $options = [])
     {
+        $currentAction = $this->dispatcher->getActionName();
+
         // In edition the id is hidden
-        if (!empty($options['edit'])) {
+        if ($currentAction == 'edit') {
             $id = new Hidden('id');
-        } else {
-            $id = new Text('id');
+        } else { // search
+            $id = new Text('id', [
+                'placeholder' => 'Id',
+                'class' => 'form-control'
+            ]);
         }
 
         $this->add($id);
 
         $firstName = new Text('firstName', [
             'placeholder' => 'First Name',
+            'class' => 'form-control'
         ]);
 
         $firstName->addValidators([
@@ -46,6 +52,7 @@ class VolunteersForm extends Form
 
         $lastName = new Text('lastName', [
             'placeholder' => 'Last Name',
+            'class' => 'form-control'
         ]);
 
         $lastName->addValidators([
@@ -60,7 +67,7 @@ class VolunteersForm extends Form
             'active = :active:',
             'bind' => [
                 'active' => 'Y',
-            ],
+            ]
         ]);
 
         $this->add(new Select('userId', $users, [
@@ -70,7 +77,8 @@ class VolunteersForm extends Form
             ],
             'useEmpty'   => true,
             'emptyText'  => 'No Account yet',
-            'emptyValue' => '0',
+            'emptyValue' => '',
+                'class' => 'form-control'
         ]));
 
         $departments = Departments::find([]);
@@ -82,7 +90,29 @@ class VolunteersForm extends Form
             ],
             'useEmpty'   => true,
             'emptyText'  => 'No Department yet',
-            'emptyValue' => '0',
+            'emptyValue' => '',
+            'class' => 'form-control'
+        ]));
+
+        // mini form for editing certificates
+
+        $this->add(new Hidden('volCertLnkId'));
+
+        $certificates = Certificates::find([]);
+
+        $this->add(new Select('certificate', $certificates, [
+            'using'      => [
+                'id',
+                'label',
+            ],
+            'useEmpty'   => false,
+            'class' => 'form-control  mr-sm-3'
+        ]));
+
+        $this->add(new Text('certValidUntil', [
+            'placeholder' => 'Valid Until Date',
+            'class' => 'form-control  mr-sm-3',
+            'id' => 'certValidUntil'
         ]));
 
         // todo-008: List Certificates from Link-Table

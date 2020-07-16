@@ -10,7 +10,6 @@ use Vokuro\DateTimePicker;
 use Vokuro\Forms\VehiclesForm;
 use Vokuro\Models\Vehicles;
 use function Vokuro\getCurrentDateTimeStamp;
-use function Vokuro\translateFromYesNo;
 
 class VehiclesController extends ControllerBase
 {
@@ -91,7 +90,7 @@ class VehiclesController extends ControllerBase
     public function editAction($id)
     {
         $backActionVehiclesId = $this->dispatcher->getParam('processVehiclesId');
-        if (isset($backActionVehiclesId)){
+        if (isset($backActionVehiclesId)) {
             $id = $backActionVehiclesId;
         }
         if (!$this->request->isPost() || isset($backActionVehiclesId)) {
@@ -326,5 +325,6 @@ class VehiclesController extends ControllerBase
 
             return true;
         }
+        return false;
     }
 }

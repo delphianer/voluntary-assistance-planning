@@ -7,6 +7,7 @@
     {% set rowIDIndex = 0 %}
 
     {% set tableHeadingData = [
+            'Id',
             'VolunteersId',
             'CertificatesId',
             'ValidUntil'
@@ -16,6 +17,7 @@
 
         {% set rowData = [] %}
 
+        {% set foo = arrayPush(rowData, volunteers_certificates_link.id) %}
         {% set foo = arrayPush(rowData, volunteers_certificates_link.volunteersId) %}
         {% set foo = arrayPush(rowData, volunteers_certificates_link.certificatesId) %}
         {% set foo = arrayPush(rowData, volunteers_certificates_link.validUntil) %}

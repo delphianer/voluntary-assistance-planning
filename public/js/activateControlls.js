@@ -31,4 +31,5 @@ $(document).ready(function () {
     dateTimePicker_i18n.timepicker = false;
     dateTimePicker_i18n.format = 'Y-m-d';
     $('#techInspField').datetimepicker(dateTimePicker_i18n);
+    $('#certValidUntil').datetimepicker(dateTimePicker_i18n);
 });

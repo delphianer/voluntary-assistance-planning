@@ -7,6 +7,12 @@ class VolunteersCertificatesLink extends \Phalcon\Mvc\Model
 
     /**
      *
+     * @var integer
+     */
+    protected $id;
+
+    /**
+     *
      * @var string
      */
     protected $create_time;
@@ -34,6 +40,19 @@ class VolunteersCertificatesLink extends \Phalcon\Mvc\Model
      * @var string
      */
     protected $validUntil;
+
+    /**
+     * Method to set the value of field id
+     *
+     * @param integer $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 
     /**
      * Method to set the value of field create_time
@@ -98,6 +117,16 @@ class VolunteersCertificatesLink extends \Phalcon\Mvc\Model
         $this->validUntil = $validUntil;
 
         return $this;
+    }
+
+    /**
+     * Returns the value of field id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**

@@ -7,7 +7,7 @@
 
     <ul class="nav nav-tabs" id="user-edit-tabs" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="basic-tab" data-toggle="tab" href="#basic" role="tab" aria-controls="basic" aria-selected="true">Data</a>
+            <a class="nav-link active" id="basic-tab" data-toggle="tab" href="#basic" role="tab" aria-controls="basic" aria-selected="true">Main</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" id="additional-tab" data-toggle="tab" href="#additional" role="tab" aria-controls="additional" aria-selected="false">Additional</a>
