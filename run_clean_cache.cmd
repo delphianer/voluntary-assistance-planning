@@ -1,0 +1,9 @@
+cd var
+cd cache
+cd volt
+del c__*
+cd ..
+cd metaData
+del map*
+del meta*
+rem pause
