@@ -72,21 +72,7 @@ class VehiclepropertiesController extends ControllerBase
     public function newAction()
     {
         $formOptions = [];
-        $processVehiclesId = $this->dispatcher->getParam('processVehiclesId');
-        if (isset($processVehiclesId) && ($processVehiclesId > 0)) {
-            $vehiclesLabel = $this->dispatcher->getParam('vehiclesLabel');
-            $selectedVehicle = [
-                'id'=>$processVehiclesId,
-                'label'=>$vehiclesLabel,
-            ];
-            $formOptions["selectedVehicle"] = $selectedVehicle;
-            $this->view->setVar('selectedVehicle', $selectedVehicle);
-            $this->view->setVar('backAction', 'vehicles/edit/'.$processVehiclesId);
-            $this->view->setVar('backActionController', 'vehicles');
-            $this->view->setVar('backActionValue', $processVehiclesId);
-            $this->tag->setDefault("label", '');
-            $this->tag->setDefault("description", '');
-        }
+        $formOptions['selectedVehicle'] = $this->handleProcessVehicle(true);
 
         $form = new VehiclePropertiesForm(null, $formOptions);
         $this->view->setVar('form', $form);
@@ -101,7 +87,11 @@ class VehiclepropertiesController extends ControllerBase
      */
     public function editAction($id)
     {
-        if (!$this->request->isPost()) {
+        $processVehiclesId = $this->dispatcher->getParam('processVehiclesId');
+        if (isset($processVehiclesId)) {
+            $id = $this->dispatcher->getParam('vehiclepropertyId');
+        }
+        if (!$this->request->isPost() || isset($processVehiclesId)) {
             $vehicleproperty = Vehicleproperties::findFirstByid($id);
             if (!$vehicleproperty) {
                 $this->flash->error("vehiclepropertie was not found");
@@ -125,6 +115,12 @@ class VehiclepropertiesController extends ControllerBase
             $this->tag->setDefault("is_numeric", $vehicleproperty->getIsNumeric());
             $this->tag->setDefault("value_string", $vehicleproperty->getValueString());
             $this->tag->setDefault("value_numeric", $vehicleproperty->getValueNumeric());
+
+            $formOptions = [];
+            $formOptions['selectedVehicle'] = $this->handleProcessVehicle(false);
+
+            $form = new VehiclePropertiesForm(null, $formOptions);
+            $this->view->setVar('form', $form);
         }
 
         $this->view->setVar('extraTitle', "Edit Vehicleproperties");
@@ -158,16 +154,8 @@ class VehiclepropertiesController extends ControllerBase
 
         $this->flash->success("vehicleproperty was created successfully");
 
-        $backActionController = $this->request->getPost("backActionController", "string");
-        if (isset($backActionController)) {
-            $backActionValue = $this->request->getPost("backActionValue", "int");
-            $this->tag->setDefault("id", $backActionValue);
-            $this->dispatcher->forward([
-                'controller' => 'vehicles',
-                'action' => 'edit',
-                'params' => [$backActionValue]
-            ]);
-
+        $backActionValue = $this->request->getPost("backActionValue", "int");
+        if ($this->handledBackAction($backActionValue)) {
             return;
         }
 
@@ -224,7 +212,12 @@ class VehiclepropertiesController extends ControllerBase
             return;
         }
 
-        $this->flash->success("vehiclepropertie was updated successfully");
+        $this->flash->success("vehicleproperty was updated successfully");
+
+        $backActionValue = $this->request->getPost("backActionValue", "int");
+        if ($this->handledBackAction($backActionValue)) {
+            return;
+        }
 
         $this->dispatcher->forward([
             'controller' => "vehicleproperties",
@@ -239,8 +232,14 @@ class VehiclepropertiesController extends ControllerBase
      */
     public function deleteAction($id)
     {
-        $vehiclepropertie = Vehicleproperties::findFirstByid($id);
-        if (!$vehiclepropertie) {
+        // passed by vehicle-dispatcher-forward:
+        $processVehiclesId = $this->dispatcher->getParam('processVehiclesId');
+        if (isset($processVehiclesId)) {
+            $id = $this->dispatcher->getParam('vehiclepropertyId');
+        }
+
+        $vehicleproperty = Vehicleproperties::findFirstByid($id);
+        if (!$vehicleproperty) {
             $this->flash->error("vehiclepropertie was not found");
 
             $this->dispatcher->forward([
@@ -251,8 +250,8 @@ class VehiclepropertiesController extends ControllerBase
             return;
         }
 
-        if (!$vehiclepropertie->delete()) {
-            foreach ($vehiclepropertie->getMessages() as $message) {
+        if (!$vehicleproperty->delete()) {
+            foreach ($vehicleproperty->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
 
@@ -264,7 +263,12 @@ class VehiclepropertiesController extends ControllerBase
             return;
         }
 
-        $this->flash->success("vehiclepropertie was deleted successfully");
+        $this->flash->success("vehicleproperty was deleted successfully");
+
+        // go back to vehicle/edit/...
+        if ($this->handledBackAction($processVehiclesId)) {
+            return;
+        }
 
         $this->dispatcher->forward([
             'controller' => "vehicleproperties",
@@ -280,8 +284,50 @@ class VehiclepropertiesController extends ControllerBase
         $vehicleproperty->setvehiclesId($this->request->getPost("vehiclesId", "int"));
         $vehicleproperty->setLabel($this->request->getPost("label", "string"));
         $vehicleproperty->setDescription($this->request->getPost("description", "string"));
-        $vehicleproperty->setisNumeric(translateFromYesNo($this->request->getPost("is_numeric", "string")));
+        $vehicleproperty->setisNumeric($this->request->getPost("is_numeric", "string"));
         $vehicleproperty->setvalueString($this->request->getPost("value_string", "string"));
         $vehicleproperty->setvalueNumeric($this->request->getPost("value_numeric", "float"));
+    }
+
+    /**
+     * @param $isNewAction
+     * @return array|null
+     */
+    private function handleProcessVehicle($isNewAction)
+    {
+        // todo: fehler finden -> dispatcher ist nicht gesetzt, wenn edit ausgeführt wird
+        $processVehiclesId = $this->dispatcher->getParam('processVehiclesId');
+        if (isset($processVehiclesId) && ($processVehiclesId > 0)) {
+            $vehiclesLabel = $this->dispatcher->getParam('vehiclesLabel');
+            $selectedVehicle = [
+                'id'=>$processVehiclesId,
+                'label'=>$vehiclesLabel,
+            ];
+            $this->view->setVar('selectedVehicle', $selectedVehicle);
+            $this->view->setVar('backAction', 'vehicles/edit/'.$processVehiclesId);
+            $this->view->setVar('backActionController', 'vehicles');
+            $this->view->setVar('backActionValue', $processVehiclesId);
+            if ($isNewAction) {
+                $this->tag->setDefault("label", '');
+                $this->tag->setDefault("description", '');
+            }
+            return $selectedVehicle;
+        }
+        return null;
+    }
+
+    private function handledBackAction($backActionValue)
+    {
+        if (isset($backActionValue)) {
+            $this->tag->setDefault("id", $backActionValue);
+            $this->dispatcher->setParam('processVehiclesId', $backActionValue);
+            $this->dispatcher->forward([
+                'controller' => 'vehicles',
+                'action' => 'edit'
+            ]);
+
+            return true;
+        }
+        return false;
     }
 }

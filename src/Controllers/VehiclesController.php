@@ -90,8 +90,11 @@ class VehiclesController extends ControllerBase
      */
     public function editAction($id)
     {
-        $backActionController = $this->request->getPost("backActionController", "string");
-        if (!$this->request->isPost() || isset($backActionController)) {
+        $backActionVehiclesId = $this->dispatcher->getParam('processVehiclesId');
+        if (isset($backActionVehiclesId)){
+            $id = $backActionVehiclesId;
+        }
+        if (!$this->request->isPost() || isset($backActionVehiclesId)) {
             $vehicle = Vehicles::findFirstByid($id);
             if (!$vehicle) {
                 $this->flash->error("vehicle was not found");
@@ -211,17 +214,10 @@ class VehiclesController extends ControllerBase
             return;
         }
 
-        $submitAction = $this->request->getPost("submitAction");
-        if ($submitAction == 'goToProperty') {
-            $this->dispatcher->setParam('processVehiclesId', $vehicle->getId());
-            $this->dispatcher->setParam('vehiclesLabel', $vehicle->getLabel());
-            $this->dispatcher->forward([
-                'controller' => "vehicleproperties",
-                'action' => 'new'
-            ]);
-
+        if ($this->handledSubmitAction($this->request->getPost("submitAction"), $vehicle)) {
             return;
         }
+
 
         $this->flash->success("vehicle was updated successfully");
 
@@ -284,5 +280,51 @@ class VehiclesController extends ControllerBase
         $vehicle->sethasFlashingLights($this->request->getPost("hasFlashingLights", "string"));
         $vehicle->sethasRadioCom($this->request->getPost("hasRadioCom", "string"));
         $vehicle->sethasDigitalRadioCom($this->request->getPost("hasDigitalRadioCom", "string"));
+    }
+
+    private function handledSubmitAction($submitAction, $vehicle)
+    {
+        if ($submitAction == 'submit') { // nothing to change
+            return false;
+        }
+
+        // create new property
+        if ($submitAction == 'goToProperty') {
+            $this->dispatcher->setParam('processVehiclesId', $vehicle->getId());
+            $this->dispatcher->setParam('vehiclesLabel', $vehicle->getLabel());
+            $this->dispatcher->forward([
+                'controller' => "vehicleproperties",
+                'action' => 'new'
+            ]);
+
+            return true;
+        }
+
+        // edit existing property
+        if (preg_match('/^edit\d/', $submitAction)) {
+            $vehiclepropertyId = preg_replace('/^edit/', '', $submitAction);
+            $this->dispatcher->setParam('processVehiclesId', $vehicle->getId());
+            $this->dispatcher->setParam('vehiclesLabel', $vehicle->getLabel());
+            $this->dispatcher->setParam('vehiclepropertyId', $vehiclepropertyId);
+            $this->dispatcher->forward([
+                'controller' => "vehicleproperties",
+                'action' => 'edit'
+            ]);
+
+            return true;
+        }
+
+        // delete existing property
+        if (preg_match('/^del\d/', $submitAction)) {
+            $vehiclepropertyId = preg_replace('/^del/', '', $submitAction);
+            $this->dispatcher->setParam('processVehiclesId', $vehicle->getId());
+            $this->dispatcher->setParam('vehiclepropertyId', $vehiclepropertyId);
+            $this->dispatcher->forward([
+                'controller' => "vehicleproperties",
+                'action' => 'delete'
+            ]);
+
+            return true;
+        }
     }
 }

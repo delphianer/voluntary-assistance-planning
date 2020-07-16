@@ -114,6 +114,8 @@ CREATE TABLE IF NOT EXISTS `vokuro`.`vehicles` (
 ENGINE = InnoDB;
 
 
+
+
 -- -----------------------------------------------------
 -- Table `vokuro`.`vehicleProperties`
 -- -----------------------------------------------------
@@ -122,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `vokuro`.`vehicleProperties` (
   `vehiclesId` INT NOT NULL,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `label` VARCHAR(60) UNIQUE NULL,
+  `label` VARCHAR(60) NOT NULL,
   `description` VARCHAR(5000) NULL,
   `is_numeric` VARCHAR(1) NOT NULL DEFAULT 'N',
   `value_string` VARCHAR(5000) NULL,
@@ -135,6 +137,9 @@ CREATE TABLE IF NOT EXISTS `vokuro`.`vehicleProperties` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+ALTER TABLE `vokuro`.`vehicleProperties` 
+ADD UNIQUE `vehiclesId` (`vehiclesId`, `label`) USING BTREE;
 
 
 -- -----------------------------------------------------

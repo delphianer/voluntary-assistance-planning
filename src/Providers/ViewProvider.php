@@ -46,6 +46,8 @@ class ViewProvider implements ServiceProviderInterface
                     $volt->setOptions([
                         'path'      => $cacheDir . 'volt/',
                         'separator' => '_',
+                        // TODO-003: remove later
+                        'always'     => true,
                     ]);
 
                     $volt->getCompiler()
@@ -58,11 +60,20 @@ class ViewProvider implements ServiceProviderInterface
 
                     $volt->getCompiler()
                         ->addFunction(
-                                'arrayPush',
-                                function ($resolvedArgs, $exprArgs) {
-                                    return 'array_push('.$resolvedArgs.')';
-                                }
-                            );
+                            'arrayPush',
+                            function ($resolvedArgs, $exprArgs) {
+                                return 'array_push('.$resolvedArgs.')';
+                            }
+                        );
+
+                    $volt->getCompiler()
+                        ->addFunction(
+                            'numberFormat',
+                            function ($resolvedArgs, $exprArgs) {
+                                return 'number_format('.$resolvedArgs.')';
+                            }
+                        );
+
 
                     return $volt;
                 },

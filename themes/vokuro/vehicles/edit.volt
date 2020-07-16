@@ -42,7 +42,6 @@
                 <thead>
                 <tr>
                     <th>Property</th>
-                    <th>numeric</th>
                     <th>Value</th>
                     <th></th>
                     <th></th>
@@ -55,11 +54,10 @@
                 {% for property in vehicle.Vehicleproperties %}
                     <tr>
                         <td>{{ property.label }}</td>
-                        <td>{{ property.is_numeric }}</td>
 
                         {% if property.is_numeric == 'Y' %}
 
-                        <td>{{ property.value_numeric }}</td>
+                        <td>{{ numberFormat(property.value_numeric) }}</td>
 
                         {% else %}
 
@@ -67,15 +65,24 @@
 
                         {% endif %}
 
-                        <td>edit : {{ property.id }}</td>
-                        <td>del : {{ property.id }}</td>
-
                         {% if isAllowedToEdit %}
-                        <td class="td-width-12">{{ link_to( url("vehicleproperties/edit?processVehiclesId=") ~ vehicle.id ~ "&id=" ~ property.id, '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}</td>
+                        <td class="td-width-12">
+                            <button type="submit" class="btn btn-sm btn-outline-warning"
+                                    name="submitAction"
+                                    value="edit{{property.id}}">
+                                    <i class="icon-pencil"></i> Edit
+                            </button>
+                        </td>
                         {% endif %}
 
                         {% if isAllowedToDelete %}
-                        <td class="td-width-12">{{ link_to( url("vehicleproperties/delete?processVehiclesId=") ~ vehicle.id ~ "&id=" ~ property.id, '<i class="icon-remove"></i> Delete', "class": "btn btn-sm btn-outline-danger") }}</td>
+                        <td class="td-width-12">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                    name="submitAction"
+                                    value="del{{property.id}}">
+                                    <i class="icon-pencil"></i> delete
+                            </button>
+                        </td>
                         {% endif %}
 
                     </tr>
@@ -89,7 +96,7 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-sm btn-outline-primary"
+                    <button type="submit" class="btn btn-sm btn-primary"
                             name="submitAction" value="goToProperty">Add new property</button>
                 </div>
             </div>

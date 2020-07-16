@@ -12,10 +12,7 @@
                      'Description',
                      'TechnicalInspection',
                      'SeatCount',
-                     'IsAmbulance',
-                     'HasFlashingLights',
-                     'HasRadioCom',
-                     'HasDigitalRadioCom'
+                     'Fix Properties'
         ] %}
 
     {% for vehicle in page.items %}
@@ -27,10 +24,29 @@
             {% set foo = arrayPush(rowData , vehicle.description) %}
             {% set foo = arrayPush(rowData , vehicle.technicalInspection) %}
             {% set foo = arrayPush(rowData , vehicle.seatCount) %}
-            {% set foo = arrayPush(rowData , vehicle.isAmbulance) %}
-            {% set foo = arrayPush(rowData , vehicle.hasFlashingLights) %}
-            {% set foo = arrayPush(rowData , vehicle.hasRadioCom) %}
-            {% set foo = arrayPush(rowData , vehicle.hasDigitalRadioCom) %}
+
+            {% set propText = '' %}
+                {% set comma = '' %}
+                {% if vehicle.isAmbulance == 'Y' %}
+                    {% set propText = propText ~ 'IsAmbulance' %}
+                    {% set comma = ', ' %}
+                {% endif %}
+
+                {% if vehicle.hasFlashingLights == 'Y' %}
+                    {% set propText = propText ~ comma ~ 'HasFlashingLights' %}
+                    {% set comma = ', ' %}
+                {% endif %}
+
+                {% if vehicle.hasRadioCom == 'Y' %}
+                    {% set propText = propText ~ comma ~ 'HasRadioCom' %}
+                    {% set comma = ', ' %}
+                {% endif %}
+
+                {% if vehicle.hasDigitalRadioCom == 'Y' %}
+                    {% set propText = propText ~ comma ~ 'HasDigitalRadioCom' %}
+                {% endif %}
+
+            {% set foo = arrayPush(rowData , propText) %}
 
         {% set foo = arrayPush(tableBodyData , rowData) %}
 
