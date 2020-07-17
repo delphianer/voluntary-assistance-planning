@@ -105,9 +105,7 @@ class VolunteersController extends ControllerBase
 
                 return;
             }
-            $form = new VolunteersForm($volunteer, [
-                'edit' => true,
-            ]);
+            $form = new VolunteersForm();
             $this->view->setVar('form', $form);
 
             $this->view->id = $volunteer->getId();

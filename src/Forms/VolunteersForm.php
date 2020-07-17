@@ -25,7 +25,6 @@ class VolunteersForm extends Form
     {
         $currentAction = $this->dispatcher->getActionName();
 
-        // In edition the id is hidden
         if ($currentAction == 'edit') {
             $id = new Hidden('id');
         } else { // search

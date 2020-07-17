@@ -20,11 +20,15 @@ class VehiclesForm extends Form
      */
     public function initialize($entity = null, array $options = [])
     {
-        // In edition the id is hidden
-        if (!empty($options['editAction'])) {
+        $currentAction = $this->dispatcher->getActionName();
+
+        if ($currentAction == 'edit') {
             $id = new Hidden('id');
         } else {
-            $id = new Text('id');
+            $id = new Text('id', [
+                'placeholder' => 'Id',
+                'class' => 'form-control'
+            ]);
         }
 
         $this->add($id);
@@ -58,20 +62,20 @@ class VehiclesForm extends Form
 
         $seatCount->addValidators([
             new PresenceOf([
-                'message' => 'The label is required',
+                'message' => 'The number of seats is required',
             ]),
         ]);
 
         $seatCount->addValidators([
             new Numericality([ // RegexValidator
-                'message' => 'The label is required',
+                'message' => 'number of seats must be numeric',
                 'allowEmpty' => false
             ]),
         ]);
 
         $this->add($seatCount);
 
-        if (!empty($options['indexAction'])) {
+        if ($currentAction == 'index') {
             $yesNoFieldOptions = [
                 ''=>'...',
                 'N'=> 'No',

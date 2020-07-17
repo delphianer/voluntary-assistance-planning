@@ -5,6 +5,7 @@ namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
+use Vokuro\Forms\OperationsForm;
 use Vokuro\Models\Operations;
 use function Vokuro\getCurrentDateTimeStamp;
 
@@ -25,6 +26,9 @@ class OperationsController extends ControllerBase
      */
     public function indexAction()
     {
+        $form = new OperationsForm();
+        $this->view->setVar('form', $form);
+
         $this->view->setVar('extraTitle', "Search operations");
     }
 
@@ -64,6 +68,9 @@ class OperationsController extends ControllerBase
      */
     public function newAction()
     {
+        $form = new OperationsForm();
+        $this->view->setVar('form', $form);
+
         $this->view->setVar('extraTitle', "New Operations");
     }
 
@@ -86,6 +93,8 @@ class OperationsController extends ControllerBase
 
                 return;
             }
+            $form = new OperationsForm();
+            $this->view->setVar('form', $form);
 
             $this->view->id = $operation->getId();
 

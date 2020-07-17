@@ -7,11 +7,10 @@
     {% set rowIDIndex = 0 %}
 
     {% set tableHeadingData = [
-            'Id',
-            'ClientId',
-            'ShortDescription',
-            'LongDescription',
-            'MainDepartmentId'
+            'ID',
+            'Client',
+            'short desc.',
+            'main department'
         ] %}
 
     {% for operation in page.items %}
@@ -19,10 +18,13 @@
         {% set rowData = [] %}
 
             {% set foo = arrayPush(rowData, operation.id) %}
-            {% set foo = arrayPush(rowData, operation.clientId) %}
+            {% set foo = arrayPush(rowData, operation.Clients.label) %}
             {% set foo = arrayPush(rowData, operation.shortDescription) %}
-            {% set foo = arrayPush(rowData, operation.longDescription) %}
-            {% set foo = arrayPush(rowData, operation.mainDepartmentId) %}
+            {% if operation.department is defined and operation.department is not empty %}
+                {% set foo = arrayPush(rowData, operation.department.label) %}
+            {% else %}
+                {% set foo = arrayPush(rowData, '-') %}
+            {% endif %}
 
         {% set foo = arrayPush(tableBodyData , rowData) %}
 

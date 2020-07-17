@@ -30,7 +30,7 @@ class VehiclesController extends ControllerBase
      */
     public function indexAction()
     {
-        $form = new VehiclesForm(null, ['indexAction' => true]);
+        $form = new VehiclesForm();
         $this->view->setVar('form', $form);
 
         $this->setupDateTimePicker();
@@ -74,7 +74,7 @@ class VehiclesController extends ControllerBase
      */
     public function newAction()
     {
-        $form = new VehiclesForm(null, ['newAction' => true]);
+        $form = new VehiclesForm();
         $this->view->setVar('form', $form);
 
         $this->setupDateTimePicker();
@@ -118,7 +118,7 @@ class VehiclesController extends ControllerBase
             $this->tag->setDefault("hasRadioCom", $vehicle->getHasradiocom());
             $this->tag->setDefault("hasDigitalRadioCom", $vehicle->getHasdigitalradiocom());
 
-            $form = new VehiclesForm(null, ['editAction' => true]);
+            $form = new VehiclesForm();
             $this->view->setVars(
                 [
                     'form' => $form,
