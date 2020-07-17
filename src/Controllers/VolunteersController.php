@@ -121,10 +121,10 @@ class VolunteersController extends ControllerBase
             // todo: go on with this: volCertLnkId
             $volCertLnkId = $this->dispatcher->getParam('volCertLnkId');
             if (isset($volCertLnkId) && ($volCertLnkId > 0)) {
-                $cert = VolunteersCertificatesLink::findFirst(['id' => $volCertLnkId]);
-                $this->tag->setDefault("volCertLnkId", $cert->getId());
-                $this->tag->setDefault("certificate", $cert->getCertificatesId());
-                $this->tag->setDefault("certValidUntil", $cert->getValidUntil());
+                $certLink = VolunteersCertificatesLink::findFirstByid($volCertLnkId);
+                $this->tag->setDefault("volCertLnkId", $certLink->getId());
+                $this->tag->setDefault("certificate", $certLink->getCertificatesId());
+                $this->tag->setDefault("certValidUntil", $certLink->getValidUntil());
             }
         }
         $this->setupDateTimePicker();
@@ -294,7 +294,7 @@ class VolunteersController extends ControllerBase
         if ($submitAction == 'saveCertDefinition') {
             $volCertLnkId = $this->request->getPost("volCertLnkId", "int");
             if (isset($volCertLnkId) && ($volCertLnkId > 0)) {
-                $cert = VolunteersCertificatesLink::findFirst(['id' => $volCertLnkId]);
+                $cert = VolunteersCertificatesLink::findFirstByid($volCertLnkId);
             } else {
                 $cert = new VolunteersCertificatesLink();
                 $cert->setCreateTime(getCurrentDateTimeStamp());
@@ -329,12 +329,12 @@ class VolunteersController extends ControllerBase
             return true;
         }
 
-        // todo: delete existing property
+        // delete existing certificate
         if (preg_match('/^del\d/', $submitAction)) {
             $volCertLnkId = preg_replace('/^del/', '', $submitAction);
 
             if (isset($volCertLnkId) && ($volCertLnkId > 0)) {
-                $cert = VolunteersCertificatesLink::findFirst(['id' => $volCertLnkId]);
+                $cert = VolunteersCertificatesLink::findFirstByid($volCertLnkId);
                 if (!$cert->delete()) {
                     foreach ($cert->getMessages() as $message) {
                         $this->flash->error($message->getMessage());

@@ -114,7 +114,5 @@ class VolunteersForm extends Form
             'class' => 'form-control  mr-sm-3',
             'id' => 'certValidUntil'
         ]));
-
-        // todo-008: List Certificates from Link-Table
     }
 }

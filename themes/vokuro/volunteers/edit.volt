@@ -41,8 +41,8 @@
             <table class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th>Certificate</th>
-                    <th>valid until</th>
+                    <th class="text-center">Certificate</th>
+                    <th class="text-center">valid until</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -51,11 +51,15 @@
 
                 {% for certLink in volunteer.VolunteersCertificatesLink %}
                     <tr>
-                        <td>{{ certLink.Certificates.label }}</td>
+                        <td class="text-center">{{ certLink.Certificates.label }}</td>
 
-                        <td>{{ certLink.validUntil }}</td>
+                        {% if certLink.validUntil is empty or certLink.validUntil == '0000-00-00' %}
+                        <td class="text-center">-</td>
+                        {% else %}
+                        <td class="text-center">{{ certLink.validUntil }}</td>
+                        {% endif %}
 
-                        <td class="td-width-12">
+                        <td class="td-width-12 text-center">
                             <button type="submit" class="btn btn-sm btn-outline-warning"
                                     name="submitAction"
                                     value="edit{{certLink.id}}">
@@ -63,7 +67,7 @@
                             </button>
                         </td>
 
-                        <td class="td-width-12">
+                        <td class="td-width-12 text-center">
                             <button type="submit" class="btn btn-sm btn-outline-danger"
                                     name="submitAction"
                                     value="del{{certLink.id}}">
@@ -90,7 +94,7 @@
                     {{ form.render("certValidUntil") }}
 
                     <button type="submit" class="btn btn-sm btn-primary"
-                            name="submitAction" value="saveCertDefinition">Add Certificate</button>
+                            name="submitAction" value="saveCertDefinition">Save Certificate</button>
                 </div>
             </div>
 
