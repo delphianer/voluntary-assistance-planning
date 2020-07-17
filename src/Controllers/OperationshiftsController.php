@@ -75,6 +75,9 @@ class OperationshiftsController extends ControllerBase
      */
     public function editAction($id)
     {
+        // todo: setup id by params of dispatcher because this is a post when comming from OperationsController
+        // see VehiclePropertiesController -> editAction
+
         if (!$this->request->isPost()) {
             $operationshift = Operationshifts::findFirstByid($id);
             if (!$operationshift) {
@@ -102,6 +105,9 @@ class OperationshiftsController extends ControllerBase
             $this->tag->setDefault("start", $operationshift->getStart());
             $this->tag->setDefault("end", $operationshift->getEnd());
 
+            // todo: handleProcessOperation -> comming from OperationsController
+            // see VehiclePropertiesController -> editAction
+            // todo: setup form
         }
 
         $this->view->setVar('extraTitle', "Edit Operationshifts");

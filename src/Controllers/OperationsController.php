@@ -95,6 +95,7 @@ class OperationsController extends ControllerBase
             }
             $form = new OperationsForm();
             $this->view->setVar('form', $form);
+            $this->view->setVar('operation', $operation);
 
             $this->view->id = $operation->getId();
 
@@ -195,6 +196,8 @@ class OperationsController extends ControllerBase
 
             return;
         }
+
+        // todo: handledSubmitAction -> new, edit delete of shift, see VehiclesController
 
         $this->flash->success("operation was updated successfully");
 
