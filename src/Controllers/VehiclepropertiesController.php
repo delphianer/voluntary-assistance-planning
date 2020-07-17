@@ -295,7 +295,6 @@ class VehiclepropertiesController extends ControllerBase
      */
     private function handleProcessVehicle($isNewAction)
     {
-        // todo: fehler finden -> dispatcher ist nicht gesetzt, wenn edit ausgeführt wird
         $processVehiclesId = $this->dispatcher->getParam('processVehiclesId');
         if (isset($processVehiclesId) && ($processVehiclesId > 0)) {
             $vehiclesLabel = $this->dispatcher->getParam('vehiclesLabel');

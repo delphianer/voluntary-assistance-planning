@@ -4,7 +4,7 @@
 <div class="form-group">
     <label for="fieldVehiclesid" class="col-sm-12 control-label">
     {% if selectedVehicle is defined %}
-        Add property for:  {{ selectedVehicle['label'] }}
+        Add property for:  <b>{{ selectedVehicle['label'] }}</b>
     {% else %}
         Vehicle:
     {% endif %}

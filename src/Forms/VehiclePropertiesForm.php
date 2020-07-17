@@ -32,7 +32,7 @@ class VehiclePropertiesForm extends Form
             $vehiclesId = new Hidden('vehiclesId');
             $vehiclesId->setDefault($options['selectedVehicle']['id']);
         } else {
-            $vehiclesId = new Text(
+            $vehiclesId = new Text( // todo: check if this is really correct o.O
                 'vehiclesId',
                 ['class' => 'form-control']
             );
