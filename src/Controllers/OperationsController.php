@@ -81,7 +81,12 @@ class OperationsController extends ControllerBase
      */
     public function editAction($id)
     {
-        if (!$this->request->isPost()) {
+        $processOperationsId = $this->dispatcher->getParam('processOperationsId');
+        if (isset($processOperationsId)) {
+            $id = $processOperationsId;
+        }
+
+        if (!$this->request->isPost() || isset($processOperationsId)) {
             $operation = Operations::findFirstByid($id);
             if (!$operation) {
                 $this->flash->error("operation was not found");
@@ -183,7 +188,6 @@ class OperationsController extends ControllerBase
 
 
         if (!$operation->save()) {
-
             foreach ($operation->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -197,7 +201,9 @@ class OperationsController extends ControllerBase
             return;
         }
 
-        // todo: handledSubmitAction -> new, edit delete of shift, see VehiclesController
+        if ($this->handledSubmitAction($this->request->getPost("submitAction"), $operation)){
+            return;
+        }
 
         $this->flash->success("operation was updated successfully");
 
@@ -227,7 +233,6 @@ class OperationsController extends ControllerBase
         }
 
         if (!$operation->delete()) {
-
             foreach ($operation->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -258,5 +263,52 @@ class OperationsController extends ControllerBase
         $operation->setshortDescription($this->request->getPost("shortDescription", "string"));
         $operation->setlongDescription($this->request->getPost("longDescription", "string"));
         $operation->setmainDepartmentId($this->request->getPost("mainDepartmentId", "int"));
+    }
+
+    private function handledSubmitAction($submitAction, $operation)
+    {
+        if ($submitAction == 'submit') { // nothing to change -> correct submit button
+            return false;
+        }
+
+        // create new property
+        if ($submitAction == 'goToShift') {
+            $this->dispatcher->setParam('processOperationId', $operation->getId());
+            $this->dispatcher->setParam('OperationShortDesc', $operation->getShortDescription());
+            $this->dispatcher->forward([
+                'controller' => "OperationShifts",
+                'action' => 'new'
+            ]);
+
+            return true;
+        }
+
+        // edit existing property
+        if (preg_match('/^edit\d/', $submitAction)) {
+            $shiftId = preg_replace('/^edit/', '', $submitAction);
+            $this->dispatcher->setParam('processOperationId', $operation->getId());
+            $this->dispatcher->setParam('OperationShortDesc', $operation->getShortDescription());
+            $this->dispatcher->setParam('OperationShiftsId', $shiftId);
+            $this->dispatcher->forward([
+                'controller' => "OperationShifts",
+                'action' => 'edit'
+            ]);
+
+            return true;
+        }
+
+        // delete existing property
+        if (preg_match('/^del\d/', $submitAction)) {
+            $shiftId = preg_replace('/^del/', '', $submitAction);
+            $this->dispatcher->setParam('processOperationId', $operation->getId());
+            $this->dispatcher->setParam('OperationShiftsId', $shiftId);
+            $this->dispatcher->forward([
+                'controller' => "OperationShifts",
+                'action' => 'delete'
+            ]);
+
+            return true;
+        }
+        return false;
     }
 }

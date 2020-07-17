@@ -6,11 +6,15 @@ namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
+use Vokuro\DateTimePicker;
+use Vokuro\Forms\OperationShiftsForm;
 use Vokuro\Models\Operationshifts;
 use function Vokuro\getCurrentDateTimeStamp;
 
 class OperationshiftsController extends ControllerBase
 {
+    use DateTimePicker;
+
     /**
      * initialize this Controller
      */
@@ -26,6 +30,11 @@ class OperationshiftsController extends ControllerBase
      */
     public function indexAction()
     {
+        $form = new OperationShiftsForm();
+        $this->view->setVar('form', $form);
+
+        $this->setupDateTimePicker();
+
         $this->view->setVar('extraTitle', "Search operationshifts");
     }
 
@@ -65,6 +74,14 @@ class OperationshiftsController extends ControllerBase
      */
     public function newAction()
     {
+        $formOptions = [];
+        $formOptions['selectedOperation'] = $this->handleProcessOperation(true);
+
+        $form = new OperationShiftsForm(null, $formOptions);
+        $this->view->setVar('form', $form);
+
+        $this->setupDateTimePicker();
+
         $this->view->setVar('extraTitle', "New Operationshifts");
     }
 
@@ -75,10 +92,11 @@ class OperationshiftsController extends ControllerBase
      */
     public function editAction($id)
     {
-        // todo: setup id by params of dispatcher because this is a post when comming from OperationsController
-        // see VehiclePropertiesController -> editAction
-
-        if (!$this->request->isPost()) {
+        $processOperationId = $this->dispatcher->getParam('processOperationId');
+        if (isset($processOperationId)) {
+            $id = $this->dispatcher->getParam('OperationShiftsId');
+        }
+        if (!$this->request->isPost()|| isset($processOperationId)) {
             $operationshift = Operationshifts::findFirstByid($id);
             if (!$operationshift) {
                 $this->flash->error("operationshift was not found");
@@ -105,9 +123,13 @@ class OperationshiftsController extends ControllerBase
             $this->tag->setDefault("start", $operationshift->getStart());
             $this->tag->setDefault("end", $operationshift->getEnd());
 
-            // todo: handleProcessOperation -> comming from OperationsController
-            // see VehiclePropertiesController -> editAction
-            // todo: setup form
+            $formOptions = [];
+            $formOptions['selectedOperation'] = $this->handleProcessOperation(false);
+
+            $form = new OperationShiftsForm(null, $formOptions);
+            $this->view->setVar('form', $form);
+
+            $this->setupDateTimePicker();
         }
 
         $this->view->setVar('extraTitle', "Edit Operationshifts");
@@ -142,7 +164,12 @@ class OperationshiftsController extends ControllerBase
             return;
         }
 
-        $this->flash->success("operationshift was created successfully");
+        $this->flash->success("Shift was created successfully");
+
+        $backActionValue = $this->request->getPost("backActionValue", "int");
+        if ($this->handledBackAction($backActionValue)) {
+            return;
+        }
 
         $this->dispatcher->forward([
             'controller' => "operationshifts",
@@ -185,7 +212,6 @@ class OperationshiftsController extends ControllerBase
 
 
         if (!$operationshift->save()) {
-
             foreach ($operationshift->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -199,7 +225,12 @@ class OperationshiftsController extends ControllerBase
             return;
         }
 
-        $this->flash->success("operationshift was updated successfully");
+        $this->flash->success("Shift was updated successfully");
+
+        $backActionValue = $this->request->getPost("backActionValue", "int");
+        if ($this->handledBackAction($backActionValue)) {
+            return;
+        }
 
         $this->dispatcher->forward([
             'controller' => "operationshifts",
@@ -214,6 +245,11 @@ class OperationshiftsController extends ControllerBase
      */
     public function deleteAction($id)
     {
+        $processOperationId = $this->dispatcher->getParam('processOperationId');
+        if (isset($processOperationId)) {
+            $id = $this->dispatcher->getParam('OperationShiftsId');
+        }
+
         $operationshift = Operationshifts::findFirstByid($id);
         if (!$operationshift) {
             $this->flash->error("operationshift was not found");
@@ -240,7 +276,11 @@ class OperationshiftsController extends ControllerBase
             return;
         }
 
-        $this->flash->success("operationshift was deleted successfully");
+        $this->flash->success("Shift was deleted successfully");
+
+        if ($this->handledBackAction($processOperationId)) {
+            return;
+        }
 
         $this->dispatcher->forward([
             'controller' => "operationshifts",
@@ -257,7 +297,44 @@ class OperationshiftsController extends ControllerBase
         $operationshift->setlocationId($this->request->getPost("locationId", "int"));
         $operationshift->setshortDescription($this->request->getPost("shortDescription", "string"));
         $operationshift->setlongDescription($this->request->getPost("longDescription", "string"));
-        $operationshift->setstart($this->request->getPost("start", "int"));
-        $operationshift->setend($this->request->getPost("end", "int"));
+        $operationshift->setstart($this->request->getPost("start", "DateTime"));
+        $operationshift->setend($this->request->getPost("end", "DateTime"));
+    }
+
+    private function handleProcessOperation(bool $isNewAction)
+    {
+        $opId = $this->dispatcher->getParam('processOperationId');
+        if (isset($opId) && ($opId > 0)) {
+            $label = $this->dispatcher->getParam('OperationShortDesc');
+            $selectedOperation = [
+                'id'=>$opId,
+                'shortDescription'=>$label,
+            ];
+            $this->view->setVar('selectedOperation', $selectedOperation);
+            $this->view->setVar('backAction', 'operations/edit/'.$selectedOperation['id']);
+            $this->view->setVar('backActionController', 'operations');
+            $this->view->setVar('backActionValue', $opId);
+            if ($isNewAction) { // default blank -> new fields should be empty
+                $this->tag->setDefault("shortDescription", '');
+                $this->tag->setDefault("longDescription", '');
+            }
+            return $selectedOperation;
+        }
+        return null;
+    }
+
+    private function handledBackAction($backActionValue)
+    {
+        if (isset($backActionValue)) {
+            $this->tag->setDefault("id", $backActionValue);
+            $this->dispatcher->setParam('processOperationsId', $backActionValue);
+            $this->dispatcher->forward([
+                'controller' => 'operations',
+                'action' => 'edit'
+            ]);
+
+            return true;
+        }
+        return false;
     }
 }

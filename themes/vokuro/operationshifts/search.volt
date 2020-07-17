@@ -11,7 +11,6 @@
             'OperationId',
             'LocationId',
             'ShortDescription',
-            'LongDescription',
             'Start',
             'End'
         ] %}
@@ -20,10 +19,10 @@
 
         {% set rowData = [] %}
 
+        {% set foo = arrayPush(rowData, operationshift.id) %}
         {% set foo = arrayPush(rowData, operationshift.operationId) %}
         {% set foo = arrayPush(rowData, operationshift.locationId) %}
         {% set foo = arrayPush(rowData, operationshift.shortDescription) %}
-        {% set foo = arrayPush(rowData, operationshift.longDescription) %}
         {% set foo = arrayPush(rowData, operationshift.start) %}
         {% set foo = arrayPush(rowData, operationshift.end) %}
 

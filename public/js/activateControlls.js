@@ -15,7 +15,7 @@ let dateTimePicker_i18n = {
         }
     },
     timepicker:true,
-    format : 'Y-m-d H:i'
+    format : 'Y-m-d H:i:s'
 };
 
 
@@ -26,6 +26,10 @@ $(document).ready(function () {
     // appointments:
     $('#fieldStart').datetimepicker(dateTimePicker_i18n);
     $('#fieldEnd').datetimepicker(dateTimePicker_i18n);
+
+    // operationshifts:
+    $('#startDateTimeField').datetimepicker(dateTimePicker_i18n);
+    $('#endDateTimeField').datetimepicker(dateTimePicker_i18n);
 
     // vehicles:
     dateTimePicker_i18n.timepicker = false;
