@@ -42,7 +42,7 @@ class OperationsForm extends Form
             $emptyClient = true;
         }
 
-        $this->add(new Select('clientId', $clients, [
+        $clientId = new Select('clientId', $clients, [
             'using' => [
                 'id',
                 'label',
@@ -51,7 +51,15 @@ class OperationsForm extends Form
             'emptyText'  => 'any client',
             'emptyValue' => '',
             'class' => 'form-control  mr-sm-3'
-        ]));
+        ]);
+
+        $clientId->addValidators([
+            new PresenceOf([
+                'message' => 'The client is required',
+            ]),
+        ]);
+
+        $this->add($clientId);
 
 
         $shortDescription = new Text('shortDescription', [
