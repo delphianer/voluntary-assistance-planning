@@ -49,12 +49,12 @@
         {% endif %}
 
         {% if isAllowedToEdit %}
-            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction"value="edit' ~ collectData.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction" value="INSERT_IDENTIFER_HEREedit' ~ collectData.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
             {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
         {% if isAllowedToDelete %}
-            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="del' ~ collectData.id ~ '"> <i class="icon-pencil"></i> remove </button>' %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction" value="INSERT_IDENTIFER_HEREdel' ~ collectData.id ~ '"> <i class="icon-remove"></i> remove </button>' %}
             {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
