@@ -14,6 +14,7 @@ use Vokuro\Models\Departments;
 use Vokuro\Models\Equipment;
 use Vokuro\Models\Locations;
 use Vokuro\Models\Operations;
+use Vokuro\Models\Vehicles;
 
 class OperationShiftsForm extends Form
 {
@@ -130,7 +131,7 @@ class OperationShiftsForm extends Form
 
         // mini form for quickly adding equipment
 
-        $this->add(new Hidden('volShEquLnkId'));
+        $this->add(new Hidden('opShEquLnkId'));
 
         $equipment = Equipment::find([]);
 
@@ -151,6 +152,30 @@ class OperationShiftsForm extends Form
             'title' => 'needed count',
             'class' => 'form-control  mr-sm-2',
             'default' => '1'
+        ]));
+
+
+
+
+
+
+        // mini form for quickly adding vehicles
+
+        $this->add(new Hidden('opShVehLnkId'));
+
+        $vehicle = Vehicles::find([]);
+
+        $this->add(new Select('vehicle', $vehicle, [
+            'using'      => [
+                'id',
+                'label',
+            ],
+            'useEmpty'   => false,
+            'class' => 'form-control  mr-sm-3'
+        ]));
+
+        $this->add(new Text('vehicShortDesc', [
+            'class' => 'form-control  mr-sm-2'
         ]));
     }
 

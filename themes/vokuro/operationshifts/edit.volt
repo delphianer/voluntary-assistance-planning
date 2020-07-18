@@ -87,7 +87,7 @@
         {% endif %}
 
         {% if isAllowedToDelete %}
-            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="del' ~ collectData.id ~ '"> <i class="icon-pencil"></i> remove </button>' %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="del' ~ collectData.id ~ '"> <i class="icon-remove"></i> remove </button>' %}
             {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
@@ -121,7 +121,7 @@ todo: manpower
 
     {% set tableHeadingData = [
             ['title' : 'Equipment'],
-            ['title' : 'Short Desc'],
+            ['title' : 'Short Description'],
             ['title' : 'Needs']
         ] %}
 
@@ -147,12 +147,12 @@ todo: manpower
         {% set foo = arrayPush(rowData , [ 'data' : collectData.need_count] ) %}
 
         {% if isAllowedToEdit %}
-            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction"value="edit' ~ collectData.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction"value="equiEdit' ~ collectData.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
             {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
         {% if isAllowedToDelete %}
-            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="del' ~ collectData.id ~ '"> <i class="icon-pencil"></i> remove </button>' %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="equiDel' ~ collectData.id ~ '"> <i class="icon-remove"></i> remove </button>' %}
             {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
@@ -177,8 +177,8 @@ todo: manpower
                 <h3>Equipment Form:</h3>
             </div>
 
-            {# hidden id if edit-mode: #}
-            {{ form.render("volShEquLnkId") }}
+            {# hidden id for edit-mode: #}
+            {{ form.render("opShEquLnkId") }}
 
             <div class="form-group row mt-4">
                 <label for="equipment" class="col-sm-2 col-form-label">Equipment :</label>
@@ -188,7 +188,7 @@ todo: manpower
             </div>
 
             <div class="form-group row mt-4">
-                <label for="equipShortDesc" class="col-sm-2 col-form-label">Short Desc.:</label>
+                <label for="equipShortDesc" class="col-sm-2 col-form-label">Short Description:</label>
                 <div class="col-sm-offset-2 col-sm-10">
                     {{ form.render("equipShortDesc") }}
                 </div>
@@ -212,7 +212,13 @@ todo: manpower
     </div>
 
 
+
+
+
 {{ tabChangeList['vehicles'] }}
+
+
+
 
 
     {#---------- start table.volt insert part --------#}
@@ -243,6 +249,8 @@ todo: manpower
 
     {% set tableBodyData = [] %}
 
+    {# { dump(operationshift.OperationshiftsVehiclesLink) } #}
+
     {% for collectData in operationshift.OperationshiftsVehiclesLink %}
 
         {% set rowData = [] %}
@@ -251,12 +259,12 @@ todo: manpower
         {% set foo = arrayPush(rowData , [ 'data' : collectData.shortDescription] ) %}
 
         {% if isAllowedToEdit %}
-            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction"value="edit' ~ collectData.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction" value="vehiEdit' ~ collectData.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
             {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
         {% if isAllowedToDelete %}
-            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="del' ~ collectData.id ~ '"> <i class="icon-pencil"></i> remove </button>' %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction" value="vehiDel' ~ collectData.id ~ '"> <i class="icon-remove"></i> remove </button>' %}
             {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
@@ -270,7 +278,43 @@ todo: manpower
 
     {#---------- end table.volt insert part --------#}
 
-todo: vehicles
+
+
+    <div class="form-horizontal">
+        <div class="col-sm-offset-2 col-sm-10">
+
+            <div class="col-sm-offset-2 col-sm-10 text-center mt-4">
+                <h3>Vehicle Form:</h3>
+            </div>
+
+            {# hidden id for edit-mode: #}
+            {{ form.render("opShVehLnkId") }}
+
+            <div class="form-group row mt-4">
+                <label for="equipment" class="col-sm-2 col-form-label">Vehicle :</label>
+                <div class="col-sm-offset-2 col-sm-10">
+                    {{ form.render("vehicle") }}
+                </div>
+            </div>
+
+            <div class="form-group row mt-4">
+                <label for="equipShortDesc" class="col-sm-2 col-form-label">Short Description:</label>
+                <div class="col-sm-offset-2 col-sm-10">
+                    {{ form.render("vehicShortDesc") }}
+                </div>
+            </div>
+
+            <div class="form-group row mt-4">
+                <div class="col-sm-2 col-form-label"></div>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary"
+                                        name="submitAction" value="saveVehicleDefinition">Save Vehicle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 
 {{ endAllTabs }}

@@ -8,7 +8,10 @@ use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
 use Vokuro\DateTimePicker;
 use Vokuro\Forms\OperationShiftsForm;
+use Vokuro\Models\Operations;
 use Vokuro\Models\Operationshifts;
+use Vokuro\Models\OperationshiftsEquipmentLink;
+use Vokuro\Models\OperationshiftsVehiclesLink;
 use function Vokuro\getCurrentDateTimeStamp;
 
 class OperationshiftsController extends ControllerBase
@@ -75,7 +78,7 @@ class OperationshiftsController extends ControllerBase
     public function newAction()
     {
         $formOptions = [];
-        $formOptions['selectedOperation'] = $this->handleProcessOperation(true);
+        $formOptions['selectedOperation'] = $this->handleProcessOperation(true, null);
 
         $form = new OperationShiftsForm(null, $formOptions);
         $this->view->setVar('form', $form);
@@ -124,11 +127,37 @@ class OperationshiftsController extends ControllerBase
             $this->tag->setDefault("end", $operationshift->getEnd());
 
             $formOptions = [];
-            $formOptions['selectedOperation'] = $this->handleProcessOperation(false);
+            $formOptions['selectedOperation'] = $this->handleProcessOperation(false, $operationshift);
 
             $form = new OperationShiftsForm(null, $formOptions);
             $this->view->setVar('form', $form);
             $this->view->setVar('operationshift', $operationshift);
+
+            $opShEquLnkId = $this->dispatcher->getParam('opShEquLnkId');
+            if (isset($opShEquLnkId) && ($opShEquLnkId > 0)) {
+                $equiLink = OperationshiftsEquipmentLink::findFirstByid($opShEquLnkId);
+                $this->tag->setDefault("opShEquLnkId", $equiLink->getId());
+                $this->tag->setDefault("equipment", $equiLink->getEquipmentId());
+                $this->tag->setDefault("equipShortDesc", $equiLink->getShortDescription());
+                $this->tag->setDefault("equipNeedCount", $equiLink->getNeedCount());
+
+                $this->view->setVar('setActiveTabKey', 'equipment');
+            }
+
+            $opShVehLnkId = $this->dispatcher->getParam('opShVehLnkId');
+            if (isset($opShVehLnkId) && ($opShVehLnkId > 0)) {
+                $vehiLink = OperationshiftsVehiclesLink::findFirstByid($opShVehLnkId);
+                $this->tag->setDefault("opShVehLnkId", $vehiLink->getId());
+                $this->tag->setDefault("vehicle", $vehiLink->getVehicleId());
+                $this->tag->setDefault("vehicShortDesc", $vehiLink->getShortDescription());
+
+                $this->view->setVar('setActiveTabKey', 'vehicles');
+            }
+            else {
+                $this->tag->setDefault("opShVehLnkId", '');
+                $this->tag->setDefault("vehicle", '');
+                $this->tag->setDefault("vehicShortDesc", '');
+            }
 
             $this->setupDateTimePicker();
         }
@@ -309,16 +338,21 @@ class OperationshiftsController extends ControllerBase
 
     /**
      * @param bool $isNewAction
+     * @param Operationshifts $operationshift
      * @return array|null
      */
-    private function handleProcessOperation(bool $isNewAction)
+    private function handleProcessOperation(bool $isNewAction, Operationshifts $operationshift)
     {
         $opId = $this->dispatcher->getParam('processOperationId');
         if (isset($opId) && ($opId > 0)) {
-            $label = $this->dispatcher->getParam('OperationShortDesc');
+            if (!isset($operationshift)) {
+                $shortDescription = (Operations::findFirstByid($opId))->shortDescription;
+            } else {
+                $shortDescription = $operationshift->Operations->shortDescription;
+            }
             $selectedOperation = [
                 'id'=>$opId,
-                'shortDescription'=>$label,
+                'shortDescription'=>$shortDescription,
             ];
             $this->view->setVar('selectedOperation', $selectedOperation);
             $this->view->setVar('backAction', 'operations/edit/'.$selectedOperation['id']);
@@ -352,15 +386,169 @@ class OperationshiftsController extends ControllerBase
         return false;
     }
 
+    /**
+     * @param $submitAction
+     * @param Operationshifts $operationshift
+     * @return bool
+     */
     private function handeledSubmitAction($submitAction, $operationshift)
     {
         if ($submitAction == 'submit') { // nothing to change
             return false;
         }
 
-        // todo: saveEquipDefinition
+        $dispatcherForward = false;
+
+        $dispatcherForward = $this->handleDepartmentProcessing($submitAction, $operationshift);
+
+        $dispatcherForward = $dispatcherForward || $this->handleEquipmentProcessing($submitAction, $operationshift);
+
+        $dispatcherForward = $dispatcherForward || $this->handleVehicleProcessing($submitAction, $operationshift);
+
+
+        if ($dispatcherForward) {
+            $this->dispatcher->setParam('processOperationId', $operationshift->getOperationId());
+            $this->dispatcher->setParam('OperationShiftsId', $operationshift->getId());
+            $this->dispatcher->forward([
+                'controller' => "operationshifts",
+                'action' => 'edit'
+            ]);
+
+            return true;
+        }
 
         // nothing matched:
         return false;
+    }
+
+    /**
+     * @param $submitAction
+     * @param Operationshifts $operationshift
+     * @return bool
+     */
+    private function handleDepartmentProcessing($submitAction, Operationshifts $operationshift)
+    {
+        // default
+        $dispatcherForward = false;
+
+        return $dispatcherForward;
+    }
+
+
+    /**
+     * @param $submitAction
+     * @param Operationshifts $operationshift
+     * @return bool
+     */
+    private function handleEquipmentProcessing($submitAction, Operationshifts $operationshift): bool
+    {
+        // default
+        $dispatcherForward = false;
+
+        if ($submitAction == 'saveEquipDefinition') {
+            $opShEquLnkId = $this->request->getPost("opShEquLnkId", "int");
+            if (isset($opShEquLnkId) && ($opShEquLnkId > 0)) {
+                $equiLink = OperationshiftsEquipmentLink::findFirstByid($opShEquLnkId);
+            } else {
+                $equiLink = new OperationshiftsEquipmentLink();
+                $equiLink->setCreateTime(getCurrentDateTimeStamp());
+            }
+            $equiLink->setUpdateTime(getCurrentDateTimeStamp());
+            $equiLink->setOperationShiftId($operationshift->getId());
+            $equiLink->setEquipmentId($this->request->getPost("equipment", "int"));
+            $equiLink->setShortDescription($this->request->getPost("equipShortDesc", "string"));
+            $equiLink->setNeedCount($this->request->getPost("equipNeedCount", "int"));
+            if (!$equiLink->save()) {
+                foreach ($equiLink->getMessages() as $message) {
+                    $this->flash->error($message->getMessage());
+                }
+            }
+
+            $this->view->setVar('setActiveTabKey', 'equipment');
+            $dispatcherForward = true;
+        }
+
+        // edit existing Equipment
+        if (preg_match('/^equiEdit\d/', $submitAction)) {
+            $opShEquLnkId = preg_replace('/^equiEdit/', '', $submitAction);
+            $this->dispatcher->setParam('opShEquLnkId', $opShEquLnkId);
+
+            $this->view->setVar('setActiveTabKey', 'equipment');
+            $dispatcherForward = true;
+        }
+
+        // delete existing Equipment
+        if (preg_match('/^equiDel\d/', $submitAction)) {
+            $opShEquLnkId = preg_replace('/^equiDel/', '', $submitAction);
+
+            if (isset($opShEquLnkId) && ($opShEquLnkId > 0)) {
+                $equiLink = OperationshiftsEquipmentLink::findFirstByid($opShEquLnkId);
+                if (!$equiLink->delete()) {
+                    foreach ($equiLink->getMessages() as $message) {
+                        $this->flash->error($message->getMessage());
+                    }
+                }
+            }
+
+            $this->view->setVar('setActiveTabKey', 'equipment');
+            $dispatcherForward = true;
+        }
+        return $dispatcherForward;
+    }
+
+    private function handleVehicleProcessing($submitAction, Operationshifts $operationshift)
+    {
+        // default
+        $dispatcherForward = false;
+
+        if ($submitAction == 'saveVehicleDefinition') {
+            $opShVehLnkId = $this->request->getPost("opShVehLnkId", "int");
+            if (isset($opShVehLnkId) && ($opShVehLnkId > 0)) {
+                $vehiLink = OperationshiftsVehiclesLink::findFirstByid($opShVehLnkId);
+            } else {
+                $vehiLink = new OperationshiftsVehiclesLink();
+                $vehiLink->setCreateTime(getCurrentDateTimeStamp());
+            }
+            $vehiLink->setUpdateTime(getCurrentDateTimeStamp());
+            $vehiLink->setOperationShiftId($operationshift->getId());
+            $vehiLink->setVehicleId($this->request->getPost("vehicle", "int"));
+            $vehiLink->setShortDescription($this->request->getPost("vehicShortDesc", "string"));
+            if (!$vehiLink->save()) {
+                foreach ($vehiLink->getMessages() as $message) {
+                    $this->flash->error($message->getMessage());
+                }
+            }
+
+            $this->view->setVar('setActiveTabKey', 'vehicles');
+            $dispatcherForward = true;
+        }
+
+        // edit existing Vehicle
+        if (preg_match('/^vehiEdit\d/', $submitAction)) {
+            $opShVehLnkId = preg_replace('/^vehiEdit/', '', $submitAction);
+            $this->dispatcher->setParam('opShVehLnkId', $opShVehLnkId);
+
+            $this->view->setVar('setActiveTabKey', 'vehicles');
+            $dispatcherForward = true;
+        }
+
+        // delete existing Vehicle
+        if (preg_match('/^vehiDel\d/', $submitAction)) {
+            $opShVehLnkId = preg_replace('/^equiDel/', '', $submitAction);
+
+            if (isset($opShVehLnkId) && ($opShVehLnkId > 0)) {
+                $vehiLink = OperationshiftsVehiclesLink::findFirstByid($opShVehLnkId);
+                if (!$vehiLink->delete()) {
+                    foreach ($vehiLink->getMessages() as $message) {
+                        $this->flash->error($message->getMessage());
+                    }
+                }
+            }
+
+            $this->view->setVar('setActiveTabKey', 'vehicles');
+            $dispatcherForward = true;
+        }
+
+        return $dispatcherForward;
     }
 }
