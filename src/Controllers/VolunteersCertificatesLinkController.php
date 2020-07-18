@@ -41,7 +41,7 @@ class VolunteersCertificatesLinkController extends ControllerBase
         if ($count === 0) {
             $this->flash->notice('The search did not find any volunteers_certificates_link');
             $this->dispatcher->forward([
-                "controller" => "volunteers_certificates_link",
+                "controller" => "volunteerscertificateslink",
                 'action' => 'index',
             ]);
 
@@ -81,7 +81,7 @@ class VolunteersCertificatesLinkController extends ControllerBase
                 $this->flash->error("volunteers_certificates_link was not found");
 
                 $this->dispatcher->forward([
-                    'controller' => "volunteers_certificates_link",
+                    'controller' => "volunteerscertificateslink",
                     'action' => 'index'
                 ]);
 
@@ -108,7 +108,7 @@ class VolunteersCertificatesLinkController extends ControllerBase
     public function createAction()
     {
         if (!$this->request->isPost()) { // post should go to NewAction
-            $this->dispatcher->forward([ 'controller' => "volunteers_certificates_link",'action' => 'index']);
+            $this->dispatcher->forward([ 'controller' => "volunteerscertificateslink",'action' => 'index']);
             return;
         }
 
@@ -123,7 +123,7 @@ class VolunteersCertificatesLinkController extends ControllerBase
             }
 
             $this->dispatcher->forward([
-                'controller' => "volunteers_certificates_link",
+                'controller' => "volunteerscertificateslink",
                 'action' => 'new'
             ]);
 
@@ -133,7 +133,7 @@ class VolunteersCertificatesLinkController extends ControllerBase
         $this->flash->success("volunteers_certificates_link was created successfully");
 
         $this->dispatcher->forward([
-            'controller' => "volunteers_certificates_link",
+            'controller' => "volunteerscertificateslink",
             'action' => 'index'
         ]);
     }
@@ -146,7 +146,7 @@ class VolunteersCertificatesLinkController extends ControllerBase
     {
         if (!$this->request->isPost()) {
             $this->dispatcher->forward([
-                'controller' => "volunteers_certificates_link",
+                'controller' => "volunteerscertificateslink",
                 'action' => 'index'
             ]);
 
@@ -160,7 +160,7 @@ class VolunteersCertificatesLinkController extends ControllerBase
             $this->flash->error("volunteers_certificates_link does not exist " . $id);
 
             $this->dispatcher->forward([
-                'controller' => "volunteers_certificates_link",
+                'controller' => "volunteerscertificateslink",
                 'action' => 'index'
             ]);
 
@@ -176,7 +176,7 @@ class VolunteersCertificatesLinkController extends ControllerBase
             }
 
             $this->dispatcher->forward([
-                'controller' => "volunteers_certificates_link",
+                'controller' => "volunteerscertificateslink",
                 'action' => 'edit',
                 'params' => [$volunteers_certificates_link->getId()]
             ]);
@@ -187,7 +187,7 @@ class VolunteersCertificatesLinkController extends ControllerBase
         $this->flash->success("volunteers_certificates_link was updated successfully");
 
         $this->dispatcher->forward([
-            'controller' => "volunteers_certificates_link",
+            'controller' => "volunteerscertificateslink",
             'action' => 'index'
         ]);
     }
@@ -204,7 +204,7 @@ class VolunteersCertificatesLinkController extends ControllerBase
             $this->flash->error("volunteers_certificates_link was not found");
 
             $this->dispatcher->forward([
-                'controller' => "volunteers_certificates_link",
+                'controller' => "volunteerscertificateslink",
                 'action' => 'index'
             ]);
 
@@ -217,7 +217,7 @@ class VolunteersCertificatesLinkController extends ControllerBase
             }
 
             $this->dispatcher->forward([
-                'controller' => "volunteers_certificates_link",
+                'controller' => "volunteerscertificateslink",
                 'action' => 'search'
             ]);
 
@@ -227,7 +227,7 @@ class VolunteersCertificatesLinkController extends ControllerBase
         $this->flash->success("volunteers_certificates_link was deleted successfully");
 
         $this->dispatcher->forward([
-            'controller' => "volunteers_certificates_link",
+            'controller' => "volunteerscertificateslink",
             'action' => "index"
         ]);
     }
