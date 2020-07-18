@@ -1,13 +1,19 @@
 
 {# needs
            array tabs with key => value where key is the key that is used in end of tablist
-           var activeTabKey with the name of the active tabKey #}
+           var activeTabKey with the name of the active tabKey
+           (optional) setActiveTabKey to set the tabKey dynamically (e.g. from controller)#}
 {# returns
            an array tabChangeList with key => value where key is same key as used in tabs and value is the echo for tabchange
            var endAllTabs with the echo for the end of the documenttabChangeList
             #}
 
     <ul class="nav nav-tabs" id="user-edit-tabs" role="tablist">
+
+
+    {% if setActiveTabKey is defined %}
+        {% set activeTabKey = setActiveTabKey %}
+    {% endif %}
 
     {% set firstTabStart = '' %}
     {% set tabChangeList = [] %}

@@ -84,6 +84,7 @@ class OperationsController extends ControllerBase
         $processOperationsId = $this->dispatcher->getParam('processOperationsId');
         if (isset($processOperationsId)) {
             $id = $processOperationsId;
+            $this->view->setVar('setActiveTabKey', 'shifts');
         }
 
         if (!$this->request->isPost() || isset($processOperationsId)) {
@@ -201,7 +202,7 @@ class OperationsController extends ControllerBase
             return;
         }
 
-        if ($this->handledSubmitAction($this->request->getPost("submitAction"), $operation)){
+        if ($this->handledSubmitAction($this->request->getPost("submitAction"), $operation)) {
             return;
         }
 
@@ -274,7 +275,6 @@ class OperationsController extends ControllerBase
         // create new property
         if ($submitAction == 'goToShift') {
             $this->dispatcher->setParam('processOperationId', $operation->getId());
-            $this->dispatcher->setParam('OperationShortDesc', $operation->getShortDescription());
             $this->dispatcher->forward([
                 'controller' => "OperationShifts",
                 'action' => 'new'
@@ -287,7 +287,6 @@ class OperationsController extends ControllerBase
         if (preg_match('/^edit\d/', $submitAction)) {
             $shiftId = preg_replace('/^edit/', '', $submitAction);
             $this->dispatcher->setParam('processOperationId', $operation->getId());
-            $this->dispatcher->setParam('OperationShortDesc', $operation->getShortDescription());
             $this->dispatcher->setParam('OperationShiftsId', $shiftId);
             $this->dispatcher->forward([
                 'controller' => "OperationShifts",

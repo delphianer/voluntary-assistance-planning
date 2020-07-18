@@ -307,6 +307,7 @@ class VolunteersController extends ControllerBase
                 }
             }
             $this->dispatcher->setParam('volunteerId', $volunteer->getId());
+            $this->view->setVar('setActiveTabKey', 'certificates');
             $this->dispatcher->forward([
                 'controller' => "volunteers",
                 'action' => 'edit'
@@ -319,6 +320,7 @@ class VolunteersController extends ControllerBase
             $volCertLnkId = preg_replace('/^edit/', '', $submitAction);
             $this->dispatcher->setParam('volunteerId', $volunteer->getId());
             $this->dispatcher->setParam('volCertLnkId', $volCertLnkId);
+            $this->view->setVar('setActiveTabKey', 'certificates');
             $this->dispatcher->forward([
                 'controller' => "volunteers",
                 'action' => 'edit'
@@ -339,6 +341,7 @@ class VolunteersController extends ControllerBase
                     }
                 }
             }
+            $this->view->setVar('setActiveTabKey', 'certificates');
             $this->dispatcher->setParam('volunteerId', $volunteer->getId());
             $this->dispatcher->forward([
                 'controller' => "volunteers",

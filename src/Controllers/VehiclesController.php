@@ -92,6 +92,7 @@ class VehiclesController extends ControllerBase
         $backActionVehiclesId = $this->dispatcher->getParam('processVehiclesId');
         if (isset($backActionVehiclesId)) {
             $id = $backActionVehiclesId;
+            $this->view->setVar('setActiveTabKey', 'additional');
         }
         if (!$this->request->isPost() || isset($backActionVehiclesId)) {
             $vehicle = Vehicles::findFirstByid($id);
@@ -287,6 +288,8 @@ class VehiclesController extends ControllerBase
             return false;
         }
 
+        $dispatcherForward = false;
+
         // create new property
         if ($submitAction == 'goToProperty') {
             $this->dispatcher->setParam('processVehiclesId', $vehicle->getId());
@@ -325,6 +328,8 @@ class VehiclesController extends ControllerBase
 
             return true;
         }
+
+
         return false;
     }
 }
