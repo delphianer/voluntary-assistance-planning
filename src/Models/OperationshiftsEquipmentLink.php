@@ -48,6 +48,13 @@ class OperationshiftsEquipmentLink extends \Phalcon\Mvc\Model
     protected $longDescription;
 
     /**
+     *
+     * @var int
+     */
+    protected $need_count;
+
+
+    /**
      * Method to set the value of field id
      *
      * @param integer $id
@@ -139,6 +146,21 @@ class OperationshiftsEquipmentLink extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Method to set the value of field need_count
+     *
+     * @param int $need_count
+     * @return $this
+     */
+    public function setNeedCount($need_count)
+    {
+        $this->need_count = $need_count;
+
+        return $this;
+    }
+
+
+
+    /**
      * Returns the value of field id
      *
      * @return integer
@@ -207,6 +229,17 @@ class OperationshiftsEquipmentLink extends \Phalcon\Mvc\Model
     {
         return $this->longDescription;
     }
+
+    /**
+     * Returns the value of field need_count
+     *
+     * @return int
+     */
+    public function getNeedCount()
+    {
+        return $this->need_count;
+    }
+
 
     /**
      * Initialize method for model.

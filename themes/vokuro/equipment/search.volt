@@ -10,7 +10,8 @@
             'Id',
             'Label',
             'Description',
-            'Number on stock'
+            'Number on stock',
+            'Is Reusable'
         ] %}
 
     {% for equipment in page.items %}
@@ -21,6 +22,7 @@
         {% set foo = arrayPush(rowData , equipment.label) %}
         {% set foo = arrayPush(rowData , equipment.description) %}
         {% set foo = arrayPush(rowData , equipment.total_count) %}
+        {% set foo = arrayPush(rowData , equipment.isReusable) %}
         {% set foo = arrayPush(tableBodyData , rowData) %}
 
     {% endfor %}

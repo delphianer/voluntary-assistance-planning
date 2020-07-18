@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `vokuro`.`equipment` (
   `label` VARCHAR(60) NULL,
   `description` VARCHAR(5000) NULL,
   `total_count` INT UNSIGNED NULL DEFAULT 0,
+  `isReusable` VARCHAR(1) NULL DEFAULT 'Y',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `label_UNIQUE` (`label` ASC) )
 ENGINE = InnoDB;
@@ -313,6 +314,7 @@ CREATE TABLE IF NOT EXISTS `vokuro`.`operationShifts_equipment_link` (
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `shortDescription` VARCHAR(60) UNIQUE NULL,
   `longDescription` VARCHAR(5000) NULL,
+  `need_count` INT NULL,
   PRIMARY KEY (`id`),
   INDEX `FKOELEquipment_idx` (`equipmentId` ASC),
   INDEX `FKOELOperations_idx` (`operationShiftId` ASC),

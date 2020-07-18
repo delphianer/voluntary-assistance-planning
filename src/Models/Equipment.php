@@ -42,6 +42,12 @@ class Equipment extends \Phalcon\Mvc\Model
     protected $total_count;
 
     /**
+     *
+     * @var string
+     */
+    protected $isReusable;
+
+    /**
      * Method to set the value of field id
      *
      * @param integer $id
@@ -120,6 +126,21 @@ class Equipment extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Method to set the value of field isReusable
+     *
+     * @param integer $isReusable
+     * @return $this
+     */
+    public function setIsReusable($isReusable)
+    {
+        $this->isReusable = $isReusable;
+
+        return $this;
+    }
+
+
+
+    /**
      * Returns the value of field id
      *
      * @return integer
@@ -178,6 +199,17 @@ class Equipment extends \Phalcon\Mvc\Model
     {
         return $this->total_count;
     }
+
+    /**
+     * Returns the value of field isReusable
+     *
+     * @return string
+     */
+    public function getIsReusable()
+    {
+        return $this->isReusable;
+    }
+
 
     /**
      * Initialize method for model.

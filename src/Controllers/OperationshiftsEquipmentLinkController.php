@@ -40,7 +40,7 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
         if ($count === 0) {
             $this->flash->notice('The search did not find any operationshifts_equipment_link');
             $this->dispatcher->forward([
-                "controller" => "operationshifts_equipment_link",
+                "controller" => "operationshiftsequipmentlink",
                 'action' => 'index',
             ]);
 
@@ -80,7 +80,7 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
                 $this->flash->error("operationshifts_equipment_link was not found");
 
                 $this->dispatcher->forward([
-                    'controller' => "operationshifts_equipment_link",
+                    'controller' => "operationshiftsequipmentlink",
                     'action' => 'index'
                 ]);
 
@@ -96,7 +96,7 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
             $this->tag->setDefault("update_time", $operationshifts_equipment_link->getUpdateTime());
             $this->tag->setDefault("shortDescription", $operationshifts_equipment_link->getShortdescription());
             $this->tag->setDefault("longDescription", $operationshifts_equipment_link->getLongdescription());
-            
+            $this->tag->setDefault("need_count", $operationshifts_equipment_link->getNeedCount());
         }
 
         $this->view->setVar('extraTitle', "Edit OperationshiftsEquipmentLink");
@@ -108,7 +108,7 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
     public function createAction()
     {
         if (!$this->request->isPost()) { // post should go to NewAction
-            $this->dispatcher->forward([ 'controller' => "operationshifts_equipment_link",'action' => 'index']);
+            $this->dispatcher->forward([ 'controller' => "operationshiftsequipmentlink",'action' => 'index']);
             return;
         }
 
@@ -122,7 +122,7 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
             }
 
             $this->dispatcher->forward([
-                'controller' => "operationshifts_equipment_link",
+                'controller' => "operationshiftsequipmentlink",
                 'action' => 'new'
             ]);
 
@@ -132,7 +132,7 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
         $this->flash->success("operationshifts_equipment_link was created successfully");
 
         $this->dispatcher->forward([
-            'controller' => "operationshifts_equipment_link",
+            'controller' => "operationshiftsequipmentlink",
             'action' => 'index'
         ]);
     }
@@ -145,7 +145,7 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
     {
         if (!$this->request->isPost()) {
             $this->dispatcher->forward([
-                'controller' => "operationshifts_equipment_link",
+                'controller' => "operationshiftsequipmentlink",
                 'action' => 'index'
             ]);
 
@@ -159,7 +159,7 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
             $this->flash->error("operationshifts_equipment_link does not exist " . $id);
 
             $this->dispatcher->forward([
-                'controller' => "operationshifts_equipment_link",
+                'controller' => "operationshiftsequipmentlink",
                 'action' => 'index'
             ]);
 
@@ -177,7 +177,7 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
             }
 
             $this->dispatcher->forward([
-                'controller' => "operationshifts_equipment_link",
+                'controller' => "operationshiftsequipmentlink",
                 'action' => 'edit',
                 'params' => [$operationshifts_equipment_link->getId()]
             ]);
@@ -188,7 +188,7 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
         $this->flash->success("operationshifts_equipment_link was updated successfully");
 
         $this->dispatcher->forward([
-            'controller' => "operationshifts_equipment_link",
+            'controller' => "operationshiftsequipmentlink",
             'action' => 'index'
         ]);
     }
@@ -205,7 +205,7 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
             $this->flash->error("operationshifts_equipment_link was not found");
 
             $this->dispatcher->forward([
-                'controller' => "operationshifts_equipment_link",
+                'controller' => "operationshiftsequipmentlink",
                 'action' => 'index'
             ]);
 
@@ -213,13 +213,12 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
         }
 
         if (!$operationshifts_equipment_link->delete()) {
-
             foreach ($operationshifts_equipment_link->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
 
             $this->dispatcher->forward([
-                'controller' => "operationshifts_equipment_link",
+                'controller' => "operationshiftsequipmentlink",
                 'action' => 'search'
             ]);
 
@@ -229,7 +228,7 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
         $this->flash->success("operationshifts_equipment_link was deleted successfully");
 
         $this->dispatcher->forward([
-            'controller' => "operationshifts_equipment_link",
+            'controller' => "operationshiftsequipmentlink",
             'action' => "index"
         ]);
     }
@@ -241,9 +240,8 @@ class OperationshiftsEquipmentLinkController extends ControllerBase
     {
         $operationshifts_equipment_link->setoperationShiftId($this->request->getPost("operationShiftId", "int"));
         $operationshifts_equipment_link->setequipmentId($this->request->getPost("equipmentId", "int"));
-        $operationshifts_equipment_link->setcreateTime($this->request->getPost("create_time", "int"));
-        $operationshifts_equipment_link->setupdateTime($this->request->getPost("update_time", "int"));
-        $operationshifts_equipment_link->setshortDescription($this->request->getPost("shortDescription", "int"));
-        $operationshifts_equipment_link->setlongDescription($this->request->getPost("longDescription", "int"));
+        $operationshifts_equipment_link->setshortDescription($this->request->getPost("shortDescription", "string"));
+        $operationshifts_equipment_link->setlongDescription($this->request->getPost("longDescription", "string"));
+        $operationshifts_equipment_link->setNeedCount($this->request->getPost("need_count", "int"));
     }
 }
