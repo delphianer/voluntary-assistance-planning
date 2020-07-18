@@ -85,7 +85,7 @@
         {% endif %}
 
         {% if isAllowedToDelete %}
-            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="del' ~ property.id ~ '"> <i class="icon-pencil"></i> remove </button>' %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="del' ~ property.id ~ '"> <i class="icon-remove"></i> remove </button>' %}
             {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 

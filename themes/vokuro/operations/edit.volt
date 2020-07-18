@@ -83,7 +83,7 @@
                     <button type="submit" class="btn btn-sm btn-outline-danger"
                             name="submitAction"
                             value="del{{shift.id}}">
-                            <i class="icon-pencil"></i> delete
+                            <i class="icon-remove"></i> delete
                     </button>
                 </td>
                 {% endif %}
