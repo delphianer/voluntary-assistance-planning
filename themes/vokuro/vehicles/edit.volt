@@ -35,61 +35,71 @@
 {{ tabChangeList['additional'] }}
 
 
-    <table class="table table-bordered table-striped">
-        <thead>
-        <tr>
-            <th>Property</th>
-            <th>Value</th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        {% set isAllowedToEdit = (userRole is defined and acl.isAllowed( userRole, dispatcher.getControllerName(), "edit")) %}
-        {% set isAllowedToDelete = (userRole is defined and acl.isAllowed( userRole, dispatcher.getControllerName(), "edit")) %}
+    {#---------- start table.volt insert part --------#}
 
-        {% for property in vehicle.Vehicleproperties %}
-            <tr>
-                <td>{{ property.label }}</td>
+    {#---------- basic defines for acl-check ---------#}
 
-                {% if property.is_numeric == 'Y' %}
+    {% set isAllowedToEdit = (userRole is defined and acl.isAllowed( userRole, 'volunteerscertificateslink', "edit")) %}
+    {% set isAllowedToDelete = (userRole is defined and acl.isAllowed( userRole, 'volunteerscertificateslink', "delete")) %}
 
-                <td>{{ numberFormat(property.value_numeric) }}</td>
 
-                {% else %}
+    {#---------- table header definition -------------#}
 
-                <td>{{ property.value_string }}</td>
+    {% set tableHeadingData = [
+            ['title' : 'Property', 'class':'text-center'],
+            ['title' : 'Value', 'class':'text-center']
+        ] %}
 
-                {% endif %}
+    {% if isAllowedToEdit %}
+        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+    {% endif %}
 
-                {% if isAllowedToEdit %}
-                <td class="td-width-12">
-                    <button type="submit" class="btn btn-sm btn-outline-warning"
-                            name="submitAction"
-                            value="edit{{property.id}}">
-                            <i class="icon-pencil"></i> Edit
-                    </button>
-                </td>
-                {% endif %}
+    {% if isAllowedToDelete %}
+        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+    {% endif %}
 
-                {% if isAllowedToDelete %}
-                <td class="td-width-12">
-                    <button type="submit" class="btn btn-sm btn-outline-danger"
-                            name="submitAction"
-                            value="del{{property.id}}">
-                            <i class="icon-pencil"></i> delete
-                    </button>
-                </td>
-                {% endif %}
 
-            </tr>
+    {#---------- table body definition ---------------#}
+
+    {% set tableBodyData = [] %}
+
+    {% for property in vehicle.Vehicleproperties %}
+
+        {% set rowData = [] %}
+
+        {% set foo = arrayPush(rowData , [ 'data' : property.label, 'class' : 'text-center'] ) %}
+
+        {% if property.is_numeric == 'Y' %}
+
+            {% set foo = arrayPush(rowData , [ 'data' : numberFormat(property.value_numeric), 'class' : 'text-center'] ) %}
+
         {% else %}
-            <tr>
-                <td colspan="4" class="text-center">No additional properties found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+
+            {% set foo = arrayPush(rowData , [ 'data' : property.value_string, 'class' : 'text-center'] ) %}
+
+        {% endif %}
+
+        {% if isAllowedToEdit %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction"value="edit' ~ property.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
+            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+        {% endif %}
+
+        {% if isAllowedToDelete %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="del' ~ property.id ~ '"> <i class="icon-pencil"></i> remove </button>' %}
+            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+        {% endif %}
+
+        {% set foo = arrayPush(tableBodyData , rowData) %}
+
+    {% else %}
+        {% set tableBodyDataDefaultText = 'No certificates found' %}
+    {% endfor %}
+
+
+    {% include 'layouts/includes/dataastable.volt' %}
+
+    {#---------- end table.volt insert part --------#}
+
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">

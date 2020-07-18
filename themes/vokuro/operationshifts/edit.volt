@@ -40,55 +40,133 @@
 {{ tabChangeList['manpower'] }}
 
 
+
+
+    {#---------- start table.volt insert part --------#}
+
+    {#---------- basic defines for acl-check ---------#}
+
+    {% set isAllowedToEdit = (userRole is defined and acl.isAllowed( userRole, 'operationshiftsdepartmentslink', "edit")) %}
+    {% set isAllowedToDelete = (userRole is defined and acl.isAllowed( userRole, 'operationshiftsdepartmentslink', "delete")) %}
+
+
+    {#---------- table header definition -------------#}
+
+    {% set tableHeadingData = [
+            ['title' : 'Department'],
+            ['title' : 'Short Desc'],
+            ['title' : 'Helper Needed'],
+            ['title' : 'Minimum Rank']
+        ] %}
+
+    {% if isAllowedToEdit %}
+        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+    {% endif %}
+
+    {% if isAllowedToDelete %}
+        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+    {% endif %}
+
+
+    {#---------- table body definition ---------------#}
+
+    {% set tableBodyData = [] %}
+
+    {% for collectData in operationshift.OperationshiftsDepartmentsLink %}
+
+        {% set rowData = [] %}
+
+        {% set foo = arrayPush(rowData , [ 'data' : collectData.Departments.label] ) %}
+        {% set foo = arrayPush(rowData , [ 'data' : collectData.shortDescription] ) %}
+        {% set foo = arrayPush(rowData , [ 'data' : collectData.numberVolunteersNeeded] ) %}
+        {% set foo = arrayPush(rowData , [ 'data' : collectData.minimumCertificateRanking] ) %}
+
+        {% if isAllowedToEdit %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction"value="edit' ~ collectData.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
+            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+        {% endif %}
+
+        {% if isAllowedToDelete %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="del' ~ collectData.id ~ '"> <i class="icon-pencil"></i> remove </button>' %}
+            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+        {% endif %}
+
+        {% set foo = arrayPush(tableBodyData , rowData) %}
+
+    {% else %}
+        {% set tableBodyDataDefaultText = 'No departments found' %}
+    {% endfor %}
+
+    {% include 'layouts/includes/dataastable.volt' %}
+
+    {#---------- end table.volt insert part --------#}
+
+
+
 todo: manpower
 
 
 {{ tabChangeList['equipment'] }}
 
 
+    {#---------- start table.volt insert part --------#}
 
-    <table class="table table-bordered table-striped">
-        <thead>
-        <tr>
-            <th class="text-center">Equipment</th>
-            <th class="text-center">Short Desc</th>
-            <th class="text-center">Needs</th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
+    {#---------- basic defines for acl-check ---------#}
 
-        {% for equiLink in operationshift.OperationshiftsEquipmentLink %}
-            <tr>
-                <td class="text-center">{{ equiLink.Equipment.label }}</td>
-                <td class="text-center">{{ equiLink.shortDescription }}</td>
-                <td class="text-center">{{ equiLink.need_count }}</td>
+    {% set isAllowedToEdit = (userRole is defined and acl.isAllowed( userRole, 'operationshiftsequipmentlink', "edit")) %}
+    {% set isAllowedToDelete = (userRole is defined and acl.isAllowed( userRole, 'operationshiftsequipmentlink', "delete")) %}
 
-                <td class="td-width-12 text-center">
-                    <button type="submit" class="btn btn-sm btn-outline-warning"
-                            name="submitAction"
-                            value="equiEdit{{equiLink.id}}">
-                            <i class="icon-pencil"></i> edit
-                    </button>
-                </td>
 
-                <td class="td-width-12 text-center">
-                    <button type="submit" class="btn btn-sm btn-outline-danger"
-                            name="submitAction"
-                            value="equiDel{{equiLink.id}}">
-                            <i class="icon-pencil"></i> remove
-                    </button>
-                </td>
+    {#---------- table header definition -------------#}
 
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5" class="text-center">No equipment set</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% set tableHeadingData = [
+            ['title' : 'Equipment'],
+            ['title' : 'Short Desc'],
+            ['title' : 'Needs']
+        ] %}
+
+    {% if isAllowedToEdit %}
+        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+    {% endif %}
+
+    {% if isAllowedToDelete %}
+        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+    {% endif %}
+
+
+    {#---------- table body definition ---------------#}
+
+    {% set tableBodyData = [] %}
+
+    {% for collectData in operationshift.OperationshiftsEquipmentLink %}
+
+        {% set rowData = [] %}
+
+        {% set foo = arrayPush(rowData , [ 'data' : collectData.Equipment.label] ) %}
+        {% set foo = arrayPush(rowData , [ 'data' : collectData.shortDescription] ) %}
+        {% set foo = arrayPush(rowData , [ 'data' : collectData.need_count] ) %}
+
+        {% if isAllowedToEdit %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction"value="edit' ~ collectData.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
+            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+        {% endif %}
+
+        {% if isAllowedToDelete %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="del' ~ collectData.id ~ '"> <i class="icon-pencil"></i> remove </button>' %}
+            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+        {% endif %}
+
+        {% set foo = arrayPush(tableBodyData , rowData) %}
+
+    {% else %}
+        {% set tableBodyDataDefaultText = 'No equipment found' %}
+    {% endfor %}
+
+    {% include 'layouts/includes/dataastable.volt' %}
+
+    {#---------- end table.volt insert part --------#}
+
+
 
 
 
@@ -136,6 +214,61 @@ todo: manpower
 
 {{ tabChangeList['vehicles'] }}
 
+
+    {#---------- start table.volt insert part --------#}
+
+    {#---------- basic defines for acl-check ---------#}
+
+    {% set isAllowedToEdit = (userRole is defined and acl.isAllowed( userRole, 'operationshiftsvehicleslink', "edit")) %}
+    {% set isAllowedToDelete = (userRole is defined and acl.isAllowed( userRole, 'operationshiftsvehicleslink', "delete")) %}
+
+
+    {#---------- table header definition -------------#}
+
+    {% set tableHeadingData = [
+            ['title' : 'Vehicle'],
+            ['title' : 'Short Desc']
+        ] %}
+
+    {% if isAllowedToEdit %}
+        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+    {% endif %}
+
+    {% if isAllowedToDelete %}
+        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+    {% endif %}
+
+
+    {#---------- table body definition ---------------#}
+
+    {% set tableBodyData = [] %}
+
+    {% for collectData in operationshift.OperationshiftsVehiclesLink %}
+
+        {% set rowData = [] %}
+
+        {% set foo = arrayPush(rowData , [ 'data' : collectData.Vehicles.label] ) %}
+        {% set foo = arrayPush(rowData , [ 'data' : collectData.shortDescription] ) %}
+
+        {% if isAllowedToEdit %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction"value="edit' ~ collectData.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
+            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+        {% endif %}
+
+        {% if isAllowedToDelete %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="del' ~ collectData.id ~ '"> <i class="icon-pencil"></i> remove </button>' %}
+            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+        {% endif %}
+
+        {% set foo = arrayPush(tableBodyData , rowData) %}
+
+    {% else %}
+        {% set tableBodyDataDefaultText = 'No vehicles found' %}
+    {% endfor %}
+
+    {% include 'layouts/includes/dataastable.volt' %}
+
+    {#---------- end table.volt insert part --------#}
 
 todo: vehicles
 

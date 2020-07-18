@@ -33,51 +33,67 @@
 {{ tabChangeList['certificates'] }}
 
 
-    <table class="table table-bordered table-striped">
-        <thead>
-        <tr>
-            <th class="text-center">Certificate</th>
-            <th class="text-center">valid until</th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
+    {#---------- start table.volt insert part --------#}
 
-        {% for certLink in volunteer.VolunteersCertificatesLink %}
-            <tr>
-                <td class="text-center">{{ certLink.Certificates.label }}</td>
+    {#---------- basic defines for acl-check ---------#}
 
-                {% if certLink.validUntil is empty or certLink.validUntil == '0000-00-00' %}
-                <td class="text-center">-</td>
-                {% else %}
-                <td class="text-center">{{ certLink.validUntil }}</td>
-                {% endif %}
+    {% set isAllowedToEdit = (userRole is defined and acl.isAllowed( userRole, 'volunteerscertificateslink', "edit")) %}
+    {% set isAllowedToDelete = (userRole is defined and acl.isAllowed( userRole, 'volunteerscertificateslink', "delete")) %}
 
-                <td class="td-width-12 text-center">
-                    <button type="submit" class="btn btn-sm btn-outline-warning"
-                            name="submitAction"
-                            value="edit{{certLink.id}}">
-                            <i class="icon-pencil"></i> change
-                    </button>
-                </td>
 
-                <td class="td-width-12 text-center">
-                    <button type="submit" class="btn btn-sm btn-outline-danger"
-                            name="submitAction"
-                            value="del{{certLink.id}}">
-                            <i class="icon-pencil"></i> remove
-                    </button>
-                </td>
+    {#---------- table header definition -------------#}
 
-            </tr>
+    {% set tableHeadingData = [
+            ['title' : 'Certificate', 'class':'text-center'],
+            ['title' : 'Valid Until', 'class':'text-center']
+        ] %}
+
+    {% if isAllowedToEdit %}
+        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+    {% endif %}
+
+    {% if isAllowedToDelete %}
+        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+    {% endif %}
+
+
+    {#---------- table body definition ---------------#}
+
+    {% set tableBodyData = [] %}
+
+    {% for certLink in volunteer.VolunteersCertificatesLink %}
+
+        {% set rowData = [] %}
+
+        {% set foo = arrayPush(rowData , [ 'data' : certLink.Certificates.label, 'class' : 'text-center'] ) %}
+
+        {% if certLink.validUntil is empty or certLink.validUntil == '0000-00-00' %}
+            {% set foo = arrayPush(rowData , [ 'data' : '-', 'class' : 'text-center'] ) %}
         {% else %}
-            <tr>
-                <td colspan="4" class="text-center">No certificates found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            {% set foo = arrayPush(rowData , [ 'data' : certLink.validUntil, 'class' : 'text-center'] ) %}
+        {% endif %}
+
+        {% if isAllowedToEdit %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction"value="edit' ~ certLink.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
+            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+        {% endif %}
+
+        {% if isAllowedToDelete %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="del' ~ certLink.id ~ '"> <i class="icon-pencil"></i> remove </button>' %}
+            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+        {% endif %}
+
+        {% set foo = arrayPush(tableBodyData , rowData) %}
+
+    {% else %}
+        {% set tableBodyDataDefaultText = 'No certificates found' %}
+    {% endfor %}
+
+
+    {% include 'layouts/includes/dataastable.volt' %}
+
+    {#---------- end table.volt insert part --------#}
+
 
     <div class="form-inline">
         <div class="col-sm-offset-2 col-sm-10">
