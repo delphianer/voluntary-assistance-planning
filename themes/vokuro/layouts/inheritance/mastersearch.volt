@@ -16,7 +16,7 @@
 {% set rowIDIndex = 0 %}
 {% set colCount = 0 %}
 {% set isAllowedToEdit = (userRole is defined and acl.isAllowed( userRole, dispatcher.getControllerName(), "edit")) %}
-{% set isAllowedToDelete = (userRole is defined and acl.isAllowed( userRole, dispatcher.getControllerName(), "edit")) %}
+{% set isAllowedToDelete = (userRole is defined and acl.isAllowed( userRole, dispatcher.getControllerName(), "delete")) %}
 
 {#------------------------------------------------#}
 {#     execute and fill arrays and variables      #}
