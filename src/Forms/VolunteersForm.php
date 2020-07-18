@@ -69,18 +69,28 @@ class VolunteersForm extends Form
             ]
         ]);
 
+        $emptyUsersText = 'No Account yet';
+        if ($currentAction == 'index') {
+            $emptyUsersText = 'Any Account Setting';
+        }
+
         $this->add(new Select('userId', $users, [
             'using'      => [
                 'id',
                 'name',
             ],
             'useEmpty'   => true,
-            'emptyText'  => 'No Account yet',
+            'emptyText'  => $emptyUsersText,
             'emptyValue' => '',
                 'class' => 'form-control'
         ]));
 
         $departments = Departments::find([]);
+
+        $emptyDepartmentText = 'No Department yet';
+        if ($currentAction == 'index') {
+            $emptyDepartmentText = 'Any Department Setting';
+        }
 
         $this->add(new Select('departmentId', $departments, [
             'using'      => [
@@ -88,10 +98,13 @@ class VolunteersForm extends Form
                 'label',
             ],
             'useEmpty'   => true,
-            'emptyText'  => 'No Department yet',
+            'emptyText'  => $emptyDepartmentText,
             'emptyValue' => '',
             'class' => 'form-control'
         ]));
+
+
+
 
         // mini form for editing certificates
 
