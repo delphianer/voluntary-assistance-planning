@@ -40,7 +40,7 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
         if ($count === 0) {
             $this->flash->notice('The search did not find any operationshifts_vehicles_link');
             $this->dispatcher->forward([
-                "controller" => "operationshifts_vehicles_link",
+                "controller" => "operationshiftsvehicleslink",
                 'action' => 'index',
             ]);
 
@@ -80,7 +80,7 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
                 $this->flash->error("operationshifts_vehicles_link was not found");
 
                 $this->dispatcher->forward([
-                    'controller' => "operationshifts_vehicles_link",
+                    'controller' => "operationshiftsvehicleslink",
                     'action' => 'index'
                 ]);
 
@@ -108,7 +108,7 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
     public function createAction()
     {
         if (!$this->request->isPost()) { // post should go to NewAction
-            $this->dispatcher->forward([ 'controller' => "operationshifts_vehicles_link",'action' => 'index']);
+            $this->dispatcher->forward([ 'controller' => "operationshiftsvehicleslink",'action' => 'index']);
             return;
         }
 
@@ -122,7 +122,7 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
             }
 
             $this->dispatcher->forward([
-                'controller' => "operationshifts_vehicles_link",
+                'controller' => "operationshiftsvehicleslink",
                 'action' => 'new'
             ]);
 
@@ -132,7 +132,7 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
         $this->flash->success("operationshifts_vehicles_link was created successfully");
 
         $this->dispatcher->forward([
-            'controller' => "operationshifts_vehicles_link",
+            'controller' => "operationshiftsvehicleslink",
             'action' => 'index'
         ]);
     }
@@ -145,7 +145,7 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
     {
         if (!$this->request->isPost()) {
             $this->dispatcher->forward([
-                'controller' => "operationshifts_vehicles_link",
+                'controller' => "operationshiftsvehicleslink",
                 'action' => 'index'
             ]);
 
@@ -159,7 +159,7 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
             $this->flash->error("operationshifts_vehicles_link does not exist " . $id);
 
             $this->dispatcher->forward([
-                'controller' => "operationshifts_vehicles_link",
+                'controller' => "operationshiftsvehicleslink",
                 'action' => 'index'
             ]);
 
@@ -177,7 +177,7 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
             }
 
             $this->dispatcher->forward([
-                'controller' => "operationshifts_vehicles_link",
+                'controller' => "operationshiftsvehicleslink",
                 'action' => 'edit',
                 'params' => [$operationshifts_vehicles_link->getId()]
             ]);
@@ -188,7 +188,7 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
         $this->flash->success("operationshifts_vehicles_link was updated successfully");
 
         $this->dispatcher->forward([
-            'controller' => "operationshifts_vehicles_link",
+            'controller' => "operationshiftsvehicleslink",
             'action' => 'index'
         ]);
     }
@@ -205,7 +205,7 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
             $this->flash->error("operationshifts_vehicles_link was not found");
 
             $this->dispatcher->forward([
-                'controller' => "operationshifts_vehicles_link",
+                'controller' => "operationshiftsvehicleslink",
                 'action' => 'index'
             ]);
 
@@ -219,7 +219,7 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
             }
 
             $this->dispatcher->forward([
-                'controller' => "operationshifts_vehicles_link",
+                'controller' => "operationshiftsvehicleslink",
                 'action' => 'search'
             ]);
 
@@ -229,7 +229,7 @@ class OperationshiftsVehiclesLinkController extends ControllerBase
         $this->flash->success("operationshifts_vehicles_link was deleted successfully");
 
         $this->dispatcher->forward([
-            'controller' => "operationshifts_vehicles_link",
+            'controller' => "operationshiftsvehicleslink",
             'action' => "index"
         ]);
     }

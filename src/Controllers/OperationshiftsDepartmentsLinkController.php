@@ -40,7 +40,7 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
         if ($count === 0) {
             $this->flash->notice('The search did not find any operationshifts_departments_link');
             $this->dispatcher->forward([
-                "controller" => "operationshifts_departments_link",
+                "controller" => "operationshiftsdepartmentslink",
                 'action' => 'index',
             ]);
 
@@ -80,7 +80,7 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
                 $this->flash->error("operationshifts_departments_link was not found");
 
                 $this->dispatcher->forward([
-                    'controller' => "operationshifts_departments_link",
+                    'controller' => "operationshiftsdepartmentslink",
                     'action' => 'index'
                 ]);
 
@@ -109,7 +109,7 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
     public function createAction()
     {
         if (!$this->request->isPost()) { // post should go to NewAction
-            $this->dispatcher->forward([ 'controller' => "operationshifts_departments_link",'action' => 'index']);
+            $this->dispatcher->forward([ 'controller' => "operationshiftsdepartmentslink",'action' => 'index']);
             return;
         }
 
@@ -123,7 +123,7 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
             }
 
             $this->dispatcher->forward([
-                'controller' => "operationshifts_departments_link",
+                'controller' => "operationshiftsdepartmentslink",
                 'action' => 'new'
             ]);
 
@@ -133,7 +133,7 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
         $this->flash->success("operationshifts_departments_link was created successfully");
 
         $this->dispatcher->forward([
-            'controller' => "operationshifts_departments_link",
+            'controller' => "operationshiftsdepartmentslink",
             'action' => 'index'
         ]);
     }
@@ -146,7 +146,7 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
     {
         if (!$this->request->isPost()) {
             $this->dispatcher->forward([
-                'controller' => "operationshifts_departments_link",
+                'controller' => "operationshiftsdepartmentslink",
                 'action' => 'index'
             ]);
 
@@ -160,7 +160,7 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
             $this->flash->error("operationshifts_departments_link does not exist " . $id);
 
             $this->dispatcher->forward([
-                'controller' => "operationshifts_departments_link",
+                'controller' => "operationshiftsdepartmentslink",
                 'action' => 'index'
             ]);
 
@@ -178,7 +178,7 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
             }
 
             $this->dispatcher->forward([
-                'controller' => "operationshifts_departments_link",
+                'controller' => "operationshiftsdepartmentslink",
                 'action' => 'edit',
                 'params' => [$operationshifts_departments_link->getId()]
             ]);
@@ -189,7 +189,7 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
         $this->flash->success("operationshifts_departments_link was updated successfully");
 
         $this->dispatcher->forward([
-            'controller' => "operationshifts_departments_link",
+            'controller' => "operationshiftsdepartmentslink",
             'action' => 'index'
         ]);
     }
@@ -206,7 +206,7 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
             $this->flash->error("operationshifts_departments_link was not found");
 
             $this->dispatcher->forward([
-                'controller' => "operationshifts_departments_link",
+                'controller' => "operationshiftsdepartmentslink",
                 'action' => 'index'
             ]);
 
@@ -220,7 +220,7 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
             }
 
             $this->dispatcher->forward([
-                'controller' => "operationshifts_departments_link",
+                'controller' => "operationshiftsdepartmentslink",
                 'action' => 'search'
             ]);
 
@@ -230,7 +230,7 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
         $this->flash->success("operationshifts_departments_link was deleted successfully");
 
         $this->dispatcher->forward([
-            'controller' => "operationshifts_departments_link",
+            'controller' => "operationshiftsdepartmentslink",
             'action' => "index"
         ]);
     }
