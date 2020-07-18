@@ -11,6 +11,7 @@ use Phalcon\Forms\Form;
 use Phalcon\Validation\Validator\PresenceOf;
 use Vokuro\Models\Clients;
 use Vokuro\Models\Departments;
+use Vokuro\Models\Equipment;
 use Vokuro\Models\Locations;
 use Vokuro\Models\Operations;
 
@@ -122,6 +123,34 @@ class OperationShiftsForm extends Form
         $this->add(new Text('end', [
             'class' => 'form-control',
             'id' => 'endDateTimeField'
+        ]));
+
+
+
+
+        // mini form for quickly adding equipment
+
+        $this->add(new Hidden('volShEquLnkId'));
+
+        $equipment = Equipment::find([]);
+
+        $this->add(new Select('equipment', $equipment, [
+            'using'      => [
+                'id',
+                'label',
+            ],
+            'useEmpty'   => false,
+            'class' => 'form-control  mr-sm-3'
+        ]));
+
+        $this->add(new Text('equipShortDesc', [
+            'class' => 'form-control  mr-sm-2'
+        ]));
+
+        $this->add(new Text('equipNeedCount', [
+            'title' => 'needed count',
+            'class' => 'form-control  mr-sm-2',
+            'default' => '1'
         ]));
     }
 

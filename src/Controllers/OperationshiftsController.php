@@ -128,6 +128,7 @@ class OperationshiftsController extends ControllerBase
 
             $form = new OperationShiftsForm(null, $formOptions);
             $this->view->setVar('form', $form);
+            $this->view->setVar('operationshift', $operationshift);
 
             $this->setupDateTimePicker();
         }
@@ -225,6 +226,11 @@ class OperationshiftsController extends ControllerBase
             return;
         }
 
+        // first check if submitAction is used
+        if ($this->handeledSubmitAction(($this->request->getPost("submitAction", "string")), $operationshift)) {
+            return;
+        }
+
         $this->flash->success("Shift was updated successfully");
 
         $backActionValue = $this->request->getPost("backActionValue", "int");
@@ -263,7 +269,6 @@ class OperationshiftsController extends ControllerBase
         }
 
         if (!$operationshift->delete()) {
-
             foreach ($operationshift->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -301,6 +306,11 @@ class OperationshiftsController extends ControllerBase
         $operationshift->setend($this->request->getPost("end", "DateTime"));
     }
 
+
+    /**
+     * @param bool $isNewAction
+     * @return array|null
+     */
     private function handleProcessOperation(bool $isNewAction)
     {
         $opId = $this->dispatcher->getParam('processOperationId');
@@ -323,6 +333,10 @@ class OperationshiftsController extends ControllerBase
         return null;
     }
 
+    /**
+     * @param $backActionValue
+     * @return bool
+     */
     private function handledBackAction($backActionValue)
     {
         if (isset($backActionValue)) {
@@ -335,6 +349,18 @@ class OperationshiftsController extends ControllerBase
 
             return true;
         }
+        return false;
+    }
+
+    private function handeledSubmitAction($submitAction, $operationshift)
+    {
+        if ($submitAction == 'submit') { // nothing to change
+            return false;
+        }
+
+        // todo: saveEquipDefinition
+
+        // nothing matched:
         return false;
     }
 }
