@@ -60,11 +60,11 @@
         ] %}
 
     {% if isAllowedToEdit %}
-        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+        {% do arrayPush(tableHeadingData ,  ['title' : ''] ) %}
     {% endif %}
 
     {% if isAllowedToDelete %}
-        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+        {% do arrayPush(tableHeadingData ,  ['title' : ''] ) %}
     {% endif %}
 
 
@@ -76,22 +76,22 @@
 
         {% set rowData = [] %}
 
-        {% set foo = arrayPush(rowData , [ 'data' : collectData.Departments.label] ) %}
-        {% set foo = arrayPush(rowData , [ 'data' : collectData.shortDescription] ) %}
-        {% set foo = arrayPush(rowData , [ 'data' : collectData.numberVolunteersNeeded] ) %}
-        {% set foo = arrayPush(rowData , [ 'data' : collectData.minimumCertificateRankingLabel] ) %}
+        {% do arrayPush(rowData , [ 'data' : collectData.Departments.label] ) %}
+        {% do arrayPush(rowData , [ 'data' : collectData.shortDescription] ) %}
+        {% do arrayPush(rowData , [ 'data' : collectData.numberVolunteersNeeded] ) %}
+        {% do arrayPush(rowData , [ 'data' : collectData.minimumCertificateRankingLabel] ) %}
 
         {% if isAllowedToEdit %}
             {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction"value="depEdit' ~ collectData.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
-            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+            {% do arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
         {% if isAllowedToDelete %}
             {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="depDel' ~ collectData.id ~ '"> <i class="icon-remove"></i> remove </button>' %}
-            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+            {% do arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% else %}
         {% set tableBodyDataDefaultText = 'No departments found' %}
@@ -181,11 +181,11 @@
         ] %}
 
     {% if isAllowedToEdit %}
-        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+        {% do arrayPush(tableHeadingData ,  ['title' : ''] ) %}
     {% endif %}
 
     {% if isAllowedToDelete %}
-        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+        {% do arrayPush(tableHeadingData ,  ['title' : ''] ) %}
     {% endif %}
 
 
@@ -197,21 +197,21 @@
 
         {% set rowData = [] %}
 
-        {% set foo = arrayPush(rowData , [ 'data' : collectData.Equipment.label] ) %}
-        {% set foo = arrayPush(rowData , [ 'data' : collectData.shortDescription] ) %}
-        {% set foo = arrayPush(rowData , [ 'data' : collectData.need_count] ) %}
+        {% do arrayPush(rowData , [ 'data' : collectData.Equipment.label] ) %}
+        {% do arrayPush(rowData , [ 'data' : collectData.shortDescription] ) %}
+        {% do arrayPush(rowData , [ 'data' : collectData.need_count] ) %}
 
         {% if isAllowedToEdit %}
             {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction"value="equiEdit' ~ collectData.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
-            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+            {% do arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
         {% if isAllowedToDelete %}
             {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="equiDel' ~ collectData.id ~ '"> <i class="icon-remove"></i> remove </button>' %}
-            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+            {% do arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% else %}
         {% set tableBodyDataDefaultText = 'No equipment found' %}
@@ -292,11 +292,11 @@
         ] %}
 
     {% if isAllowedToEdit %}
-        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+        {% do arrayPush(tableHeadingData ,  ['title' : ''] ) %}
     {% endif %}
 
     {% if isAllowedToDelete %}
-        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+        {% do arrayPush(tableHeadingData ,  ['title' : ''] ) %}
     {% endif %}
 
 
@@ -310,20 +310,20 @@
 
         {% set rowData = [] %}
 
-        {% set foo = arrayPush(rowData , [ 'data' : collectData.Vehicles.label] ) %}
-        {% set foo = arrayPush(rowData , [ 'data' : collectData.shortDescription] ) %}
+        {% do arrayPush(rowData , [ 'data' : collectData.Vehicles.label] ) %}
+        {% do arrayPush(rowData , [ 'data' : collectData.shortDescription] ) %}
 
         {% if isAllowedToEdit %}
             {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction" value="vehiEdit' ~ collectData.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
-            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+            {% do arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
         {% if isAllowedToDelete %}
             {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction" value="vehiDel' ~ collectData.id ~ '"> <i class="icon-remove"></i> remove </button>' %}
-            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+            {% do arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% else %}
         {% set tableBodyDataDefaultText = 'No vehicles found' %}

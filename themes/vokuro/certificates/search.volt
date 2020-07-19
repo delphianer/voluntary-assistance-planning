@@ -16,11 +16,11 @@
 
         {% set rowData = [] %}
 
-        {% set foo = arrayPush(rowData , certificate.id) %}
-        {% set foo = arrayPush(rowData , certificate.label) %}
-        {% set foo = arrayPush(rowData , certificate.description) %}
+        {% do arrayPush(rowData , certificate.id) %}
+        {% do arrayPush(rowData , certificate.label) %}
+        {% do arrayPush(rowData , certificate.description) %}
 
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% endfor %}
 

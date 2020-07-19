@@ -31,9 +31,9 @@
         {# TODO: remove not necessary columns and this comment #}
         {# TODO: change format -> like this example to add each cell into rowData-Array:
             example:
-                {% set foo = arrayPush(rowData , $singular$.id) %}
-                {% set foo = arrayPush(rowData , $singular$.label) %}
-                {% set foo = arrayPush(rowData , $singular$.description) %}
+                {% do arrayPush(rowData , $singular$.id) %}
+                {% do arrayPush(rowData , $singular$.label) %}
+                {% do arrayPush(rowData , $singular$.description) %}
             then remove this comment
          #}
 
@@ -41,7 +41,7 @@
          $rowColumns$
          {#--------------------------------------------#}
 
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% endfor %}
 

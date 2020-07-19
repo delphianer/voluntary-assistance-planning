@@ -19,14 +19,14 @@
 
         {% set rowData = [] %}
 
-        {% set foo = arrayPush(rowData, opshdepl_volunteers_link.id) %}
-        {% set foo = arrayPush(rowData, opshdepl_volunteers_link.shortDescription) %}
-        {% set foo = arrayPush(rowData, opshdepl_volunteers_link.longDescription) %}
-        {% set foo = arrayPush(rowData, opshdepl_volunteers_link.opDepNeedId) %}
-        {% set foo = arrayPush(rowData, opshdepl_volunteers_link.volunteersId) %}
-        {% set foo = arrayPush(rowData, opshdepl_volunteers_link.volCurrentMaximumCertRank) %}
+        {% do arrayPush(rowData, opshdepl_volunteers_link.id) %}
+        {% do arrayPush(rowData, opshdepl_volunteers_link.shortDescription) %}
+        {% do arrayPush(rowData, opshdepl_volunteers_link.longDescription) %}
+        {% do arrayPush(rowData, opshdepl_volunteers_link.opDepNeedId) %}
+        {% do arrayPush(rowData, opshdepl_volunteers_link.volunteersId) %}
+        {% do arrayPush(rowData, opshdepl_volunteers_link.volCurrentMaximumCertRank) %}
 
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% endfor %}
 

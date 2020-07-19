@@ -19,35 +19,35 @@
 
         {% set rowData = [] %}
 
-            {% set foo = arrayPush(rowData, operation.id) %}
-            {% set foo = arrayPush(rowData, operation.Clients.label) %}
-            {% set foo = arrayPush(rowData, operation.shortDescription) %}
+            {% do arrayPush(rowData, operation.id) %}
+            {% do arrayPush(rowData, operation.Clients.label) %}
+            {% do arrayPush(rowData, operation.shortDescription) %}
             {% if operation.department is defined and operation.department is not empty %}
-                {% set foo = arrayPush(rowData, operation.department.label) %}
+                {% do arrayPush(rowData, operation.department.label) %}
             {% else %}
-                {% set foo = arrayPush(rowData, '-') %}
+                {% do arrayPush(rowData, '-') %}
             {% endif %}
             {% set output = true %}
             {% for Operationshift in operation.Operationshifts %}
                 {% if output %}
                     {% if Operationshift.minstart is defined and Operationshift.minstart is not empty %}
-                        {% set foo = arrayPush(rowData, Operationshift.minstart['minstart']) %}
+                        {% do arrayPush(rowData, Operationshift.minstart['minstart']) %}
                     {% else %}
-                        {% set foo = arrayPush(rowData, '-') %}
+                        {% do arrayPush(rowData, '-') %}
                     {% endif %}
                     {% if Operationshift.maxstart is defined and Operationshift.maxstart is not empty %}
-                        {% set foo = arrayPush(rowData, Operationshift.maxstart['maxstart']) %}
+                        {% do arrayPush(rowData, Operationshift.maxstart['maxstart']) %}
                     {% else %}
-                        {% set foo = arrayPush(rowData, '-') %}
+                        {% do arrayPush(rowData, '-') %}
                     {% endif %}
                     {% set output = false %}
                 {% endif %}
             {% else %}
-                {% set foo = arrayPush(rowData, '-') %}
-                {% set foo = arrayPush(rowData, '-') %}
+                {% do arrayPush(rowData, '-') %}
+                {% do arrayPush(rowData, '-') %}
             {% endfor %}
 
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% endfor %}
 

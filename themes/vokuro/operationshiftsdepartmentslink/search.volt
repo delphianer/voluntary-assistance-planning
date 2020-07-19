@@ -20,15 +20,15 @@
     {% for operationshifts_departments_link in page.items %}
 
         {% set rowData = [] %}
-            {% set foo = arrayPush(rowData, operationshifts_departments_link.id) %}
-            {% set foo = arrayPush(rowData, operationshifts_departments_link.operationShiftId) %}
-            {% set foo = arrayPush(rowData, operationshifts_departments_link.departmentId) %}
-            {% set foo = arrayPush(rowData, operationshifts_departments_link.shortDescription) %}
-            {% set foo = arrayPush(rowData, operationshifts_departments_link.longDescription) %}
-            {% set foo = arrayPush(rowData, operationshifts_departments_link.numberVolunteersNeeded) %}
-            {% set foo = arrayPush(rowData, operationshifts_departments_link.minimumCertificateRanking) %}
+            {% do arrayPush(rowData, operationshifts_departments_link.id) %}
+            {% do arrayPush(rowData, operationshifts_departments_link.operationShiftId) %}
+            {% do arrayPush(rowData, operationshifts_departments_link.departmentId) %}
+            {% do arrayPush(rowData, operationshifts_departments_link.shortDescription) %}
+            {% do arrayPush(rowData, operationshifts_departments_link.longDescription) %}
+            {% do arrayPush(rowData, operationshifts_departments_link.numberVolunteersNeeded) %}
+            {% do arrayPush(rowData, operationshifts_departments_link.minimumCertificateRanking) %}
 
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% endfor %}
 

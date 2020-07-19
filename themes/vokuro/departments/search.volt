@@ -16,11 +16,11 @@
 
         {% set rowData = [] %}
 
-        {% set foo = arrayPush(rowData , department.id) %}
-        {% set foo = arrayPush(rowData , department.label) %}
-        {% set foo = arrayPush(rowData , department.description) %}
+        {% do arrayPush(rowData , department.id) %}
+        {% do arrayPush(rowData , department.label) %}
+        {% do arrayPush(rowData , department.description) %}
 
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% endfor %}
 

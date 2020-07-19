@@ -18,13 +18,13 @@
 
         {% set rowData = [] %}
 
-        {% set foo = arrayPush(rowData, operationshifts_vehicles_link.id) %}
-        {% set foo = arrayPush(rowData, operationshifts_vehicles_link.operationShiftId) %}
-        {% set foo = arrayPush(rowData, operationshifts_vehicles_link.vehicleId) %}
-        {% set foo = arrayPush(rowData, operationshifts_vehicles_link.shortDescription) %}
-        {% set foo = arrayPush(rowData, operationshifts_vehicles_link.longDescription) %}
+        {% do arrayPush(rowData, operationshifts_vehicles_link.id) %}
+        {% do arrayPush(rowData, operationshifts_vehicles_link.operationShiftId) %}
+        {% do arrayPush(rowData, operationshifts_vehicles_link.vehicleId) %}
+        {% do arrayPush(rowData, operationshifts_vehicles_link.shortDescription) %}
+        {% do arrayPush(rowData, operationshifts_vehicles_link.longDescription) %}
 
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% endfor %}
 

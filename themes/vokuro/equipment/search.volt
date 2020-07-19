@@ -18,12 +18,12 @@
 
         {% set rowData = [] %}
 
-        {% set foo = arrayPush(rowData , equipment.id) %}
-        {% set foo = arrayPush(rowData , equipment.label) %}
-        {% set foo = arrayPush(rowData , equipment.description) %}
-        {% set foo = arrayPush(rowData , equipment.total_count) %}
-        {% set foo = arrayPush(rowData , equipment.isReusable) %}
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(rowData , equipment.id) %}
+        {% do arrayPush(rowData , equipment.label) %}
+        {% do arrayPush(rowData , equipment.description) %}
+        {% do arrayPush(rowData , equipment.total_count) %}
+        {% do arrayPush(rowData , equipment.isReusable) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% endfor %}
 

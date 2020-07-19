@@ -51,11 +51,11 @@
         ] %}
 
     {% if isAllowedToEdit %}
-        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+        {% do arrayPush(tableHeadingData ,  ['title' : ''] ) %}
     {% endif %}
 
     {% if isAllowedToDelete %}
-        {% set foo = arrayPush(tableHeadingData ,  ['title' : ''] ) %}
+        {% do arrayPush(tableHeadingData ,  ['title' : ''] ) %}
     {% endif %}
 
 
@@ -67,29 +67,29 @@
 
         {% set rowData = [] %}
 
-        {% set foo = arrayPush(rowData , [ 'data' : property.label, 'class' : 'text-center'] ) %}
+        {% do arrayPush(rowData , [ 'data' : property.label, 'class' : 'text-center'] ) %}
 
         {% if property.is_numeric == 'Y' %}
 
-            {% set foo = arrayPush(rowData , [ 'data' : numberFormat(property.value_numeric), 'class' : 'text-center'] ) %}
+            {% do arrayPush(rowData , [ 'data' : numberFormat(property.value_numeric), 'class' : 'text-center'] ) %}
 
         {% else %}
 
-            {% set foo = arrayPush(rowData , [ 'data' : property.value_string, 'class' : 'text-center'] ) %}
+            {% do arrayPush(rowData , [ 'data' : property.value_string, 'class' : 'text-center'] ) %}
 
         {% endif %}
 
         {% if isAllowedToEdit %}
             {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction"value="edit' ~ property.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
-            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+            {% do arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
         {% if isAllowedToDelete %}
             {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="del' ~ property.id ~ '"> <i class="icon-remove"></i> remove </button>' %}
-            {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
+            {% do arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% else %}
         {% set tableBodyDataDefaultText = 'No certificates found' %}

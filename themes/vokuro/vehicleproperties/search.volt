@@ -21,15 +21,15 @@
 
         {% set rowData = [] %}
 
-        {% set foo = arrayPush(rowData, vehiclepropertie.id) %}
-        {% set foo = arrayPush(rowData, vehiclepropertie.vehiclesId) %}
-        {% set foo = arrayPush(rowData, vehiclepropertie.label) %}
-        {% set foo = arrayPush(rowData, vehiclepropertie.description) %}
-        {% set foo = arrayPush(rowData, vehiclepropertie.is_numeric) %}
-        {% set foo = arrayPush(rowData, vehiclepropertie.value_string) %}
-        {% set foo = arrayPush(rowData, vehiclepropertie.value_numeric) %}
+        {% do arrayPush(rowData, vehiclepropertie.id) %}
+        {% do arrayPush(rowData, vehiclepropertie.vehiclesId) %}
+        {% do arrayPush(rowData, vehiclepropertie.label) %}
+        {% do arrayPush(rowData, vehiclepropertie.description) %}
+        {% do arrayPush(rowData, vehiclepropertie.is_numeric) %}
+        {% do arrayPush(rowData, vehiclepropertie.value_string) %}
+        {% do arrayPush(rowData, vehiclepropertie.value_numeric) %}
 
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% endfor %}
 

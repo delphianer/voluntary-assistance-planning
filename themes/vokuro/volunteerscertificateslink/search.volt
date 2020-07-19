@@ -17,12 +17,12 @@
 
         {% set rowData = [] %}
 
-        {% set foo = arrayPush(rowData, volunteers_certificates_link.id) %}
-        {% set foo = arrayPush(rowData, volunteers_certificates_link.volunteersId) %}
-        {% set foo = arrayPush(rowData, volunteers_certificates_link.certificatesId) %}
-        {% set foo = arrayPush(rowData, volunteers_certificates_link.validUntil) %}
+        {% do arrayPush(rowData, volunteers_certificates_link.id) %}
+        {% do arrayPush(rowData, volunteers_certificates_link.volunteersId) %}
+        {% do arrayPush(rowData, volunteers_certificates_link.certificatesId) %}
+        {% do arrayPush(rowData, volunteers_certificates_link.validUntil) %}
 
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% endfor %}
 

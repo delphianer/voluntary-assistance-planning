@@ -21,16 +21,16 @@
 
         {% set rowData = [] %}
 
-            {% set foo = arrayPush(rowData , location.id) %}
-            {% set foo = arrayPush(rowData , location.label) %}
-            {% set foo = arrayPush(rowData , location.description) %}
-            {% set foo = arrayPush(rowData , location.street) %}
-            {% set foo = arrayPush(rowData , location.additionalText) %}
-            {% set foo = arrayPush(rowData , location.postalcode) %}
-            {% set foo = arrayPush(rowData , location.city) %}
-            {% set foo = arrayPush(rowData , location.country) %}
+            {% do arrayPush(rowData , location.id) %}
+            {% do arrayPush(rowData , location.label) %}
+            {% do arrayPush(rowData , location.description) %}
+            {% do arrayPush(rowData , location.street) %}
+            {% do arrayPush(rowData , location.additionalText) %}
+            {% do arrayPush(rowData , location.postalcode) %}
+            {% do arrayPush(rowData , location.city) %}
+            {% do arrayPush(rowData , location.country) %}
 
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% endfor %}
 

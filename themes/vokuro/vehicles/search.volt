@@ -19,11 +19,11 @@
 
         {% set rowData = [] %}
 
-            {% set foo = arrayPush(rowData , vehicle.id) %}
-            {% set foo = arrayPush(rowData , vehicle.label) %}
-            {% set foo = arrayPush(rowData , vehicle.description) %}
-            {% set foo = arrayPush(rowData , vehicle.technicalInspection) %}
-            {% set foo = arrayPush(rowData , vehicle.seatCount) %}
+            {% do arrayPush(rowData , vehicle.id) %}
+            {% do arrayPush(rowData , vehicle.label) %}
+            {% do arrayPush(rowData , vehicle.description) %}
+            {% do arrayPush(rowData , vehicle.technicalInspection) %}
+            {% do arrayPush(rowData , vehicle.seatCount) %}
 
             {% set propText = '' %}
                 {% set comma = '' %}
@@ -46,9 +46,9 @@
                     {% set propText = propText ~ comma ~ 'HasDigitalRadioCom' %}
                 {% endif %}
 
-            {% set foo = arrayPush(rowData , propText) %}
+            {% do arrayPush(rowData , propText) %}
 
-        {% set foo = arrayPush(tableBodyData , rowData) %}
+        {% do arrayPush(tableBodyData , rowData) %}
 
     {% endfor %}
 
