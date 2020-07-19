@@ -240,11 +240,11 @@ class OperationshiftsDepartmentsLinkController extends ControllerBase
      */
     public function setDetails(OperationshiftsDepartmentsLink $operationshifts_departments_link): void
     {
-        $operationshifts_departments_link->setoperationShiftId($this->request->getPost("operationShiftId", "int"));
-        $operationshifts_departments_link->setdepartmentId($this->request->getPost("departmentId", "int"));
-        $operationshifts_departments_link->setshortDescription($this->request->getPost("shortDescription", "string"));
-        $operationshifts_departments_link->setlongDescription($this->request->getPost("longDescription", "string"));
-        $operationshifts_departments_link->setnumberVolunteersNeeded($this->request->getPost("numberVolunteersNeeded", "int"));
-        $operationshifts_departments_link->setminimumCertificateRanking($this->request->getPost("minimumCertificateRanking", "int"));
+        $operationshifts_departments_link->setOperationShiftId($this->request->getPost("operationShiftId", "int"));
+        $operationshifts_departments_link->setDepartmentId($this->request->getPost("departmentId", "int"));
+        $operationshifts_departments_link->setShortDescription($this->request->getPost("shortDescription", "string"));
+        $operationshifts_departments_link->setLongDescription($this->request->getPost("longDescription", "string"));
+        $operationshifts_departments_link->setNumberVolunteersNeeded($this->request->getPost("numberVolunteersNeeded", "int"));
+        $operationshifts_departments_link->setMinimumCertificateRanking($this->request->getPost("minimumCertificateRanking", "int"));
     }
 }

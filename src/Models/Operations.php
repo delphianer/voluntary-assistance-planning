@@ -273,13 +273,18 @@ class Operations extends \Phalcon\Mvc\Model
     {
         $this->setSchema("vokuro");
         $this->setSource("operations");
-        $this->hasMany('id'
-            , 'Vokuro\Models\Operationshifts'
-            , 'operationId'
-            , ['alias' => 'Operationshifts']);
-        $this->belongsTo('clientId'
-            , 'Vokuro\Models\Clients'
-            , 'id', ['alias' => 'Clients']);
+        $this->hasMany(
+            'id',
+            'Vokuro\Models\Operationshifts',
+            'operationId',
+            ['alias' => 'Operationshifts']
+        );
+        $this->belongsTo(
+            'clientId',
+            'Vokuro\Models\Clients',
+            'id',
+            ['alias' => 'Clients']
+        );
 
         $this->hasOne('mainDepartmentId', Departments::class, 'id', [
             'alias'    => 'department',
@@ -308,5 +313,4 @@ class Operations extends \Phalcon\Mvc\Model
     {
         return parent::findFirst($parameters);
     }
-
 }
