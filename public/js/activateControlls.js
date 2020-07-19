@@ -15,7 +15,7 @@ let dateTimePicker_i18n = {
         }
     },
     timepicker:true,
-    format : 'Y-m-d H:i:s'
+    format : 'Y-m-d H:i:00'
 };
 
 
