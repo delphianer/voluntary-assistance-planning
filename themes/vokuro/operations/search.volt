@@ -9,8 +9,10 @@
     {% set tableHeadingData = [
             'ID',
             'Client',
-            'short desc.',
-            'main department'
+            'Short Description',
+            'Main Department',
+            'Start',
+            'End'
         ] %}
 
     {% for operation in page.items %}
@@ -25,6 +27,25 @@
             {% else %}
                 {% set foo = arrayPush(rowData, '-') %}
             {% endif %}
+            {% set output = true %}
+            {% for Operationshift in operation.Operationshifts %}
+                {% if output %}
+                    {% if Operationshift.minstart is defined and Operationshift.minstart is not empty %}
+                        {% set foo = arrayPush(rowData, Operationshift.minstart['minstart']) %}
+                    {% else %}
+                        {% set foo = arrayPush(rowData, '-') %}
+                    {% endif %}
+                    {% if Operationshift.maxstart is defined and Operationshift.maxstart is not empty %}
+                        {% set foo = arrayPush(rowData, Operationshift.maxstart['maxstart']) %}
+                    {% else %}
+                        {% set foo = arrayPush(rowData, '-') %}
+                    {% endif %}
+                    {% set output = false %}
+                {% endif %}
+            {% else %}
+                {% set foo = arrayPush(rowData, '-') %}
+                {% set foo = arrayPush(rowData, '-') %}
+            {% endfor %}
 
         {% set foo = arrayPush(tableBodyData , rowData) %}
 

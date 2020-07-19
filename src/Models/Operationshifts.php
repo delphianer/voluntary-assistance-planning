@@ -324,6 +324,55 @@ class Operationshifts extends \Phalcon\Mvc\Model
         return $this->end;
     }
 
+
+    /**
+     * Returns the value of field mainDepartmentId
+     *
+     * @return DateTime
+     */
+    public function getMinStart()
+    {
+        $phql = "
+    SELECT
+        MIN(start) AS minstart
+    FROM
+        Vokuro\Models\Operationshifts os
+    WHERE
+        os.operationId = :operation_id:";
+
+        $results  = $this
+            ->modelsManager
+            ->executeQuery($phql, [
+                'operation_id' => $this->getOperationId(),
+            ]);
+
+        return $results['minstart'];
+    }
+
+    /**
+     * Returns the value of field mainDepartmentId
+     *
+     * @return DateTime
+     */
+    public function getMaxStart()
+    {
+        $phql = "
+    SELECT
+        MAX(start) AS maxstart
+    FROM
+        Vokuro\Models\Operationshifts os
+    WHERE
+        os.operationId = :operation_id:";
+
+        $results  = $this
+            ->modelsManager
+            ->executeQuery($phql, [
+                'operation_id' => $this->getOperationId(),
+            ]);
+
+        return $results['maxstart'];
+    }
+
     /**
      * Initialize method for model.
      */
