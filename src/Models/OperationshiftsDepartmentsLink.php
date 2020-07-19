@@ -267,6 +267,23 @@ class OperationshiftsDepartmentsLink extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Returns the value of no field minimumCertificateRanking
+     *
+     * @return string
+     */
+    public function getMinimumCertificateRankingLabel()
+    {
+        $cert = Certificates::findFirstByid($this->minimumCertificateRanking);
+        if (isset($cert)) {
+            return $cert->getLabel();
+        } else {
+            return '-';
+        }
+    }
+
+
+
+    /**
      * Initialize method for model.
      */
     public function initialize()
@@ -299,5 +316,4 @@ class OperationshiftsDepartmentsLink extends \Phalcon\Mvc\Model
     {
         return parent::findFirst($parameters);
     }
-
 }

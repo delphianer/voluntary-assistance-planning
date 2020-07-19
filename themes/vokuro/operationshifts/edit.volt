@@ -79,15 +79,15 @@
         {% set foo = arrayPush(rowData , [ 'data' : collectData.Departments.label] ) %}
         {% set foo = arrayPush(rowData , [ 'data' : collectData.shortDescription] ) %}
         {% set foo = arrayPush(rowData , [ 'data' : collectData.numberVolunteersNeeded] ) %}
-        {% set foo = arrayPush(rowData , [ 'data' : collectData.minimumCertificateRanking] ) %}
+        {% set foo = arrayPush(rowData , [ 'data' : collectData.minimumCertificateRankingLabel] ) %}
 
         {% if isAllowedToEdit %}
-            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction"value="edit' ~ collectData.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-warning" name="submitAction"value="depEdit' ~ collectData.id ~ '"> <i class="icon-pencil"></i> change </button>' %}
             {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
         {% if isAllowedToDelete %}
-            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="del' ~ collectData.id ~ '"> <i class="icon-remove"></i> remove </button>' %}
+            {% set buttonData = '<button type="submit" class="btn btn-sm btn-outline-danger" name="submitAction"value="depDel' ~ collectData.id ~ '"> <i class="icon-remove"></i> remove </button>' %}
             {% set foo = arrayPush(rowData ,  [ 'data' : buttonData, 'class' : 'td-width-12 text-center'] ) %}
         {% endif %}
 
@@ -103,7 +103,62 @@
 
 
 
-todo: manpower
+
+
+    <div class="form-horizontal">
+        <div class="col-sm-offset-2 col-sm-10">
+
+            <div class="col-sm-offset-2 col-sm-10 text-center mt-4">
+                <h3>Manpower Needed Form:</h3>
+            </div>
+
+            {# hidden id for edit-mode: #}
+            {{ form.render("opShDepLnkId") }}
+
+            <div class="form-group row mt-4">
+                <label for="department" class="col-sm-2 col-form-label">Department :</label>
+                <div class="col-sm-offset-2 col-sm-10">
+                    {{ form.render("department") }}
+                </div>
+            </div>
+
+            <div class="form-group row mt-4">
+                <label for="depShortDesc" class="col-sm-2 col-form-label">Short Description:</label>
+                <div class="col-sm-offset-2 col-sm-10">
+                    {{ form.render("depShortDesc") }}
+                </div>
+            </div>
+
+            <div class="form-group row mt-4">
+                <label for="depVolNeeded" class="col-sm-2 col-form-label">Needed :</label>
+                <div class="col-sm-offset-2 col-sm-10">
+                    {{ form.render("depVolNeeded") }}
+                </div>
+            </div>
+
+            <div class="form-group row mt-4">
+                <label for="depMinCertRank" class="col-sm-2 col-form-label">Minimum Certification :</label>
+                <div class="col-sm-offset-2 col-sm-10">
+                    {{ form.render("depMinCertRank") }}
+                </div>
+            </div>
+
+            <div class="form-group row mt-4">
+                <div class="col-sm-2 col-form-label"></div>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary"
+                                        name="submitAction" value="saveDepDefinition">Save Manpower Needed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
 
 
 {{ tabChangeList['equipment'] }}

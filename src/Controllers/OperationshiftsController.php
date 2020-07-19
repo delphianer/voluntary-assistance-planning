@@ -10,6 +10,7 @@ use Vokuro\DateTimePicker;
 use Vokuro\Forms\OperationShiftsForm;
 use Vokuro\Models\Operations;
 use Vokuro\Models\Operationshifts;
+use Vokuro\Models\OperationshiftsDepartmentsLink;
 use Vokuro\Models\OperationshiftsEquipmentLink;
 use Vokuro\Models\OperationshiftsVehiclesLink;
 use function Vokuro\getCurrentDateTimeStamp;
@@ -133,6 +134,24 @@ class OperationshiftsController extends ControllerBase
             $this->view->setVar('form', $form);
             $this->view->setVar('operationshift', $operationshift);
 
+            $opShDepLnkId = $this->dispatcher->getParam('opShDepLnkId');
+            if (isset($opShDepLnkId) && ($opShDepLnkId > 0)) {
+                $depLink = OperationshiftsDepartmentsLink::findFirstByid($opShDepLnkId);
+                $this->tag->setDefault("opShDepLnkId", $depLink->getId());
+                $this->tag->setDefault("department", $depLink->getDepartmentid());
+                $this->tag->setDefault("depShortDesc", $depLink->getShortDescription());
+                $this->tag->setDefault("depVolNeeded", $depLink->getNumbervolunteersneeded());
+                $this->tag->setDefault("depMinCertRank", $depLink->getMinimumcertificateranking());
+
+                $this->view->setVar('setActiveTabKey', 'manpower');
+            } else {
+                $this->tag->setDefault("opShDepLnkId", '');
+                $this->tag->setDefault("department", '');
+                $this->tag->setDefault("depShortDesc", '');
+                $this->tag->setDefault("depVolNeeded", '');
+                $this->tag->setDefault("depMinCertRank", '');
+            }
+
             $opShEquLnkId = $this->dispatcher->getParam('opShEquLnkId');
             if (isset($opShEquLnkId) && ($opShEquLnkId > 0)) {
                 $equiLink = OperationshiftsEquipmentLink::findFirstByid($opShEquLnkId);
@@ -142,6 +161,11 @@ class OperationshiftsController extends ControllerBase
                 $this->tag->setDefault("equipNeedCount", $equiLink->getNeedCount());
 
                 $this->view->setVar('setActiveTabKey', 'equipment');
+            } else {
+                $this->tag->setDefault("opShEquLnkId", '');
+                $this->tag->setDefault("equipment", '');
+                $this->tag->setDefault("equipShortDesc", '');
+                $this->tag->setDefault("equipNeedCount", '');
             }
 
             $opShVehLnkId = $this->dispatcher->getParam('opShVehLnkId');
@@ -152,8 +176,7 @@ class OperationshiftsController extends ControllerBase
                 $this->tag->setDefault("vehicShortDesc", $vehiLink->getShortDescription());
 
                 $this->view->setVar('setActiveTabKey', 'vehicles');
-            }
-            else {
+            } else {
                 $this->tag->setDefault("opShVehLnkId", '');
                 $this->tag->setDefault("vehicle", '');
                 $this->tag->setDefault("vehicShortDesc", '');
@@ -397,8 +420,6 @@ class OperationshiftsController extends ControllerBase
             return false;
         }
 
-        $dispatcherForward = false;
-
         $dispatcherForward = $this->handleDepartmentProcessing($submitAction, $operationshift);
 
         $dispatcherForward = $dispatcherForward || $this->handleEquipmentProcessing($submitAction, $operationshift);
@@ -430,6 +451,57 @@ class OperationshiftsController extends ControllerBase
     {
         // default
         $dispatcherForward = false;
+
+
+        if ($submitAction == 'saveDepDefinition') {
+            $opShDepLnkId = $this->request->getPost("opShDepLnkId", "int");
+            if (isset($opShDepLnkId) && ($opShDepLnkId > 0)) {
+                $depLink = OperationshiftsDepartmentsLink::findFirstByid($opShDepLnkId);
+            } else {
+                $depLink = new OperationshiftsDepartmentsLink();
+                $depLink->setCreateTime(getCurrentDateTimeStamp());
+            }
+            $depLink->setUpdateTime(getCurrentDateTimeStamp());
+            $depLink->setOperationShiftId($operationshift->getId());
+            $depLink->setDepartmentId($this->request->getPost("department", "int"));
+            $depLink->setShortDescription($this->request->getPost("depShortDesc", "string"));
+            $depLink->setNumberVolunteersNeeded($this->request->getPost("depVolNeeded", "int"));
+            $depLink->setMinimumCertificateRanking($this->request->getPost("depMinCertRank", "int"));
+            if (!$depLink->save()) {
+                foreach ($depLink->getMessages() as $message) {
+                    $this->flash->error($message->getMessage());
+                }
+            }
+
+            $this->view->setVar('setActiveTabKey', 'manpower');
+            $dispatcherForward = true;
+        }
+
+        // edit existing Department
+        if (preg_match('/^depEdit\d/', $submitAction)) {
+            $opShDepLnkId = preg_replace('/^depEdit/', '', $submitAction);
+            $this->dispatcher->setParam('opShDepLnkId', $opShDepLnkId);
+
+            $this->view->setVar('setActiveTabKey', 'manpower');
+            $dispatcherForward = true;
+        }
+
+        // delete existing Department
+        if (preg_match('/^depDel\d/', $submitAction)) {
+            $opShDepLnkId = preg_replace('/^depDel/', '', $submitAction);
+
+            if (isset($opShDepLnkId) && ($opShDepLnkId > 0)) {
+                $depLink = OperationshiftsDepartmentsLink::findFirstByid($opShDepLnkId);
+                if (!$depLink->delete()) {
+                    foreach ($depLink->getMessages() as $message) {
+                        $this->flash->error($message->getMessage());
+                    }
+                }
+            }
+
+            $this->view->setVar('setActiveTabKey', 'manpower');
+            $dispatcherForward = true;
+        }
 
         return $dispatcherForward;
     }
@@ -493,6 +565,7 @@ class OperationshiftsController extends ControllerBase
             $this->view->setVar('setActiveTabKey', 'equipment');
             $dispatcherForward = true;
         }
+
         return $dispatcherForward;
     }
 
@@ -534,7 +607,7 @@ class OperationshiftsController extends ControllerBase
 
         // delete existing Vehicle
         if (preg_match('/^vehiDel\d/', $submitAction)) {
-            $opShVehLnkId = preg_replace('/^equiDel/', '', $submitAction);
+            $opShVehLnkId = preg_replace('/^vehiDel/', '', $submitAction);
 
             if (isset($opShVehLnkId) && ($opShVehLnkId > 0)) {
                 $vehiLink = OperationshiftsVehiclesLink::findFirstByid($opShVehLnkId);

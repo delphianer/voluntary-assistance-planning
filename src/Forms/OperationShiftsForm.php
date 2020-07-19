@@ -9,6 +9,7 @@ use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\TextArea;
 use Phalcon\Forms\Form;
 use Phalcon\Validation\Validator\PresenceOf;
+use Vokuro\Models\Certificates;
 use Vokuro\Models\Clients;
 use Vokuro\Models\Departments;
 use Vokuro\Models\Equipment;
@@ -125,6 +126,45 @@ class OperationShiftsForm extends Form
             'class' => 'form-control',
             'id' => 'endDateTimeField'
         ]));
+
+
+
+
+        // mini form for quickly adding equipment
+
+        $this->add(new Hidden('opShDepLnkId'));
+
+        $departments = Departments::find([]);
+
+        $this->add(new Select('department', $departments, [
+            'using'      => [
+                'id',
+                'label',
+            ],
+            'useEmpty'   => false,
+            'class' => 'form-control  mr-sm-3'
+        ]));
+
+        $this->add(new Text('depShortDesc', [
+            'class' => 'form-control  mr-sm-2'
+        ]));
+
+        $this->add(new Text('depVolNeeded', [
+            'class' => 'form-control  mr-sm-2',
+            'default' => '1'
+        ]));
+
+        $certificates = Certificates::find([]);
+
+        $this->add(new Select('depMinCertRank', $certificates, [
+            'using'      => [
+                'id',
+                'label',
+            ],
+            'useEmpty'   => false,
+            'class' => 'form-control  mr-sm-3'
+        ]));
+
 
 
 
