@@ -116,7 +116,6 @@ class VolunteersController extends ControllerBase
             $this->tag->setDefault("userId", $volunteer->getUserid());
             $this->tag->setDefault("departmentId", $volunteer->getDepartmentid());
 
-            // todo: go on with this: volCertLnkId
             $volCertLnkId = $this->dispatcher->getParam('volCertLnkId');
             if (isset($volCertLnkId) && ($volCertLnkId > 0)) {
                 $certLink = VolunteersCertificatesLink::findFirstByid($volCertLnkId);
@@ -124,11 +123,12 @@ class VolunteersController extends ControllerBase
                 $this->tag->setDefault("certificate", $certLink->getCertificatesId());
                 $this->tag->setDefault("certValidUntil", $certLink->getValidUntil());
             }
-        }
-        $this->setupDateTimePicker();
 
-        $this->view->setVar('volunteer', $volunteer);
-        $this->view->setVar('extraTitle', "Edit Volunteers");
+            $this->view->setVar('volunteer', $volunteer);
+            $this->setupDateTimePicker();
+
+            $this->view->setVar('extraTitle', "Edit Volunteers");
+        }
     }
 
     /**

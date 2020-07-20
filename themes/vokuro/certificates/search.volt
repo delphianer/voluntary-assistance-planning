@@ -6,11 +6,7 @@
 
     {% set rowIDIndex = 0 %}
 
-    {% set tableHeadingData = [
-            'Id',
-            'Label',
-            'Description'
-        ] %}
+    {% set tableHeadingData = [ 'Id', 'Label', 'Description'] %}
 
     {% for certificate in page.items %}
 
