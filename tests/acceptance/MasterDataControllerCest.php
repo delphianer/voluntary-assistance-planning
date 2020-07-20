@@ -134,7 +134,7 @@ final class MasterDataControllerCest
             $I->seeInField('label', $testEntryShortDesc);
             $testEntryShortDescEdited = $testEntryShortDesc. '.edited';
             $I->fillField('label', $testEntryShortDescEdited);
-            $I->click('//input[@type="submit"]');
+            $I->click('//button[@type="submit"]');
             $I->seeInCurrentUrl('/'.$tbl.'/save');
             $I->see('was updated successfully');
 

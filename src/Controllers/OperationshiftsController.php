@@ -361,10 +361,10 @@ class OperationshiftsController extends ControllerBase
 
     /**
      * @param bool $isNewAction
-     * @param Operationshifts $operationshift
+     * @param Operationshifts|null $operationshift
      * @return array|null
      */
-    private function handleProcessOperation(bool $isNewAction, Operationshifts $operationshift)
+    private function handleProcessOperation(bool $isNewAction, $operationshift)
     {
         $opId = $this->dispatcher->getParam('processOperationId');
         if (isset($opId) && ($opId > 0)) {
