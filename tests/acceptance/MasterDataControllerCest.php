@@ -86,8 +86,10 @@ final class MasterDataControllerCest
      * ************************************************************************************** */
 
 
-
-    private function stdTestsForAllCommonActions(AcceptanceTester $I): void
+    /**
+     * @param AcceptanceTester $I
+     */
+    private function stdTestsForAllActions(AcceptanceTester $I): void
     {
         $I->dontSee('Call Stack');
         $I->dontSee(' on line ');
@@ -109,7 +111,7 @@ final class MasterDataControllerCest
             $I->amOnPage('/'.$tbl);
             $I->dontSee('You don\'t have access to this module: private');
             $I->see('Search');
-            $this->stdTestsForAllCommonActions($I);
+            $this->stdTestsForAllActions($I);
         }
     }
 
@@ -127,7 +129,7 @@ final class MasterDataControllerCest
             $I->dontSee('You don\'t have access to this module: private');
             $I->see('Search result');
             $I->amOnPage('/'.$tbl.'/search');
-            $this->stdTestsForAllCommonActions($I);
+            $this->stdTestsForAllActions($I);
         }
     }
 
@@ -145,7 +147,7 @@ final class MasterDataControllerCest
             $I->dontSee('You don\'t have access to this module: private');
             $I->see('Create ');
             $I->amOnPage('/'.$tbl.'/search');
-            $this->stdTestsForAllCommonActions($I);
+            $this->stdTestsForAllActions($I);
         }
     }
 
@@ -162,7 +164,7 @@ final class MasterDataControllerCest
             $I->amOnPage('/'.$tbl.'/create');
             $I->dontSee('You don\'t have access to this module: private');
             $I->see('Search ');
-            $this->stdTestsForAllCommonActions($I);
+            $this->stdTestsForAllActions($I);
         }
     }
 
@@ -179,7 +181,7 @@ final class MasterDataControllerCest
             $I->amOnPage('/'.$tbl.'/edit/-1');
             $I->dontSee('You don\'t have access to this module: private');
             $I->see('was not found');
-            $this->stdTestsForAllCommonActions($I);
+            $this->stdTestsForAllActions($I);
         }
     }
 
@@ -196,7 +198,7 @@ final class MasterDataControllerCest
             $I->amOnPage('/'.$tbl.'/save');
             $I->dontSee('You don\'t have access to this module: private');
             $I->see('Search ');
-            $this->stdTestsForAllCommonActions($I);
+            $this->stdTestsForAllActions($I);
         }
     }
 
@@ -214,7 +216,7 @@ final class MasterDataControllerCest
             $I->dontSee('You don\'t have access to this module: private');
             $I->see('Search ');
             $I->see('was not found');
-            $this->stdTestsForAllCommonActions($I);
+            $this->stdTestsForAllActions($I);
         }
     }
 
@@ -243,6 +245,7 @@ final class MasterDataControllerCest
             $I->fillField('label', $this->editedFixTestLabel);
             $I->click('//input[@type="submit"]');
             $I->dontSee($this->editedFixTestLabel);
+            $this->stdTestsForAllActions($I);
         }
     }
 
@@ -265,6 +268,7 @@ final class MasterDataControllerCest
             $I->click('//input[@type="submit"]');
             $I->seeInCurrentUrl('/'.$tbl.'/create');
             $I->see('was created successfully');
+            $this->stdTestsForAllActions($I);
         }
     }
 
@@ -281,6 +285,7 @@ final class MasterDataControllerCest
             $I->fillField('label', $this->fixTestLabel);
             $I->click('//input[@type="submit"]');
             $I->see($this->fixTestLabel);
+            $this->stdTestsForAllActions($I);
 
             // get edit-link and extract ID
             $idStr = $I->grabAttributeFrom(Locator::combine('a[class="btn btn-sm btn-outline-warning"]', '//tbody/tr/td/a[0]'), 'href');
@@ -306,6 +311,7 @@ final class MasterDataControllerCest
             $I->click('//button[@type="submit"]');
             $I->seeInCurrentUrl('/'.$tbl.'/save');
             $I->see('was updated successfully');
+            $this->stdTestsForAllActions($I);
         }
     }
 
@@ -325,6 +331,7 @@ final class MasterDataControllerCest
             $I->click('//input[@type="submit"]');
             $I->seeInCurrentUrl('/'.$key.'/search');
             $I->dontSee($this->fixTestLabel);
+            $this->stdTestsForAllActions($I);
         }
     }
 
@@ -342,6 +349,7 @@ final class MasterDataControllerCest
             $I->amOnPage('/'.$key.'/search/'.$value);
             $I->dontSee($this->fixTestLabel);
             $I->see($this->editedFixTestLabel);
+            $this->stdTestsForAllActions($I);
         }
     }
 
@@ -361,6 +369,7 @@ final class MasterDataControllerCest
             $I->dontSee($this->fixTestLabel);
             $I->dontSee($this->editedFixTestLabel);
             $I->seeInCurrentUrl('/'.$key.'/delete/'.$value);
+            $this->stdTestsForAllActions($I);
         }
     }
 
@@ -378,6 +387,7 @@ final class MasterDataControllerCest
             $I->amOnPage('/'.$key.'/search/'.$value);
             $I->dontSee($this->fixTestLabel);
             $I->dontSee($this->editedFixTestLabel);
+            $this->stdTestsForAllActions($I);
         }
     }
 
@@ -390,6 +400,7 @@ final class MasterDataControllerCest
      */
     public function testWholeProcess(AcceptanceTester $I): void
     {
+        /*
         $I->setCookie('PHPSESSID', $this->cookie);
         $testEntryShortDesc = 'simpleTestEntry'.date("Ymd.his");
 
@@ -439,5 +450,6 @@ final class MasterDataControllerCest
             $I->seeInCurrentUrl('/'.$tbl.'/delete/'.$id);
             $I->see('was deleted successfully');
         }
+        */
     }
 }
