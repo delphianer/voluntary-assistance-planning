@@ -326,7 +326,7 @@ class Operationshifts extends \Phalcon\Mvc\Model
 
 
     /**
-     * Returns the value of field mainDepartmentId
+     * Returns the aggregated value of minstart to get the lowest datetime for the start of an operation
      *
      * @return DateTime
      */
@@ -350,15 +350,16 @@ class Operationshifts extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Returns the value of field mainDepartmentId
+     * Returns the aggregated value of maxend to get the highest datetime for the end of an operation
      *
      * @return DateTime
      */
-    public function getMaxStart()
+    public function getMaxEnd()
     {
+        /* // end is a reserved word! oops
         $phql = "
     SELECT
-        MAX(start) AS maxstart
+        MIN([end]) AS maxend
     FROM
         Vokuro\Models\Operationshifts os
     WHERE
@@ -367,10 +368,21 @@ class Operationshifts extends \Phalcon\Mvc\Model
         $results  = $this
             ->modelsManager
             ->executeQuery($phql, [
-                'operation_id' => $this->getOperationId(),
+                'operation_id' => $this->getOperationId()
             ]);
 
-        return $results['maxstart'];
+        return $results['maxend'];
+        */
+        $modelManager = $this
+                        ->modelsManager
+                        ->createBuilder()
+                        ->columns(['maxend' => 'MAX([end]) '])
+                        ->from(Operationshifts::class)
+                        ->where('operationId = :operation_id:')
+                        ->getQuery()
+                        ->getSingleResult(['operation_id' =>  $this->getOperationId()]);
+
+        return $modelManager;
     }
 
     /**
@@ -408,5 +420,4 @@ class Operationshifts extends \Phalcon\Mvc\Model
     {
         return parent::findFirst($parameters);
     }
-
 }

@@ -35,8 +35,8 @@
                     {% else %}
                         {% do arrayPush(rowData, '-') %}
                     {% endif %}
-                    {% if Operationshift.maxstart is defined and Operationshift.maxstart is not empty %}
-                        {% do arrayPush(rowData, Operationshift.maxstart['maxstart']) %}
+                    {% if Operationshift.maxend is defined and Operationshift.maxend is not empty %}
+                        {% do arrayPush(rowData, Operationshift.maxend['maxend']) %}
                     {% else %}
                         {% do arrayPush(rowData, '-') %}
                     {% endif %}
