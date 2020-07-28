@@ -55,13 +55,13 @@
         </ul>
 
         <ul class="navbar-nav my-2 my-lg-0">
-        {% if userRole is not empty %}
+        {% if userRole is defined and userRole is not empty and userRole != 'Guest'%}
             {% if acl.isAllowed( userRole,"appointments","edit") or acl.isAllowed( userRole,"operations","edit") %}
             <li class="nav-item">{{ link_to('dataentryhome', 'class': 'nav-link', 'Data Entry Panel') }}</li>
             {% endif %}
             <li class="nav-item">{{ link_to('session/logout', 'class': 'nav-link', 'Logout') }}</li>
         {% else %}
-            <li class="nav-item">{{ userRole }}-{{ link_to('session/login', 'class': 'nav-link', 'Login') }}</li>
+            <li class="nav-item">{{ link_to('session/login', 'class': 'nav-link', 'Login') }}</li>
         {% endif %}
         </ul>
         {#

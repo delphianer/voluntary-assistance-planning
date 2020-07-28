@@ -40,13 +40,13 @@ class ControllerBase extends Controller
         $controllerName = $dispatcher->getControllerName();
         $actionName     = $dispatcher->getActionName();
 
+        // Get the current identity
+        $identity = $this->auth->getIdentity();
+
+        $this->view->setVar('userRole', is_array($identity) ? $identity['profile'] : 'Guest');
+
         // Only check permissions on private controllers
         if ($this->acl->isPrivate($controllerName)) {
-            // Get the current identity
-            $identity = $this->auth->getIdentity();
-
-            $this->view->setVar('userRole', is_array($identity) ? $identity['profile'] : 'Guest');
-
             // If there is no identity available the user is redirected to index/index
             if (!is_array($identity)) {
                 $this->flash->notice('You don\'t have access to this module: private');
