@@ -2,10 +2,23 @@
 
 {%- set isPublicMenu = true -%}
 
+
+{% if userRole is defined and userRole is not empty and userRole != 'Guest' %}
+
+{%- set menus = [
+    'Home': 'index',
+    'LP': 'landingpage',
+    'About': 'about'
+] -%}
+
+{% else %}
+
 {%- set menus = [
     'Home': 'index',
     'About': 'about'
 ] -%}
+
+{% endif %}
 
 {% include 'layouts/includes/header.volt' %}
 
