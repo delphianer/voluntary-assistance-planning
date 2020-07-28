@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-// 
 namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
@@ -94,7 +93,7 @@ class ClientsController extends ControllerBase
             $this->tag->setDefault("label", $client->getLabel());
             $this->tag->setDefault("description", $client->getDescription());
             $this->tag->setDefault("contactInformation", $client->getContactinformation());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit Clients");

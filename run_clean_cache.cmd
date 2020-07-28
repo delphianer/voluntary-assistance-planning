@@ -6,4 +6,7 @@ cd ..
 cd metaData
 del map*
 del meta*
+cd ..
+cd acl
+del data.txt
 rem pause
