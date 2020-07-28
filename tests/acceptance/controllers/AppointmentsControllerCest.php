@@ -78,7 +78,8 @@ final class AppointmentsControllerCest
         $I->setCookie('PHPSESSID', $this->cookie);
 
         $I->amOnPage('/appointments/edit/1');
-        $I->see('Edit appointments');
+        //$I->see('Edit appointments'); // there is no data
+        $I->see('appointment was not found');
     }
 
     /**
