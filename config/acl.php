@@ -46,6 +46,7 @@ return [
         'appointments' => $actions_std,
         'certificates' => $actions_std,
         'clients' => $actions_std,
+        'dataentryhome' => ['index'],
         'departments' => $actions_std,
         'equipment' => $actions_std,
         'locations' => $actions_std,
