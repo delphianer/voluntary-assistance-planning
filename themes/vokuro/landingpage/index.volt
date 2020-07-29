@@ -62,25 +62,6 @@
     </div>
 </header>
 
-    <div class="row m-2">
-        <div class="col font-weight-bold">
-            Event
-        </div>
-        <div class="col font-weight-bold">
-            Label
-        </div>
-        <div class="col font-weight-bold">
-            Start
-        </div>
-        <div class="col font-weight-bold">
-            End
-        </div>
-        <div class="col font-weight-bold">
-            Edit ?
-        </div>
-    </div>
-
-
     <div class="row m-5">
         <div class="col text-center">
             <h3 class="text-center">

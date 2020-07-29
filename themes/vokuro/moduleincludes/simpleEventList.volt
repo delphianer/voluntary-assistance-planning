@@ -27,17 +27,10 @@
         {% set rowData = [] %}
         {% set aclEditController = '' %}
 
-        {% if event['event_kind'] == 'op' %}
-            {% do arrayPush(rowData , [ 'data' : 'Operation'] ) %}
+        {% set aclEditController = event['event_kind'] %}
+        {% set aclEditRow = (userRole is defined and acl.isAllowed( userRole, event['event_kind'], "edit")) %}
 
-            {% set aclEditController = 'operations' %}
-            {% set aclEditRow = (userRole is defined and acl.isAllowed( userRole, "operations", "edit")) %}
-        {% else %}
-            {% do arrayPush(rowData , [ 'data' : 'Appointment'] ) %}
-
-            {% set aclEditController = 'appointments' %}
-            {% set aclEditRow = (userRole is defined and acl.isAllowed( userRole, "appointments", "edit")) %}
-        {% endif %}
+        {% do arrayPush(rowData , [ 'data' : ((event['event_kind'] == 'operations') ? 'Operation' : 'Appointment')] ) %}
 
         {% do arrayPush(rowData , [ 'data' : event['event_label']] ) %}
         {% do arrayPush(rowData , [ 'data' : event['event_starting']] ) %}
