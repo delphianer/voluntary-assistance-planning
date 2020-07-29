@@ -385,6 +385,43 @@ class Operationshifts extends \Phalcon\Mvc\Model
         return $modelManager;
     }
 
+
+    /**
+     * Returns the aggregated value of maxend to get the highest datetime for the end of an operation
+     *
+     * @return DateTime
+     */
+    public function getNeedsCount()
+    {
+        /* // end is a reserved word! oops
+        $phql = "
+    SELECT
+        MIN([end]) AS maxend
+    FROM
+        Vokuro\Models\Operationshifts os
+    WHERE
+        os.operationId = :operation_id:";
+
+        $results  = $this
+            ->modelsManager
+            ->executeQuery($phql, [
+                'operation_id' => $this->getOperationId()
+            ]);
+
+        return $results['maxend'];
+        */
+        $modelManager = $this
+            ->modelsManager
+            ->createBuilder()
+            ->columns(['maxend' => 'MAX([end]) '])
+            ->from(Operationshifts::class)
+            ->where('operationId = :operation_id:')
+            ->getQuery()
+            ->getSingleResult(['operation_id' =>  $this->getOperationId()]);
+
+        return $modelManager;
+    }
+
     /**
      * Initialize method for model.
      */

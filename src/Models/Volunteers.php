@@ -209,6 +209,17 @@ class Volunteers extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Returns the value of field firstname and lastname together
+     *
+     * @return string
+     */
+    public function getFirstAndLastName()
+    {
+        return  $this->firstName.' '. $this->lastName;
+    }
+
+
+    /**
      * Initialize method for model.
      */
     public function initialize()
@@ -232,7 +243,7 @@ class Volunteers extends \Phalcon\Mvc\Model
             'alias'    => 'department',
             'reusable' => true,
         ]);
-	
+
         $this->hasMany('id', 'Vokuro\Models\OpshdeplVolunteersLink', 'volunteersId', ['alias' => 'OpshdeplVolunteersLink']);
         $this->hasMany('id', 'Vokuro\Models\VolunteersCertificatesLink', 'volunteersId', ['alias' => 'VolunteersCertificatesLink']);
     }

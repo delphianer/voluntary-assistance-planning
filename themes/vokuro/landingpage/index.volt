@@ -96,10 +96,6 @@
 
     {% for event in nextOperations %}
         {% set rowData = [] %}
-        {% set aclEditController = '' %}
-
-        {% set aclEditController = event['event_kind'] %}
-        {% set aclEditRow = (userRole is defined and acl.isAllowed( userRole, event['event_kind'], "edit")) %}
 
         {% do arrayPush(rowData , [ 'data' : event['event_label']] ) %}
         {% do arrayPush(rowData , [ 'data' : event['event_starting']] ) %}
@@ -109,15 +105,15 @@
 
         {% set availableActions = '' %}
         {% if event['event_IHaveCommitted'] != 0 %}
-            {% set availableActions = link_to( url("opshdeplvolunteerslink/edit/") ~ event['event_IHaveCommitted'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warnig") %}
-            {% set availableActions = availableActions ~ link_to( url("opshdeplvolunteerslink/delete/") ~ event['event_IHaveCommitted'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-danger") %}
+            {% set availableActions = link_to( url("operationshiftsoverview/edit?origin=landingpage&opid=" ~ event['event_id']), '<i class="icon-pencil"></i> edit my entry', "class": "btn btn-sm btn-outline-warnig") %}
+            {% set availableActions = availableActions ~ link_to( url("operationshiftsoverview/delete?origin=landingpage&opid=" ~ event['event_id']), '<i class="icon-remove"></i> cancel commitment', "class": "btn btn-sm btn-outline-danger") %}
         {% else %}
-            {% set availableActions = link_to( url("opshdeplvolunteerslink/new/") ~ event['event_id'], '<i class="icon-pencil"></i> Commit', "class": "btn btn-sm btn-outline-primary") %}
+            {% set availableActions = link_to( url("operationshiftsoverview/new?origin=landingpage&opid=" ~ event['event_id']), '<i class="icon-check"></i> Commit', "class": "btn btn-sm btn-outline-primary") %}
         {% endif %}
         {% do arrayPush(rowData , [ 'data' : availableActions, 'class' : 'text-center'] ) %}
 
-        {% if aclEditRow %}
-        {% do arrayPush(rowData , [ 'data' : link_to( url(aclEditController ~ "/edit/") ~ event['event_id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning"), 'class' : 'text-center'] ) %}
+        {% if aclEditOperation %}
+            {% do arrayPush(rowData , [ 'data' : link_to( url("operations/edit/") ~ event['event_id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning"), 'class' : 'text-center'] ) %}
         {% endif %}
 
         {% do arrayPush(bodyData , rowData) %}

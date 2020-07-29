@@ -125,6 +125,49 @@ class EventlistController extends ControllerBase
 
 
 
+    /**
+     * @param Volunteers $vol
+     * @return mixed
+     */
+    public function getOperationShiftsWithCommitmentFormat(Volunteers $vol)
+    {
+        $myID = 0;
+        if (isset($vol)) {
+            $myID = $vol->getId();
+        }
+
+        $rawSQL = "
+                select
+                    os.id shift_id
+                    ,os.shortDescription event_label
+                    ,dep.label department_label
+                    ,os.`start` event_start
+                    ,os.`end` event_end
+                    ,odl.id department_need_id
+                    ,odl.numberVolunteersNeeded event_needed
+                    ,(select count(*)
+                        from opshdepl_volunteers_link ovl
+                        where ovl.opDepNeedId = odl.id ) event_volunteersCommitted
+                    ,nvl((select count(*)
+                        from opshdepl_volunteers_link ovl
+                        where  ovl.opDepNeedId = odl.id
+                        and ovl.volunteersId = $myID
+                        and odl.operationShiftId = os.id),0) event_IHaveCommitted
+                    from operationshifts os
+                    inner join operationshifts_departments_link odl on odl.operationShiftId = os.id
+                    inner join departments dep on dep.id = odl.departmentId";
+
+        $db      = $this->di['db'];
+        $data    = $db->query($rawSQL);
+        $results = $data->fetchAll();
+
+        return $results;
+    }
+
+
+
+
+
 
     public function getSimpleCountFromTable(array $countColumns, array $fromTables, string $resultColName, string $whereCondition)
     {

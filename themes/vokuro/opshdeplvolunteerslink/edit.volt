@@ -1,45 +1,45 @@
 {% extends 'layouts/inheritance/masteredit.volt' %}
 
-{% block title %}Edit Volunteer Commitments{% endblock %}
+{% block title %}Declare Commitment{% endblock %}
 
 {% block inputelements %}
 
-<div class="form-group">
-    <label for="fieldShortdescription" class="col-sm-2 control-label">ShortDescription</label>
-    <div class="col-sm-10">
-        {{ text_field("shortDescription", "size" : 30, "class" : "form-control", "id" : "fieldShortdescription") }}
+<header class="jumbotron" id="overview">
+    <div class="row">
+        <div class="col font-weight-bold">
+            Operation:
+        </div>
+        <div class="col">
+            <b>{{ operation.shortDescription }}</b>
+        </div>
     </div>
-</div>
-
-<div class="form-group">
-    <label for="fieldLongdescription" class="col-sm-2 control-label">LongDescription</label>
-    <div class="col-sm-10">
-        {{ text_field("longDescription", "size" : 30, "class" : "form-control", "id" : "fieldLongdescription") }}
+    <div class="row">
+        <div class="col font-weight-bold">
+            Shift:
+        </div>
+        <div class="col">
+            {{ operationShift.shortDescription }}
+        </div>
     </div>
-</div>
-
-<div class="form-group">
-    <label for="fieldOpdepneedid" class="col-sm-2 control-label">OpDepNeedId</label>
-    <div class="col-sm-10">
-        {{ text_field("opDepNeedId", "type" : "numeric", "class" : "form-control", "id" : "fieldOpdepneedid") }}
+    <div class="row">
+        <div class="col font-weight-bold">
+            Start:
+        </div>
+        <div class="col">
+            <b>{{ operationShift.Start }}</b>
+        </div>
+        <div class="col font-weight-bold">
+            End:
+        </div>
+        <div class="col">
+           <b> {{ operationShift.End }}</b>
+        </div>
     </div>
-</div>
-
-<div class="form-group">
-    <label for="fieldVolunteersid" class="col-sm-2 control-label">VolunteersId</label>
-    <div class="col-sm-10">
-        {{ text_field("volunteersId", "type" : "numeric", "class" : "form-control", "id" : "fieldVolunteersid") }}
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="fieldVolcurrentmaximumcertrank" class="col-sm-2 control-label">VolCurrentMaximumCertRank</label>
-    <div class="col-sm-10">
-        {{ text_field("volCurrentMaximumCertRank", "type" : "numeric", "class" : "form-control", "id" : "fieldVolcurrentmaximumcertrank") }}
-    </div>
-</div>
+</header>
 
 
+
+{% include 'opshdeplvolunteerslink/common_input.volt' %}
 
 {{ hidden_field("id") }}
 

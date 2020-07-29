@@ -49,6 +49,8 @@ return [
         'dataentryhome' => ['index'],
         'departments' => $actions_std,
         'equipment' => $actions_std,
+        'landingpage' => ['index'],
+        'operationshiftsoverview' => ['index'],
         'locations' => $actions_std,
         'operations' => $actions_std,
         'operationshifts' => $actions_std,

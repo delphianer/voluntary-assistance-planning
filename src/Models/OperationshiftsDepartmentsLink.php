@@ -267,7 +267,7 @@ class OperationshiftsDepartmentsLink extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Returns the value of no field minimumCertificateRanking
+     * Returns the label of field minimumCertificateRanking
      *
      * @return string
      */
@@ -281,6 +281,16 @@ class OperationshiftsDepartmentsLink extends \Phalcon\Mvc\Model
         }
     }
 
+    /**
+     * Returns the label for displaying in select
+     *
+     * @return integer
+     */
+    public function getLabel()
+    {
+        return $this->Departments->label . ' ('.$this->getNumberVolunteersNeeded().')'.(empty($this->getShortDescription())?'':' -> '.$this->getShortDescription());
+    }
+
 
 
     /**
@@ -290,7 +300,7 @@ class OperationshiftsDepartmentsLink extends \Phalcon\Mvc\Model
     {
         $this->setSchema("vokuro");
         $this->setSource("operationshifts_departments_link");
-        $this->hasMany('id', 'Vokuro\Models\OpshdeplVolunteersLink', 'opDepNeedId', ['alias' => 'OpshdeplVolunteersLink']);
+        $this->hasMany('id', 'Vokuro\Models\OpshdeplVolunteersLink', 'opDepNeedId', ['alias' => 'VolunteersCommitted']);
         $this->belongsTo('departmentId', 'Vokuro\Models\Departments', 'id', ['alias' => 'Departments']);
         $this->belongsTo('operationShiftId', 'Vokuro\Models\Operationshifts', 'id', ['alias' => 'Operationshifts']);
     }

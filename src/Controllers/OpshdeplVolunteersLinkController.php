@@ -5,7 +5,12 @@ namespace Vokuro\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
+use Vokuro\Forms\VolunteersCommitmentForm;
+use Vokuro\Models\Operations;
+use Vokuro\Models\Operationshifts;
+use Vokuro\Models\OperationshiftsDepartmentsLink;
 use Vokuro\Models\OpshdeplVolunteersLink;
+use Vokuro\Models\Volunteers;
 use function Vokuro\getCurrentDateTimeStamp;
 
 class OpshdeplVolunteersLinkController extends ControllerBase
@@ -25,7 +30,7 @@ class OpshdeplVolunteersLinkController extends ControllerBase
      */
     public function indexAction()
     {
-        $this->view->setVar('extraTitle', "Search opshdepl_volunteers_link");
+        return $this->response->redirect('landingpage');
     }
 
     /**
@@ -33,30 +38,7 @@ class OpshdeplVolunteersLinkController extends ControllerBase
      */
     public function searchAction()
     {
-        $builder = Criteria::fromInput($this->getDI(), OpshdeplVolunteersLink::class, $this->request->getQuery());
-        $builder->orderBy("shortDescription");
-
-        $count = OpshdeplVolunteersLink::count($builder->getParams());
-        if ($count === 0) {
-            $this->flash->notice('The search did not find any opshdepl_volunteers_link');
-            $this->dispatcher->forward([
-                "controller" => "opshdepl_volunteers_link",
-                'action' => 'index',
-            ]);
-
-            return;
-        }
-
-        $paginator   = new Paginator(
-            [
-                'builder'   => $builder->createBuilder(),
-                'limit'     => 10,
-                'page'      => $this->request->getQuery('page', 'int', 1),
-            ]
-        );
-
-        $this->view->setVar('page', $paginator->paginate());
-        $this->view->setVar('extraTitle', "Found opshdepl_volunteers_link");
+        return $this->response->redirect('landingpage');
     }
 
     /**
@@ -64,7 +46,42 @@ class OpshdeplVolunteersLinkController extends ControllerBase
      */
     public function newAction()
     {
-        $this->view->setVar('extraTitle', "New OpshdeplVolunteersLink");
+        $this->view->setVar('extraTitle', "New Volunteer Commitment");
+
+        $origin = $this->request->get('origin');
+        $this->view->setVar('origin', $origin);
+
+        $opshid = $this->request->get('opshid');
+        $dnid = $this->request->get('dnid');
+
+        $formOptions = [];
+
+        $operationShift = Operationshifts::findFirstByid($opshid);
+        $this->view->setVar('operationShift', $operationShift);
+        $formOptions['operationShift'] = $operationShift;
+
+        $operationShiftDepartmentNeeds = OperationshiftsDepartmentsLink::findFirstByid($dnid);
+        $this->view->setVar('operationShiftDepartmentNeeds', $operationShiftDepartmentNeeds);
+        $formOptions['operationShiftDepartmentNeeds'] = $operationShiftDepartmentNeeds;
+
+        $identity = $this->auth->getIdentity();
+        $volunteer = Volunteers::findFirst(['userId' >= $identity['id']]);
+        $this->view->setVar('volunteer', $volunteer);
+        $formOptions['volunteer'] = $volunteer;
+
+        $form = new VolunteersCommitmentForm(null, $formOptions);
+        $this->view->setVar('form', $form);
+
+        /*
+        todo: backAction definieren
+{% if backAction is defined %}
+     {{ hidden_field('backActionController', 'value':backActionController) }}
+     {{ hidden_field('backActionValue', 'value':backActionValue) }}
+{% endif %}
+        */
+
+
+
     }
 
     /**
@@ -97,7 +114,7 @@ class OpshdeplVolunteersLinkController extends ControllerBase
             $this->tag->setDefault("opDepNeedId", $opshdepl_volunteers_link->getOpdepneedid());
             $this->tag->setDefault("volunteersId", $opshdepl_volunteers_link->getVolunteersid());
             $this->tag->setDefault("volCurrentMaximumCertRank", $opshdepl_volunteers_link->getVolcurrentmaximumcertrank());
-            
+
         }
 
         $this->view->setVar('extraTitle', "Edit OpshdeplVolunteersLink");
@@ -109,7 +126,8 @@ class OpshdeplVolunteersLinkController extends ControllerBase
     public function createAction()
     {
         if (!$this->request->isPost()) { // post should go to NewAction
-            $this->dispatcher->forward([ 'controller' => "opshdepl_volunteers_link",'action' => 'index']);
+            // todo: landingpage everywhere when process is not OK
+            $this->dispatcher->forward([ 'controller' => "landingpage",'action' => 'index']);
             return;
         }
 
@@ -123,7 +141,7 @@ class OpshdeplVolunteersLinkController extends ControllerBase
             }
 
             $this->dispatcher->forward([
-                'controller' => "opshdepl_volunteers_link",
+                'controller' => "opshdeplvolunteerslink",
                 'action' => 'new'
             ]);
 
@@ -242,8 +260,10 @@ class OpshdeplVolunteersLinkController extends ControllerBase
     {
         $opshdepl_volunteers_link->setshortDescription($this->request->getPost("shortDescription", "string"));
         $opshdepl_volunteers_link->setlongDescription($this->request->getPost("longDescription", "string"));
-        $opshdepl_volunteers_link->setopDepNeedId($this->request->getPost("opDepNeedId", "int"));
-        $opshdepl_volunteers_link->setvolunteersId($this->request->getPost("volunteersId", "int"));
+        $id = $this->request->getPost("opDepNeedId", "int");
+        $opshdepl_volunteers_link->setopDepNeedId($id);
+        $id = $this->request->getPost("volunteersId", "int");
+        $opshdepl_volunteers_link->setvolunteersId($id);
         $opshdepl_volunteers_link->setvolCurrentMaximumCertRank($this->request->getPost("volCurrentMaximumCertRank", "int"));
     }
 }
