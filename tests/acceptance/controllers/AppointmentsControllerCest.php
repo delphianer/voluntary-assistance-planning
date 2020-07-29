@@ -7,21 +7,13 @@ use AcceptanceTester;
 
 final class AppointmentsControllerCest
 {
-    private $cookie = null;
-
     /**
      * @param AcceptanceTester $I
      */
     public function login(AcceptanceTester $I): void
     {
-        $I->amOnPage('/session/login');
-        $I->see('Log In');
-        $I->fillField('email', 'bob@phalcon.io');
-        $I->fillField('password', 'password1');
-        $I->click('//form/*[@type="submit"]');
-        $I->see('Search users');
-
-        $this->cookie = $I->grabCookie('PHPSESSID');
+        $I->amOnPage('index');
+        $I->loginAsBob($I);
     }
 
     /**
@@ -39,7 +31,7 @@ final class AppointmentsControllerCest
      */
     public function testIndex(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/appointments');
         $I->see('Search appointments');
@@ -51,7 +43,7 @@ final class AppointmentsControllerCest
      */
     public function testSearch(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/appointments/search');
         $I->see('Search result');
@@ -63,7 +55,7 @@ final class AppointmentsControllerCest
      */
     public function testNew(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/appointments/new');
         $I->see('Create new appointment');
@@ -75,7 +67,7 @@ final class AppointmentsControllerCest
      */
     public function testEdit(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/appointments/edit/1');
         //$I->see('Edit appointments'); // there is no data
@@ -88,8 +80,19 @@ final class AppointmentsControllerCest
      */
     public function testDelete(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         // todo-025: implement: $I->amOnPage('/appointments/delete/4');
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     */
+    public function logoutUser(AcceptanceTester $I): void
+    {
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
+
+        $I->amOnPage('index');
+        $I->logoffAsBob($I);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use Codeception\Util\Locator;
 
@@ -7,7 +8,6 @@ class TransactionDataControllersCest
     /**
      * @var string|null
      */
-    private $cookie = null;
     private $appointmentId;
     private $operationId;
     private $operationShiftId;
@@ -78,14 +78,7 @@ class TransactionDataControllersCest
      */
     public function login(AcceptanceTester $I): void
     {
-        $I->amOnPage('/session/login');
-        $I->see('Log In');
-        $I->fillField('email', 'bob@phalcon.io');
-        $I->fillField('password', 'password1');
-        $I->click('//form/*[@type="submit"]');
-        $I->see('Search users');
-
-        $this->cookie = $I->grabCookie('PHPSESSID');
+        $I->LoginAsBob($I);
     }
 
 
@@ -94,7 +87,7 @@ class TransactionDataControllersCest
      */
     public function testIndexAsAdminUser(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->transactionDataModels as $tbl) {
             $I->wantToTest("Dimension as AdminUser: ".$tbl);
@@ -131,7 +124,7 @@ class TransactionDataControllersCest
      */
     public function addAnAppointment(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/appointments/new');
         $I->fillField('label', $this->appointmentUniqueData['label']);
@@ -151,7 +144,7 @@ class TransactionDataControllersCest
      */
     public function searchAppointmentAndGrapID(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/appointments/index');
         $I->fillField('label', $this->appointmentUniqueData['label']);
@@ -174,7 +167,7 @@ class TransactionDataControllersCest
      */
     public function editAppointment(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/appointments/edit/'.$this->appointmentId);
         $I->seeInField('label', $this->appointmentUniqueData['label']);
@@ -194,7 +187,7 @@ class TransactionDataControllersCest
      */
     public function deleteAppointment(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/appointments/search?id='.$this->appointmentId);
         $I->see($this->appointmentUniqueData['label']);
@@ -228,7 +221,7 @@ class TransactionDataControllersCest
      */
     public function addAnOperation(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/operations/new');
         $I->fillField('shortDescription', $this->operationUniqueData['shortDescription']);
@@ -245,7 +238,7 @@ class TransactionDataControllersCest
      */
     public function searchOperationAndGrapID(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/operations/index');
         $I->fillField('shortDescription', $this->operationUniqueData['shortDescription']);
@@ -267,7 +260,7 @@ class TransactionDataControllersCest
      */
     public function editOperation(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/operations/edit/'.$this->operationId);
         $I->seeInField('shortDescription', $this->operationUniqueData['shortDescription']);
@@ -285,7 +278,7 @@ class TransactionDataControllersCest
      */
     public function editOperationAndAddShift(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/operations/edit/'.$this->operationId);
         $I->seeInField('shortDescription', $this->operationUniqueData['shortDescription']);
@@ -308,7 +301,7 @@ class TransactionDataControllersCest
 
     private function prepareEditOperationShiftAndAddSomething(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/operations/edit/'.$this->operationId);
         $I->click('//button[@type="submit"][@value="edit'.$this->operationShiftId.'"]');
@@ -343,7 +336,7 @@ class TransactionDataControllersCest
      */
     public function deleteOperationShiftEquipment(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/operationshiftsequipmentlink/search?id='.$this->operationShiftEquipmentId);
         $I->see($this->operationUniqueData['shift']['equipShortDesc']);
@@ -382,7 +375,7 @@ class TransactionDataControllersCest
      */
     public function deleteOperationShiftVehicle(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/operationshiftsvehicleslink/search?id='.$this->operationShiftVehicleId);
         $I->see($this->operationUniqueData['shift']['vehicShortDesc']);
@@ -417,7 +410,7 @@ class TransactionDataControllersCest
      */
     public function deleteOperationShiftDepartment(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/operationshiftsdepartmentslink/search?id='.$this->operationShiftDepartmentId);
         $I->see($this->operationUniqueData['shift']['depShortDesc']);
@@ -442,7 +435,7 @@ class TransactionDataControllersCest
      */
     public function deleteOperationShift(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/operationshifts/search?id='.$this->operationShiftId);
         $I->see($this->operationUniqueData['shift']['shortDescription']);
@@ -459,7 +452,7 @@ class TransactionDataControllersCest
      */
     public function deleteOperation(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/operations/search?id='.$this->operationId);
         $I->see($this->operationUniqueData['shortDescription']);
@@ -467,5 +460,17 @@ class TransactionDataControllersCest
         $I->see('operation was deleted successfully');
         $I->amOnPage('/operations/search?id='.$this->operationId);
         $I->dontSee($this->operationUniqueData['shortDescription']);
+    }
+
+
+    /**
+     * @param AcceptanceTester $I
+     */
+    public function logoutUser(AcceptanceTester $I): void
+    {
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
+
+        $I->amOnPage('index');
+        $I->logoffAsBob($I);
     }
 }

@@ -48,13 +48,8 @@ class SessionControllerCest
      */
     public function testLogoutAsUser(AcceptanceTester $I): void
     {
-        $I->amOnPage('/session/login');
-        $I->see('Log In');
-        $I->fillField('email', 'bob@phalcon.io');
-        $I->fillField('password', 'password1');
-        $I->click('//form/*[@type="submit"]');
-        $I->see('Search users');
-        $I->amOnPage('/session/logout');
-        $I->see('Welcome!');
+        $I->amOnPage('index');
+        $I->loginAsBob($I);
+        $I->logoffAsBob($I);
     }
 }

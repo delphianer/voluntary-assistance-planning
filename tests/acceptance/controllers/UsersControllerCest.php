@@ -4,24 +4,17 @@ declare(strict_types=1);
 namespace Vokuro\Tests\Acceptance\Controllers;
 
 use AcceptanceTester;
+use acceptance\CommonTestIncludes;
 
 final class UsersControllerCest
 {
-    private $cookie = null;
-
     /**
      * @param AcceptanceTester $I
      */
     public function login(AcceptanceTester $I): void
     {
-        $I->amOnPage('/session/login');
-        $I->see('Log In');
-        $I->fillField('email', 'bob@phalcon.io');
-        $I->fillField('password', 'password1');
-        $I->click('//form/*[@type="submit"]');
-        $I->see('Search users');
-
-        $this->cookie = $I->grabCookie('PHPSESSID');
+        $I->amOnPage('index');
+        $I->LoginAsBob($I);
     }
 
     /**
@@ -39,7 +32,7 @@ final class UsersControllerCest
      */
     public function testIndex(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/users');
         $I->see('Search users');
@@ -51,7 +44,7 @@ final class UsersControllerCest
      */
     public function testSearch(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/users/search');
         $I->see('Found users');
@@ -63,7 +56,7 @@ final class UsersControllerCest
      */
     public function testCreate(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/users/create');
         $I->see('Create a User');
@@ -75,7 +68,7 @@ final class UsersControllerCest
      */
     public function testEdit(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/users/edit/1');
         $I->see('Edit users');
@@ -87,7 +80,7 @@ final class UsersControllerCest
      */
     public function testDelete(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/users/delete/4');
         $I->amOnPage('/users/search');
@@ -100,9 +93,22 @@ final class UsersControllerCest
      */
     public function testChangePassword(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/users/changePassword');
         $I->see('Change Password');
+    }
+
+
+
+    /**
+     * @param AcceptanceTester $I
+     */
+    public function logoutUser(AcceptanceTester $I): void
+    {
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
+
+        $I->amOnPage('index');
+        $I->logoffAsBob($I);
     }
 }

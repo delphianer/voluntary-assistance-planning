@@ -10,21 +10,13 @@ final class ProfilesControllerCest
     /**
      * @var string|null
      */
-    private $cookie = null;
 
     /**
      * @param AcceptanceTester $I
      */
     public function login(AcceptanceTester $I): void
     {
-        $I->amOnPage('/session/login');
-        $I->see('Log In');
-        $I->fillField('email', 'bob@phalcon.io');
-        $I->fillField('password', 'password1');
-        $I->click('//form/*[@type="submit"]');
-        $I->see('Search users');
-
-        $this->cookie = $I->grabCookie('PHPSESSID');
+        $I->loginAsBob($I);
     }
 
     /**
@@ -42,7 +34,7 @@ final class ProfilesControllerCest
      */
     public function testIndex(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/profiles');
         $I->see('Search profiles');
@@ -54,7 +46,7 @@ final class ProfilesControllerCest
      */
     public function testSearch(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/profiles');
         $I->click('Search');
@@ -67,7 +59,7 @@ final class ProfilesControllerCest
      */
     public function testCreate(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/profiles/create');
         $I->see('Create a Profile');
@@ -79,7 +71,7 @@ final class ProfilesControllerCest
      */
     public function testEdit(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/profiles/edit/1');
         $I->see('Edit profile');
@@ -91,7 +83,7 @@ final class ProfilesControllerCest
      */
     public function testDelete(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         $I->amOnPage('/profiles');
         $I->click('Search');
@@ -103,5 +95,16 @@ final class ProfilesControllerCest
         $I->amOnPage('/profiles');
         $I->see('Search');
         $I->cantSee('Management');
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     */
+    public function logoutUser(AcceptanceTester $I): void
+    {
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
+
+        $I->amOnPage('index');
+        $I->logoffAsBob($I);
     }
 }

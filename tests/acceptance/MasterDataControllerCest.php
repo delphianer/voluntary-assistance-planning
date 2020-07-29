@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 
 namespace Vokuro\Tests\Acceptance\Controllers;
@@ -11,7 +12,6 @@ final class MasterDataControllerCest
     /**
      * @var string|null
      */
-    private $cookie = null;
     private $fixTestLabel = 'automaticTestKey20200720original';
     private $editedFixTestLabel = 'automaticTestKey20200720edited';
     private $masterDataIDs = []; // then stop further tests at this controller
@@ -67,14 +67,7 @@ final class MasterDataControllerCest
      */
     public function login(AcceptanceTester $I): void
     {
-        $I->amOnPage('/session/login');
-        $I->see('Log In');
-        $I->fillField('email', 'bob@phalcon.io');
-        $I->fillField('password', 'password1');
-        $I->click('//form/*[@type="submit"]');
-        $I->see('Search users');
-
-        $this->cookie = $I->grabCookie('PHPSESSID');
+        $I->LoginAsBob($I);
     }
 
 
@@ -104,7 +97,7 @@ final class MasterDataControllerCest
      */
     public function testIndexActionAsAdminUser(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->masterDataModels as $tbl) {
             $I->wantToTest("Dimension as AdminUser: ".$tbl);
@@ -121,7 +114,7 @@ final class MasterDataControllerCest
      */
     public function testSearchActionAsAdminUser(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->masterDataModels as $tbl) {
             $I->wantToTest("Dimension as AdminUser: ".$tbl);
@@ -139,7 +132,7 @@ final class MasterDataControllerCest
      */
     public function testNewActionAsAdminUser(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->masterDataModels as $tbl) {
             $I->wantToTest("Dimension as AdminUser: ".$tbl);
@@ -157,7 +150,7 @@ final class MasterDataControllerCest
      */
     public function testCreateActionAsAdminUser(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->masterDataModels as $tbl) {
             $I->wantToTest("Dimension as AdminUser: ".$tbl);
@@ -174,7 +167,7 @@ final class MasterDataControllerCest
      */
     public function testEditActionAsAdminUser(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->masterDataModels as $tbl) {
             $I->wantToTest("Dimension as AdminUser: ".$tbl);
@@ -191,7 +184,7 @@ final class MasterDataControllerCest
      */
     public function testSaveActionAsAdminUser(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->masterDataModels as $tbl) {
             $I->wantToTest("Dimension as AdminUser: ".$tbl);
@@ -208,7 +201,7 @@ final class MasterDataControllerCest
      */
     public function testDeleteActionAsAdminUser(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->masterDataModels as $tbl) {
             $I->wantToTest("Dimension as AdminUser: ".$tbl);
@@ -234,7 +227,7 @@ final class MasterDataControllerCest
      */
     public function testSearchActionNoExistingTestsYet(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->modelsWithDescriptionAndID as $tbl) {
             $I->amOnPage('/'.$tbl.'/index');
@@ -258,7 +251,7 @@ final class MasterDataControllerCest
      */
     public function newActionAndCreateActionAllMasterDataController(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->modelsWithDescriptionAndID as $tbl) {
             $I->wantToTest("Create new ".$tbl);
@@ -278,7 +271,7 @@ final class MasterDataControllerCest
      */
     public function searchActionAndExtractIdsAllMasterDataController(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->modelsWithDescriptionAndID as $tbl) {
             $I->amOnPage('/'.$tbl.'/index');
@@ -300,7 +293,7 @@ final class MasterDataControllerCest
      */
     public function searchNewCreatedAndEditThatOnAllMasterDataController(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->modelsWithDescriptionAndID as $tbl) {
             $id = $this->masterDataIDs[$tbl];
@@ -323,7 +316,7 @@ final class MasterDataControllerCest
      */
     public function oldTestLabelNotExistingAnymore(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->masterDataIDs as $key => $value) {
             $I->amOnPage('/'.$key.'/index');
@@ -343,7 +336,7 @@ final class MasterDataControllerCest
      */
     public function searchNewOneOnAllMasterDataController(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->masterDataIDs as $key => $value) {
             $I->amOnPage('/'.$key.'/search/'.$value);
@@ -362,7 +355,7 @@ final class MasterDataControllerCest
      */
     public function deleteThatOnAllMasterDataController(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->masterDataIDs as $key => $value) {
             $I->amOnPage('/'.$key.'/delete/'.$value);
@@ -381,7 +374,7 @@ final class MasterDataControllerCest
      */
     public function allTestLabelNotExistingAnymore(AcceptanceTester $I): void
     {
-        $I->setCookie('PHPSESSID', $this->cookie);
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
         foreach ($this->masterDataIDs as $key => $value) {
             $I->amOnPage('/'.$key.'/search/'.$value);
@@ -452,4 +445,19 @@ final class MasterDataControllerCest
         }
         */
     }
+
+
+
+    /**
+     * @param AcceptanceTester $I
+     */
+    public function logoutUser(AcceptanceTester $I): void
+    {
+        $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
+
+        $I->amOnPage('index');
+        $I->logoffAsBob($I);
+    }
+
+
 }
