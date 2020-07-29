@@ -65,6 +65,79 @@
     <div class="row m-5">
         <div class="col text-center">
             <h3 class="text-center">
+                next operations
+            </h3>
+        </div>
+    </div>
+
+
+
+    {#---------- header definition -------------#}
+
+    {% set aclEditOperation = (userRole is defined and acl.isAllowed( userRole, "operations", "edit")) %}
+    {% set editLabel = "" %}
+    {% if aclEditOperation %}
+        {% set editLabel = "Edit" %}
+    {% endif %}
+
+    {% set headerData = [
+            ['title' : 'Label', 'class':'text-center'],
+            ['title' : 'Start', 'class':'text-center'],
+            ['title' : 'End', 'class':'text-center'],
+            ['title' : 'Needs', 'class':'text-center'],
+            ['title' : 'Committed', 'class':'text-center'],
+            ['title' : 'Action', 'class':'text-center'],
+            ['title' : editLabel, 'class':'text-center']
+        ] %}
+
+    {#---------- table body definition ---------------#}
+
+    {% set bodyData = [] %}
+
+    {% for event in nextOperations %}
+        {% set rowData = [] %}
+        {% set aclEditController = '' %}
+
+        {% set aclEditController = event['event_kind'] %}
+        {% set aclEditRow = (userRole is defined and acl.isAllowed( userRole, event['event_kind'], "edit")) %}
+
+        {% do arrayPush(rowData , [ 'data' : event['event_label']] ) %}
+        {% do arrayPush(rowData , [ 'data' : event['event_starting']] ) %}
+        {% do arrayPush(rowData , [ 'data' : event['event_ending']] ) %}
+        {% do arrayPush(rowData , [ 'data' : event['event_volunteersNeeded']] ) %}
+        {% do arrayPush(rowData , [ 'data' : event['event_volunteersCommitted']] ) %}
+
+        {% set availableActions = '' %}
+        {% if event['event_IHaveCommitted'] != 0 %}
+            {% set availableActions = link_to( url("opshdeplvolunteerslink/edit/") ~ event['event_IHaveCommitted'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warnig") %}
+            {% set availableActions = availableActions ~ link_to( url("opshdeplvolunteerslink/delete/") ~ event['event_IHaveCommitted'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-danger") %}
+        {% else %}
+            {% set availableActions = link_to( url("opshdeplvolunteerslink/new/") ~ event['event_id'], '<i class="icon-pencil"></i> Commit', "class": "btn btn-sm btn-outline-primary") %}
+        {% endif %}
+        {% do arrayPush(rowData , [ 'data' : availableActions, 'class' : 'text-center'] ) %}
+
+        {% if aclEditRow %}
+        {% do arrayPush(rowData , [ 'data' : link_to( url(aclEditController ~ "/edit/") ~ event['event_id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning"), 'class' : 'text-center'] ) %}
+        {% endif %}
+
+        {% do arrayPush(bodyData , rowData) %}
+
+    {% else %}
+        {% set nothingFound = 'No future events found' %}
+    {% endfor %}
+
+    {% include 'layouts/includes/dataasdivs.volt' %}
+
+    {#---------- end --------#}
+
+
+
+
+    <hr />
+
+    <div class="row m-5">
+        <div class="col text-center">
+            <h3 class="text-center">
                 upcomming events
             </h3>
         </div>

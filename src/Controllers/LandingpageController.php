@@ -31,12 +31,13 @@ class LandingpageController extends ControllerBase
         $this->view->setVar('operationsNext30DaysCount', $this->eventList->getOperationsCount("start between NOW() and  DATE_FORMAT(NOW()+7,'%Y-%m-%d 00:00:00')"));
         $this->view->setVar('operationsDoneCount', $this->eventList->getOperationsCount("[end] <= NOW()"));
 
-
         $identity = $this->auth->getIdentity();
         $this->view->setVar('authId', $identity['id']);
         $this->view->setVar('authName', $identity['name']);
         $volunteer = Volunteers::findFirst(['userId' >= $identity['id']]);
         $this->view->setVar('volunteer', $volunteer);
+
+        $this->view->setVar('nextOperations', $this->eventList->getNextOperationsWithCommitmentFormat(10,$volunteer));
     }
 
 }

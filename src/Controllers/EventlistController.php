@@ -6,6 +6,7 @@ namespace Vokuro\Controllers;
 use Vokuro\Models\Appointments;
 use Vokuro\Models\Operations;
 use Vokuro\Models\Operationshifts;
+use Vokuro\Models\Volunteers;
 
 /**
  * This controller just helps out doing the event-lists :)
@@ -76,6 +77,55 @@ class EventlistController extends ControllerBase
         return $results;
     }
 
+
+
+    public function getNextOperationsWithCommitmentFormat(int $limit, Volunteers $vol)
+    {
+        $myID = 0;
+        if (isset($vol)) {
+            $myID = $vol->getId();
+        }
+
+        $rawSQL = "
+            select 'operations' event_kind
+                ,op.id event_id
+                ,op.shortDescription event_label
+                ,min(opsh.start) event_starting
+                ,min(opsh.end) event_ending
+                ,nvl(
+                	(select numberVolunteersNeeded
+	                	from operationshifts_departments_link odl
+    	            	where odl.operationShiftId = opsh.id),0) event_volunteersNeeded
+                ,(select count(*)
+                	from operationshifts_departments_link odl
+                	join opshdepl_volunteers_link ovl
+                		on ovl.opDepNeedId = odl.id
+                	where odl.operationShiftId = opsh.id) event_volunteersCommitted
+                ,nvl(
+                    (select max(ovl.id)
+                        from operationshifts_departments_link odl
+                        join opshdepl_volunteers_link ovl
+                            on ovl.opDepNeedId = odl.id
+                            and ovl.volunteersId = $myID
+                        where odl.operationShiftId = opsh.id),0) event_IHaveCommitted
+            from operations op
+            inner join vokuro.operationshifts opsh on opsh.operationId = op.id
+            where opsh.`start` > now()
+            group by op.shortDescription
+            order by event_starting
+            limit $limit";
+
+        $db      = $this->di['db'];
+        $data    = $db->query($rawSQL);
+        $results = $data->fetchAll();
+
+        return $results;
+    }
+
+
+
+
+
     public function getSimpleCountFromTable(array $countColumns, array $fromTables, string $resultColName, string $whereCondition)
     {
         $model = $this
@@ -112,9 +162,4 @@ class EventlistController extends ControllerBase
             ->getSingleResult();
         return $model['operationsCount'];
     }
-
-
-
-
-
 }
