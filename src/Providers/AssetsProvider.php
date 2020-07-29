@@ -37,13 +37,20 @@ class AssetsProvider implements ServiceProviderInterface
 
             $assetManager->collection('css')
                 ->addCss(
-                    '/css/bootstrap-4.3.1.min.css?dc=' . self::VERSION, true, true, [
+                    '/css/bootstrap-4.3.1.min.css?dc=' . self::VERSION,
+                    true,
+                    true,
+                    [
                         "media"       => "screen,projection",
                     ]
                 )
                 ->addCss('/css/style.css?dc=' . self::VERSION, true, true, [
                     "media" => "screen,projection"
+                ])
+                ->addCss('/css/font-awesome.min.css?dc=' . self::VERSION, true, true, [
+                    "media" => "screen,projection"
                 ]);
+
 
             $assetManager->collection('js')
                 ->addJs('/js/jquery-3.3.1.slim.min.js?dc=' . self::VERSION, true, true, [])
