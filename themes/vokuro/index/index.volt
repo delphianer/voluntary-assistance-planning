@@ -3,8 +3,20 @@
 <header class="jumbotron" id="overview">
     <h1 class="display-4">Welcome!</h1>
     <p class="lead">This is a website secured by Phalcon Framework</p>
+
+    {% if userRole is defined and userRole is not empty and userRole == 'Guest' %}
     <hr class="my-4">
-    {{ link_to('session/signup', '<i class="icon-ok icon-white"></i> Create an Account', 'class': 'btn btn-primary btn-large') }}
+    <div class="row">
+        <div class="col text-center">
+            <p class="lead">You need an Account?</p>
+            {{ link_to('session/signup', '<i class="icon-pencil icon-white"></i> Create your Account', 'class': 'btn btn-primary btn-large') }}
+        </div>
+        <div class="col text-center">
+            <p class="lead">You have an Account?</p>
+            {{ link_to('session/login', '<i class="icon-ok icon-white"></i> Login here', 'class': 'btn btn-primary btn-large') }}
+        </div>
+    </div>
+    {% endif %}
 </header>
 
 <div class="row">
