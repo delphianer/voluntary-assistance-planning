@@ -2,6 +2,7 @@
           - tableHeadingData as array with also arrays for 'title', 'class' used as attributes
           - tableBodyData as array similar tableHeadingData with data containing all cell-Rows.
                            Cells as Array with 'data', 'class' as attributes
+          - tableBodyDataDefaultText with a text-message in the case, nothing has been found
         #}
 {# returns
             nothing -> outputs all the table #}
