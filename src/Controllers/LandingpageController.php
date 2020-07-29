@@ -21,6 +21,7 @@ class LandingpageController extends ControllerBase
 
         $this->eventList = new EventlistController();
         $this->view->setVar('nextEvents', $this->eventList->getNextEventsSimpleFormat(10));
+        $this->view->setVar('lastEvents', $this->eventList->getLastEventsSimpleFormat(5));
 
         $this->view->setVar('appointmentsNextWeekCount', $this->eventList->getAppointmentsCount("start between NOW() and  DATE_FORMAT(NOW()+7,'%Y-%m-%d 00:00:00')"));
         $this->view->setVar('appointmentsNext30DaysCount', $this->eventList->getAppointmentsCount("start between NOW() and  DATE_FORMAT(NOW()+7,'%Y-%m-%d 00:00:00')"));
@@ -37,16 +38,6 @@ class LandingpageController extends ControllerBase
         $volunteer = Volunteers::findFirst(['userId' >= $identity['id']]);
         $this->view->setVar('volunteer', $volunteer);
     }
-
-
-
-
-
-
-
-
-
-
 
 }
 

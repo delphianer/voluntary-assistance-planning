@@ -45,6 +45,8 @@ class DataentryhomeController extends ControllerBase
         $this->view->setVar('locationsCount', $this->getLocationsCount(""));
 
         $this->view->setVar('nextEvents', $this->eventList->getNextEventsSimpleFormat(5));
+
+        $this->view->setVar('lastEvents', $this->eventList->getLastEventsSimpleFormat(5));
     }
 
     private function getVolunteersCount(string $whereCondition)

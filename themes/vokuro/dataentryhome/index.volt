@@ -33,13 +33,13 @@
     <hr class="my-4">
     <div class="row">
         <div class="col is-3">
-            Count Volunteers
+            Volunteers
         </div>
         <div class="col is-3">
             {{ volunteersCount }}
         </div>
         <div class="col is-3">
-            Count Vehicles
+            Vehicles
         </div>
         <div class="col is-3">
            {{ vehiclesCount }}
@@ -47,13 +47,13 @@
     </div>
     <div class="row">
         <div class="col is-3">
-            Count Equipment total
+            Equipment total
         </div>
         <div class="col is-3">
             {{ equipmentCount }}
         </div>
         <div class="col is-3">
-            Count Equipment not on Stock
+            Equipment out of Stock
         </div>
         <div class="col is-3">
             {{ equipmentNotOnStockCount }}
@@ -61,13 +61,13 @@
     </div>
     <div class="row">
         <div class="col is-3">
-            Count Clients
+            Clients
         </div>
         <div class="col is-3">
             {{ clientsCount }}
         </div>
         <div class="col is-3">
-            Count Locations
+            Locations
         </div>
         <div class="col is-3">
             {{ locationsCount }}
@@ -75,62 +75,27 @@
     </div>
 </header>
 
-    <div class="row m-2">
-        <div class="col font-weight-bold">
-            Event
-        </div>
-        <div class="col font-weight-bold">
-            Label
-        </div>
-        <div class="col font-weight-bold">
-            Start
-        </div>
-        <div class="col font-weight-bold">
-            End
-        </div>
-        <div class="col font-weight-bold">
-            Edit ?
+    <div class="row m-5">
+        <div class="col text-center">
+            <h3 class="text-center">
+                upcomming events
+            </h3>
         </div>
     </div>
+    {% set outputEvents = nextEvents %}
 
-    {% for event in nextEvents %}
-    {% set aclEditRow = false %}
-    {% set aclEditController = '' %}
-    <div class="row">
-        <div class="col is-1">
-            {% if event['event_kind'] == 'op' %}
-                Operation
-                {% set aclEditController = 'operations' %}
-                {% set aclEditRow = (userRole is defined and acl.isAllowed( userRole, "operations", "edit")) %}
-            {% else %}
-                Appointment
-                {% set aclEditController = 'appointments' %}
-                {% set aclEditRow = (userRole is defined and acl.isAllowed( userRole, "appointments", "edit")) %}
-            {% endif %}
+    {% include 'moduleincludes/simpleEventList.volt' %}
+
+    <div class="row m-5">
+        <div class="col is-3 text-center font-weight-bold mt-4">
+            <h3 class="text-center">
+                last 5 events
+            </h3>
         </div>
-
-        <div class="col is-1">
-        {{ event['event_label'] }}
-        </div>
-
-        <div class="col is-1">
-        {{ event['event_starting'] }}
-        </div>
-
-        <div class="col is-1">
-        {{ event['event_ending'] }}
-        </div>
-
-        <div class="col is-1">
-            {% if aclEditRow %}
-                {{ link_to( url(aclEditController ~ "/edit/") ~ event['event_id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}
-            {% else %}
-            -
-            {% endif %}
-        </div>
-
     </div>
-    {% else %}
-        No events found
-    {% endfor %}
+    {% set outputEvents = lastEvents %}
+
+    {% include 'moduleincludes/simpleEventList.volt' %}
+
+
 

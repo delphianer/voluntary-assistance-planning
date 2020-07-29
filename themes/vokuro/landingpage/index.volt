@@ -80,44 +80,26 @@
         </div>
     </div>
 
-    {% for event in nextEvents %}
-    {% set aclEditRow = false %}
-    {% set aclEditController = '' %}
-    <div class="row">
-        <div class="col is-1">
-            {% if event['event_kind'] == 'op' %}
-                Operation
-                {% set aclEditController = 'operations' %}
-                {% set aclEditRow = (userRole is defined and acl.isAllowed( userRole, "operations", "edit")) %}
-            {% else %}
-                Appointment
-                {% set aclEditController = 'appointments' %}
-                {% set aclEditRow = (userRole is defined and acl.isAllowed( userRole, "appointments", "edit")) %}
-            {% endif %}
-        </div>
 
-        <div class="col is-1">
-        {{ event['event_label'] }}
+    <div class="row m-5">
+        <div class="col text-center">
+            <h3 class="text-center">
+                upcomming events
+            </h3>
         </div>
-
-        <div class="col is-1">
-        {{ event['event_starting'] }}
-        </div>
-
-        <div class="col is-1">
-        {{ event['event_ending'] }}
-        </div>
-
-        <div class="col is-1">
-            {% if aclEditRow %}
-                {{ link_to( url(aclEditController ~ "/edit/") ~ event['event_id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning") }}
-            {% else %}
-            -
-            {% endif %}
-        </div>
-
     </div>
-    {% else %}
-        No events found
-    {% endfor %}
+    {% set outputEvents = nextEvents %}
+
+    {% include 'moduleincludes/simpleEventList.volt' %}
+
+    <div class="row m-5">
+        <div class="col is-3 text-center font-weight-bold mt-4">
+            <h3 class="text-center">
+                last 5 events
+            </h3>
+        </div>
+    </div>
+    {% set outputEvents = lastEvents %}
+
+    {% include 'moduleincludes/simpleEventList.volt' %}
 
