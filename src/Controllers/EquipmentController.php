@@ -240,6 +240,6 @@ class EquipmentController extends ControllerBase
         $equipment->setLabel($this->request->getPost("label", "string"));
         $equipment->setDescription($this->request->getPost("description", "string"));
         $equipment->settotalCount($this->request->getPost("total_count", "int"));
-        $equipment->setDescription($this->request->getPost("isRequsable", "string"));
+        $equipment->setIsReusable($this->request->getPost("isRequsable", "string"));
     }
 }

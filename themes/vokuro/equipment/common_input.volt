@@ -14,7 +14,7 @@
 </div>
 
 <div class="form-group">
-    <label for="fieldTotalCount" class="col-sm-2 control-label">Number available on stock</label>
+    <label for="fieldTotalCount" class="col-sm-5 control-label">Number available on stock</label>
     <div class="col-sm-10">
         {{ text_field("total_count", "type" : "numeric", "class" : "form-control", "id" : "fieldTotalCount") }}
     </div>
@@ -23,7 +23,11 @@
 <div class="form-group">
     <label for="fieldIsRequsable" class="col-sm-2 control-label">IsRequsable</label>
     <div class="col-sm-10">
-        {{ text_field("isRequsable", "type" : "numeric", "class" : "form-control", "id" : "fieldIsRequsable") }}
+        {% if dispatcher.getActionName() == 'index' %}
+            {{ selectStatic(["isRequsable", "class" : "form-control", "id" : "fieldIsRequsable"], ['':'Any','N':'No','Y':'Yes'] ) }}
+        {% else %}
+            {{ selectStatic(["isRequsable", "class" : "form-control", "id" : "fieldIsRequsable"], ['N':'No','Y':'Yes'] ) }}
+        {% endif %}
     </div>
 </div>
 
