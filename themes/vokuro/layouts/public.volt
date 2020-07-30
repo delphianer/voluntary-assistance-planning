@@ -6,8 +6,7 @@
 {% if userRole is defined and userRole is not empty and userRole != 'Guest' %}
 
 {%- set menus = [
-    'Home': 'index',
-    'LP': 'landingpage',
+    'Landing Page': 'landingpage',
     'About': 'about'
 ] -%}
 
