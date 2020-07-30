@@ -46,6 +46,9 @@
             <th>short descr.</th>
             <th>start</th>
             <th>end</th>
+            <th><i class="icon-user"></i></th>
+            <th><i class="icon-suitcase"></i></th>
+            <th><i class="icon-ambulance"></i></th>
             <th></th>
             <th></th>
         </tr>
@@ -67,6 +70,12 @@
                 <td>{{ shift.start }}</td>
 
                 <td>{{ shift.end }}</td>
+
+                <td>{{ shift.needsSum }}</td>
+
+                <td>{{ shift.OperationshiftsEquipmentLink|length }}</td>
+
+                <td>{{ shift.OperationshiftsVehiclesLink|length }}</td>
 
                 {% if isAllowedToEdit %}
                 <td class="td-width-12">

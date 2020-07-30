@@ -2,6 +2,8 @@
 
 namespace Vokuro\Models;
 
+use phpDocumentor\Reflection\Types\Integer;
+
 class Operationshifts extends \Phalcon\Mvc\Model
 {
 
@@ -387,39 +389,20 @@ class Operationshifts extends \Phalcon\Mvc\Model
 
 
     /**
-     * Returns the aggregated value of maxend to get the highest datetime for the end of an operation
+     * Returns the sum of needsCount from OperationshiftsDepartmentsLink
      *
-     * @return DateTime
+     * @return int
      */
-    public function getNeedsCount()
+    public function getNeedsSum()
     {
-        /* // end is a reserved word! oops
-        $phql = "
-    SELECT
-        MIN([end]) AS maxend
-    FROM
-        Vokuro\Models\Operationshifts os
-    WHERE
-        os.operationId = :operation_id:";
-
-        $results  = $this
-            ->modelsManager
-            ->executeQuery($phql, [
-                'operation_id' => $this->getOperationId()
-            ]);
-
-        return $results['maxend'];
-        */
-        $modelManager = $this
-            ->modelsManager
-            ->createBuilder()
-            ->columns(['maxend' => 'MAX([end]) '])
-            ->from(Operationshifts::class)
-            ->where('operationId = :operation_id:')
-            ->getQuery()
-            ->getSingleResult(['operation_id' =>  $this->getOperationId()]);
-
-        return $modelManager;
+        $result = 0;
+        foreach ($this->OperationshiftsDepartmentsLink as $dep){
+            /**
+             * @var OperationshiftsDepartmentsLink $dep
+             */
+            $result += $dep->getNumberVolunteersNeeded();
+        }
+        return $result;
     }
 
     /**
