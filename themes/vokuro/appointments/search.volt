@@ -12,11 +12,9 @@
             'Description',
             'Start',
             'End',
-            'LocationId',
-            'MainDepartmentId',
-            'ClientId',
-            'Created on',
-            'last updated'
+            'Department',
+            'Client',
+            'Location'
         ] %}
 
     {% for appointment in page.items %}
@@ -27,11 +25,9 @@
         {% do arrayPush(rowData, appointment.description ) %}
         {% do arrayPush(rowData, appointment.start ) %}
         {% do arrayPush(rowData, appointment.end ) %}
-        {% do arrayPush(rowData, appointment.locationId ) %}
-        {% do arrayPush(rowData, appointment.mainDepartmentId ) %}
-        {% do arrayPush(rowData, appointment.clientId ) %}
-        {% do arrayPush(rowData, appointment.create_time ) %}
-        {% do arrayPush(rowData, appointment.update_time ) %}
+        {% do arrayPush(rowData, ((appointment.Departments is defined and appointment.Departments is not null) ? appointment.Departments.Label : '-') ) %}
+        {% do arrayPush(rowData, ((appointment.Clients is defined and appointment.Clients is not null) ? appointment.Clients.Label : '-') ) %}
+        {% do arrayPush(rowData, ((appointment.Locations is defined and appointment.Locations is not null) ? appointment.Locations.Label : '-') ) %}
 
         {% do arrayPush(tableBodyData , rowData) %}
 

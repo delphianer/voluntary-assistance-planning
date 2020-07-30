@@ -360,6 +360,22 @@ class Appointments extends \Phalcon\Mvc\Model
     {
         $this->setSchema("vokuro");
         $this->setSource("appointments");
+        $this->belongsTo(
+            'clientId',
+            'Vokuro\Models\Clients',
+            'id',
+            ['alias' => 'Clients']
+        );
+        $this->belongsTo(
+            'mainDepartmentId',
+            'Vokuro\Models\Departments',
+            'id',
+            ['alias' => 'Departments']
+        );
+        $this->belongsTo('locationId',
+            'Vokuro\Models\Locations',
+            'id',
+            ['alias' => 'Locations']);
     }
 
     /**

@@ -8,6 +8,7 @@ use http\Client\Curl\User;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\QueryBuilder as Paginator;
 use Vokuro\DateTimePicker;
+use Vokuro\Forms\AppointmentsForm;
 use Vokuro\Models\Appointments;
 use function Vokuro\getCurrentDateTimeStamp;
 
@@ -32,6 +33,9 @@ class AppointmentsController extends ControllerBase
     {
         $this->view->setVar('extraTitle', "Search appointments");
         $this->setupDateTimePicker();
+
+        $form = new AppointmentsForm();
+        $this->view->setVar('form', $form);
     }
 
     /**
@@ -39,9 +43,26 @@ class AppointmentsController extends ControllerBase
      */
     public function searchAction()
     {
-        $builder = Criteria::fromInput($this->getDI(), Appointments::class, $this->request->getQuery());
-        if ($builder->getConditions() == null) { // no conditions? -> restrict to future-appointments
-            $builder->conditions('start >= DATE_FORMAT(NOW(),\'%Y-%m-%d 00:00:00\')'); // in the future
+        $query = $this->request->getQuery();
+        if (!empty($query['start'])) {
+            $startCondition = $query['start'];
+            $query['start'] = ''; // all after this date
+        }
+        if (!empty($query['end'])) {
+            $endCondition = $query['end'];
+            $query['end'] = ''; // all after this date
+        }
+        $conditions = '';
+        $builder = Criteria::fromInput($this->getDI(), Appointments::class, $query);
+        if (isset($startCondition)) {
+            $conditions .= (!empty($conditions) ? ' and ' : '' ) . "[start] >= '$startCondition'";
+            //$builder->conditions('start >= DATE_FORMAT(NOW(),\'%Y-%m-%d 00:00:00\')'); // in the future
+        }
+        if (isset($endCondition)) {
+            $conditions .= (!empty($conditions) ? ' and ' : '' ) . "[end] <= '$endCondition'";
+        }
+        if (!empty($conditions)) {
+            $builder->conditions($conditions);
         }
         $builder->orderBy("start");
 
@@ -56,9 +77,11 @@ class AppointmentsController extends ControllerBase
             return;
         }
 
+        $b = $builder->createBuilder();
+
         $paginator   = new Paginator(
             [
-                'builder'   => $builder->createBuilder(),
+                'builder'   => $b,
                 'limit'     => 10,
                 'page'      => $this->request->getQuery('page', 'int', 1),
             ]
@@ -75,6 +98,9 @@ class AppointmentsController extends ControllerBase
     {
         $this->view->setVar('extraTitle', "New Appointments");
         $this->setupDateTimePicker();
+
+        $form = new AppointmentsForm();
+        $this->view->setVar('form', $form);
     }
 
     /**
@@ -111,10 +137,13 @@ class AppointmentsController extends ControllerBase
             $this->tag->setDefault("locationId", $appointment->getLocationid());
             $this->tag->setDefault("mainDepartmentId", $appointment->getMaindepartmentid());
             $this->tag->setDefault("clientId", $appointment->getClientid());
-        }
 
-        $this->view->setVar('extraTitle', "Edit Appointments");
-        $this->setupDateTimePicker();
+            $form = new AppointmentsForm();
+            $this->view->setVar('form', $form);
+
+            $this->view->setVar('extraTitle', "Edit Appointments");
+            $this->setupDateTimePicker();
+        }
     }
 
     /**

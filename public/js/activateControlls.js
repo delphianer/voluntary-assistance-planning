@@ -23,11 +23,7 @@ let dateTimePicker_i18n = {
 
 $(document).ready(function () {
 
-    // appointments:
-    $('#fieldStart').datetimepicker(dateTimePicker_i18n);
-    $('#fieldEnd').datetimepicker(dateTimePicker_i18n);
-
-    // operationshifts:
+    // operationshifts + appointments
     $('#startDateTimeField').datetimepicker(dateTimePicker_i18n);
     $('#endDateTimeField').datetimepicker(dateTimePicker_i18n);
 

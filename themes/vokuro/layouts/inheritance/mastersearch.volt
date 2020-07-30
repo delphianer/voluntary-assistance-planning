@@ -73,6 +73,7 @@
     </tbody>
     <tfoot>
     <tr>
+        {% if page.last > 1 %}
         <td colspan="{{ colCount }}" class="text-right">
             <div class="btn-group" role="group">
                 {{ link_to(url(dispatcher.getControllerName() ~ "/search") , '<i class="icon-fast-backward"></i> First', "class": "btn btn-secondary") }}
@@ -85,8 +86,16 @@
                 <button type="button" class="btn btn-secondary" disabled>{{ page.current }}</button>
                 <button type="button" class="btn btn-secondary" disabled>/</button>
                 <button type="button" class="btn btn-secondary" disabled>{{ page.last }}</button>
+                <button type="button" class="btn btn-secondary" disabled>Found more than {{ tableBodyData|length }}</button>
             </div>
         </td>
+        {% else %}
+        <td colspan="{{ colCount }}" class="text-right">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-secondary" disabled>Found: {{ tableBodyData|length }}</button>
+            </div>
+        </td>
+        {% endif %}
     </tr>
     </tfoot>
 </table>
