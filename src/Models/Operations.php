@@ -266,6 +266,20 @@ class Operations extends \Phalcon\Mvc\Model
         return $this->mainDepartmentId;
     }
 
+
+    /**
+     * Returns the count of shifts
+     *
+     * @return integer
+     */
+    public function getNumberOfShifts()
+    {
+        return sizeof($this->Operationshifts);
+    }
+
+
+
+
     /**
      * Initialize method for model.
      */

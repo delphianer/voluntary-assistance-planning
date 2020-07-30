@@ -12,7 +12,8 @@
             'Short Description',
             'Main Department',
             'Start',
-            'End'
+            'End',
+            'Shifts'
         ] %}
 
     {% for operation in page.items %}
@@ -46,6 +47,7 @@
                 {% do arrayPush(rowData, '-') %}
                 {% do arrayPush(rowData, '-') %}
             {% endfor %}
+            {% do arrayPush(rowData, operation.numberOfShifts) %}
 
         {% do arrayPush(tableBodyData , rowData) %}
 
