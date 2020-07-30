@@ -22,6 +22,10 @@ class IndexController extends ControllerBase
      */
     public function indexAction(): void
     {
+        if (is_array($this->auth->getIdentity())) {
+            $this->response->redirect('landingpage');
+            return;
+        }
         $this->view->setVar('logged_in', is_array($this->auth->getIdentity()));
         $this->view->setTemplateBefore('public');
     }
