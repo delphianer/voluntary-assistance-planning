@@ -62,3 +62,10 @@
 </div>
 
 
+<div class="form-group">
+    <label for="fieldEndid" class="col-sm-2 control-label">Role</label>
+    <div class="col-sm-10">
+        {{ form.render('volCurrentMaximumCertRank') }}
+    </div>
+</div>
+

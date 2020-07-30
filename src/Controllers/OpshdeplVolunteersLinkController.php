@@ -48,40 +48,7 @@ class OpshdeplVolunteersLinkController extends ControllerBase
     {
         $this->view->setVar('extraTitle', "New Volunteer Commitment");
 
-        $origin = $this->request->get('origin');
-        $this->view->setVar('origin', $origin);
-
-        $opshid = $this->request->get('opshid');
-        $dnid = $this->request->get('dnid');
-
-        $formOptions = [];
-
-        $operationShift = Operationshifts::findFirstByid($opshid);
-        $this->view->setVar('operationShift', $operationShift);
-        $formOptions['operationShift'] = $operationShift;
-
-        $operationShiftDepartmentNeeds = OperationshiftsDepartmentsLink::findFirstByid($dnid);
-        $this->view->setVar('operationShiftDepartmentNeeds', $operationShiftDepartmentNeeds);
-        $formOptions['operationShiftDepartmentNeeds'] = $operationShiftDepartmentNeeds;
-
-        $identity = $this->auth->getIdentity();
-        $volunteer = Volunteers::findFirst(['userId' >= $identity['id']]);
-        $this->view->setVar('volunteer', $volunteer);
-        $formOptions['volunteer'] = $volunteer;
-
-        $form = new VolunteersCommitmentForm(null, $formOptions);
-        $this->view->setVar('form', $form);
-
-        /*
-        todo: backAction definieren
-{% if backAction is defined %}
-     {{ hidden_field('backActionController', 'value':backActionController) }}
-     {{ hidden_field('backActionValue', 'value':backActionValue) }}
-{% endif %}
-        */
-
-
-
+        $this->initFormByRequest();
     }
 
     /**
@@ -89,10 +56,22 @@ class OpshdeplVolunteersLinkController extends ControllerBase
      *
      * @param string $id
      */
-    public function editAction($id)
+    public function editAction($id = null)
     {
         if (!$this->request->isPost()) {
-            $opshdepl_volunteers_link = OpshdeplVolunteersLink::findFirstByid($id);
+            if ((intval($this->request->get('opshid')) > 0) && (intval($this->request->get('opshid')) > 0)) {
+                $this->initFormByRequest();
+                $params = [
+                    'opDepNeedId' => intval($this->request->get('dnid')),
+                    'volunteersId' => $this->view->getVar('volunteer')->getId()
+                ];
+                $opshdepl_volunteers_link = OpshdeplVolunteersLink::findFirst($params);
+            } elseif (is_null($id)) {
+                $this->response->redirect('landingpage');
+                return;
+            } else {
+                $opshdepl_volunteers_link = OpshdeplVolunteersLink::findFirstByid($id);
+            }
             if (!$opshdepl_volunteers_link) {
                 $this->flash->error("opshdepl_volunteers_link was not found");
 
@@ -114,7 +93,6 @@ class OpshdeplVolunteersLinkController extends ControllerBase
             $this->tag->setDefault("opDepNeedId", $opshdepl_volunteers_link->getOpdepneedid());
             $this->tag->setDefault("volunteersId", $opshdepl_volunteers_link->getVolunteersid());
             $this->tag->setDefault("volCurrentMaximumCertRank", $opshdepl_volunteers_link->getVolcurrentmaximumcertrank());
-
         }
 
         $this->view->setVar('extraTitle', "Edit OpshdeplVolunteersLink");
@@ -148,10 +126,16 @@ class OpshdeplVolunteersLinkController extends ControllerBase
             return;
         }
 
-        $this->flash->success("opshdepl_volunteers_link was created successfully");
+        $this->flash->success("Commitment was created successfully");
+
+        $origin = $this->request->getPost("backActionController", "string");
+        $opid = $this->request->getPost("backActionValue", "int");
+        if ($this->handledBackAction($origin, $opid)) {
+            return;
+        }
 
         $this->dispatcher->forward([
-            'controller' => "opshdepl_volunteers_link",
+            'controller' => "opshdeplvolunteerslink",
             'action' => 'index'
         ]);
     }
@@ -190,7 +174,6 @@ class OpshdeplVolunteersLinkController extends ControllerBase
 
 
         if (!$opshdepl_volunteers_link->save()) {
-
             foreach ($opshdepl_volunteers_link->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -203,8 +186,13 @@ class OpshdeplVolunteersLinkController extends ControllerBase
 
             return;
         }
+        $this->flash->success("Commitment was updated successfully");
 
-        $this->flash->success("opshdepl_volunteers_link was updated successfully");
+        $origin = $this->request->getPost("backActionController", "string");
+        $opid = $this->request->getPost("backActionValue", "int");
+        if ($this->handledBackAction($origin, $opid)) {
+            return;
+        }
 
         $this->dispatcher->forward([
             'controller' => "opshdepl_volunteers_link",
@@ -217,9 +205,25 @@ class OpshdeplVolunteersLinkController extends ControllerBase
      *
      * @param string $id
      */
-    public function deleteAction($id)
+    public function deleteAction($id = null)
     {
-        $opshdepl_volunteers_link = OpshdeplVolunteersLink::findFirstByid($id);
+        $origin = '';
+        $opid = 0;
+        if ((intval($this->request->get('opshid')) > 0) && (intval($this->request->get('opshid')) > 0)) {
+            $this->initFormByRequest();
+            $params = [
+                'opDepNeedId' => intval($this->request->get('dnid')),
+                'volunteersId' => $this->view->getVar('volunteer')->getId()
+            ];
+            $opshdepl_volunteers_link = OpshdeplVolunteersLink::findFirst($params);
+            $origin = $this->request->get('origin');
+            $opid = $opshdepl_volunteers_link->OperationshiftsDepartmentsLink->Operationshifts->getOperationId();
+        } elseif (is_null($id)) {
+            $this->response->redirect('landingpage');
+            return;
+        } else {
+            $opshdepl_volunteers_link = OpshdeplVolunteersLink::findFirstByid($id);
+        }
         if (!$opshdepl_volunteers_link) {
             $this->flash->error("opshdepl_volunteers_link was not found");
 
@@ -232,7 +236,6 @@ class OpshdeplVolunteersLinkController extends ControllerBase
         }
 
         if (!$opshdepl_volunteers_link->delete()) {
-
             foreach ($opshdepl_volunteers_link->getMessages() as $message) {
                 $this->flash->error($message->getMessage());
             }
@@ -245,7 +248,11 @@ class OpshdeplVolunteersLinkController extends ControllerBase
             return;
         }
 
-        $this->flash->success("opshdepl_volunteers_link was deleted successfully");
+        $this->flash->success("Commitment was deleted successfully");
+
+        if ($this->handledBackAction($origin,$opid)) {
+            return;
+        }
 
         $this->dispatcher->forward([
             'controller' => "opshdepl_volunteers_link",
@@ -265,5 +272,58 @@ class OpshdeplVolunteersLinkController extends ControllerBase
         $id = $this->request->getPost("volunteersId", "int");
         $opshdepl_volunteers_link->setvolunteersId($id);
         $opshdepl_volunteers_link->setvolCurrentMaximumCertRank($this->request->getPost("volCurrentMaximumCertRank", "int"));
+    }
+
+
+    private function initFormByRequest()
+    {
+        $origin = $this->request->get('origin');
+        $opshid = intval($this->request->get('opshid'));
+        $dnid = intval($this->request->get('dnid'));
+
+
+        $formOptions = [];
+
+        /**
+         * @var Operationshifts $operationShift
+         */
+        $operationShift = Operationshifts::findFirstByid($opshid);
+        $this->view->setVar('operationShift', $operationShift);
+        $formOptions['operationShift'] = $operationShift;
+
+        $this->view->setVar('backAction', $origin.'/?origin=landingpage&opid='.$operationShift->getOperationId());
+        $this->view->setVar('backActionController', $origin);
+        $this->view->setVar('backActionValue', $operationShift->getOperationId());
+
+        $operationShiftDepartmentNeeds = OperationshiftsDepartmentsLink::findFirstByid($dnid);
+        $this->view->setVar('operationShiftDepartmentNeeds', $operationShiftDepartmentNeeds);
+        $formOptions['operationShiftDepartmentNeeds'] = $operationShiftDepartmentNeeds;
+
+        $identity = $this->auth->getIdentity();
+        $volunteer = Volunteers::findFirst(['userId' >= $identity['id']]);
+        $this->view->setVar('volunteer', $volunteer);
+        $formOptions['volunteer'] = $volunteer;
+
+        $form = new VolunteersCommitmentForm(null, $formOptions);
+        $this->view->setVar('form', $form);
+    }
+
+    /**
+     * @param $backActionValue
+     * @return bool
+     */
+    private function handledBackAction($origin, $opid)
+    {
+        if ((!empty($origin)) && ($opid > 0)) {
+            //$this->response->redirect($origin.'/?origin=landingpage&opid='.$opid);
+            $this->dispatcher->setParam('origin', 'landingpage');
+            $this->dispatcher->setParam('opid', $opid);
+            $this->dispatcher->forward([
+                'controller' => $origin,
+                'action' => "index"
+            ]);
+            return true;
+        }
+        return false;
     }
 }

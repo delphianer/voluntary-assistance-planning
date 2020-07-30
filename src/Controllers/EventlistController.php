@@ -78,7 +78,12 @@ class EventlistController extends ControllerBase
     }
 
 
-
+    /**
+     * @param int $limit
+     * @param int $opid
+     * @param Volunteers $vol
+     * @return mixed
+     */
     public function getNextOperationsWithCommitmentFormat(int $limit, Volunteers $vol)
     {
         $myID = 0;
@@ -91,23 +96,23 @@ class EventlistController extends ControllerBase
                 ,op.id event_id
                 ,op.shortDescription event_label
                 ,min(opsh.start) event_starting
-                ,min(opsh.end) event_ending
-                ,nvl(
+                ,max(opsh.end) event_ending
+                ,sum(nvl(
                 	(select numberVolunteersNeeded
 	                	from operationshifts_departments_link odl
-    	            	where odl.operationShiftId = opsh.id),0) event_volunteersNeeded
-                ,(select count(*)
+    	            	where odl.operationShiftId = opsh.id),0)) event_volunteersNeeded
+                ,sum((select count(*)
                 	from operationshifts_departments_link odl
                 	join opshdepl_volunteers_link ovl
                 		on ovl.opDepNeedId = odl.id
-                	where odl.operationShiftId = opsh.id) event_volunteersCommitted
-                ,nvl(
+                	where odl.operationShiftId = opsh.id)) event_volunteersCommitted
+                ,sum(nvl(
                     (select max(ovl.id)
                         from operationshifts_departments_link odl
                         join opshdepl_volunteers_link ovl
                             on ovl.opDepNeedId = odl.id
                             and ovl.volunteersId = $myID
-                        where odl.operationShiftId = opsh.id),0) event_IHaveCommitted
+                        where odl.operationShiftId = opsh.id),0)) event_IHaveCommitted
             from operations op
             inner join vokuro.operationshifts opsh on opsh.operationId = op.id
             where opsh.`start` > now()
@@ -123,13 +128,12 @@ class EventlistController extends ControllerBase
     }
 
 
-
-
     /**
+     * @param int $opid
      * @param Volunteers $vol
      * @return mixed
      */
-    public function getOperationShiftsWithCommitmentFormat(Volunteers $vol)
+    public function getOperationShiftsWithCommitmentFormat(int $opid, Volunteers $vol)
     {
         $myID = 0;
         if (isset($vol)) {
@@ -155,7 +159,8 @@ class EventlistController extends ControllerBase
                         and odl.operationShiftId = os.id),0) event_IHaveCommitted
                     from operationshifts os
                     inner join operationshifts_departments_link odl on odl.operationShiftId = os.id
-                    inner join departments dep on dep.id = odl.departmentId";
+                    inner join departments dep on dep.id = odl.departmentId
+                    where os.operationId = $opid";
 
         $db      = $this->di['db'];
         $data    = $db->query($rawSQL);

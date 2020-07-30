@@ -1,9 +1,12 @@
+
 <h2 class="mt-5">Landing Page</h2>
 
 <header class="jumbotron" id="overview">
     <div class="row">
-        <div class="col font-weight-bold">
-            Hello {{ authName }}
+        <div class="col">
+            <h4>
+                Hello {{ authName }}
+            </h4>
         </div>
         <div class="col">
             Your System-Role: <div class="font-weight-bold">{{ userRole }}</div>
@@ -62,6 +65,10 @@
     </div>
 </header>
 
+
+{{ flash.output() }}
+
+
     <div class="row m-5">
         <div class="col text-center">
             <h3 class="text-center">
@@ -75,7 +82,7 @@
     {#---------- header definition -------------#}
 
     {% set aclEditOperation = (userRole is defined and acl.isAllowed( userRole, "operations", "edit")) %}
-    {% set editLabel = "" %}
+    {% set editLabel = "." %}
     {% if aclEditOperation %}
         {% set editLabel = "Edit" %}
     {% endif %}
@@ -86,7 +93,7 @@
             ['title' : 'End', 'class':'text-center'],
             ['title' : 'Needs', 'class':'text-center'],
             ['title' : 'Committed', 'class':'text-center'],
-            ['title' : 'Action', 'class':'text-center'],
+            ['title' : 'Go List Shifts', 'class':'text-center'],
             ['title' : editLabel, 'class':'text-center']
         ] %}
 
@@ -98,19 +105,13 @@
         {% set rowData = [] %}
 
         {% do arrayPush(rowData , [ 'data' : event['event_label']] ) %}
-        {% do arrayPush(rowData , [ 'data' : event['event_starting']] ) %}
-        {% do arrayPush(rowData , [ 'data' : event['event_ending']] ) %}
-        {% do arrayPush(rowData , [ 'data' : event['event_volunteersNeeded']] ) %}
-        {% do arrayPush(rowData , [ 'data' : event['event_volunteersCommitted']] ) %}
+        {% do arrayPush(rowData , [ 'data' : event['event_starting'], 'class':'text-center'] ) %}
+        {% do arrayPush(rowData , [ 'data' : event['event_ending'], 'class':'text-center'] ) %}
+        {% do arrayPush(rowData , [ 'data' : event['event_volunteersNeeded'], 'class':'text-center'] ) %}
+        {% do arrayPush(rowData , [ 'data' : event['event_volunteersCommitted'], 'class':'text-center'] ) %}
 
-        {% set availableActions = '' %}
-        {% if event['event_IHaveCommitted'] != 0 %}
-            {% set availableActions = link_to( url("operationshiftsoverview/edit?origin=landingpage&opid=" ~ event['event_id']), '<i class="icon-pencil"></i> edit my entry', "class": "btn btn-sm btn-outline-warnig") %}
-            {% set availableActions = availableActions ~ link_to( url("operationshiftsoverview/delete?origin=landingpage&opid=" ~ event['event_id']), '<i class="icon-remove"></i> cancel commitment', "class": "btn btn-sm btn-outline-danger") %}
-        {% else %}
-            {% set availableActions = link_to( url("operationshiftsoverview/new?origin=landingpage&opid=" ~ event['event_id']), '<i class="icon-check"></i> Commit', "class": "btn btn-sm btn-outline-primary") %}
-        {% endif %}
-        {% do arrayPush(rowData , [ 'data' : availableActions, 'class' : 'text-center'] ) %}
+        {% set goDetails = link_to( url("operationshiftsoverview/?origin=landingpage&opid=" ~ event['event_id']), '<i class="icon-search"></i> More Details', "class": "btn btn-sm btn-outline-primary") %}
+        {% do arrayPush(rowData , [ 'data' : goDetails, 'class' : 'text-center'] ) %}
 
         {% if aclEditOperation %}
             {% do arrayPush(rowData , [ 'data' : link_to( url("operations/edit/") ~ event['event_id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning"), 'class' : 'text-center'] ) %}

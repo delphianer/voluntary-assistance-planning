@@ -8,20 +8,24 @@
 <header class="jumbotron" id="overview">
     <div class="row">
         <div class="col font-weight-bold">
+            <h3>
             Operation:
-        </div>
-        <div class="col">
-            {{ operation.shortDescription }}
+            <b>{{ operation.shortDescription }}</b>
+            </h3>
         </div>
     </div>
 </header>
+
+{{ flash.output() }}
+
+{{ this.flashSession.output() }}
 
     {#---------- header definition -------------#}
 
     {% set aclEditOperationshifts = (userRole is defined and acl.isAllowed( userRole, "operationshifts", "edit")) %}
     {% set editLabel = "" %}
     {% if aclEditOperationshifts %}
-        {% set editLabel = "Edit" %}
+        {% set editLabel = "Admin" %}
     {% endif %}
 
     {% set headerData = [
@@ -31,7 +35,7 @@
             ['title' : 'Department', 'class':'text-center'],
             ['title' : 'Needs', 'class':'text-center'],
             ['title' : 'Committed', 'class':'text-center'],
-            ['title' : 'Action', 'class':'text-center'],
+            ['title' : '', 'class':'text-center'],
             ['title' : editLabel, 'class':'text-center']
         ] %}
 
@@ -42,17 +46,17 @@
     {% for shift in operationShiftsWithCommitmentList %}
         {% set rowData = [] %}
 
-        {% do arrayPush(rowData , [ 'data' : shift['event_label']] ) %}
-        {% do arrayPush(rowData , [ 'data' : shift['event_start']] ) %}
-        {% do arrayPush(rowData , [ 'data' : shift['event_end']] ) %}
-        {% do arrayPush(rowData , [ 'data' : shift['department_label']] ) %}
-        {% do arrayPush(rowData , [ 'data' : shift['event_needed']] ) %}
-        {% do arrayPush(rowData , [ 'data' : shift['event_volunteersCommitted']] ) %}
+        {% do arrayPush(rowData , [ 'data' : shift['event_label'], 'class':'text-center'] ) %}
+        {% do arrayPush(rowData , [ 'data' : shift['event_start'], 'class':'text-center'] ) %}
+        {% do arrayPush(rowData , [ 'data' : shift['event_end'], 'class':'text-center'] ) %}
+        {% do arrayPush(rowData , [ 'data' : shift['department_label'], 'class':'text-center'] ) %}
+        {% do arrayPush(rowData , [ 'data' : shift['event_needed'], 'class':'text-center'] ) %}
+        {% do arrayPush(rowData , [ 'data' : shift['event_volunteersCommitted'], 'class':'text-center'] ) %}
 
         {% set availableActions = '' %}
         {% if shift['event_IHaveCommitted'] != 0 %}
-            {% set availableActions = link_to( url("opshdeplvolunteerslink/edit?origin=operationshiftsoverview&opshid=" ~ shift['shift_id']~ '&dnid=' ~ shift['department_need_id']), '<i class="icon-pencil"></i> edit my entry', "class": "btn btn-sm btn-outline-warnig") %}
-            {% set availableActions = availableActions ~ link_to( url("opshdeplvolunteerslink/delete?origin=operationshiftsoverview&opshid=" ~ shift['shift_id']~ '&dnid=' ~ shift['department_need_id']), '<i class="icon-pencil"></i> cancel commitment', "class": "btn btn-sm btn-outline-danger") %}
+            {% set availableActions = link_to( url("opshdeplvolunteerslink/edit?origin=operationshiftsoverview&opshid=" ~ shift['shift_id']~ '&dnid=' ~ shift['department_need_id']), '<i class="icon-pencil"></i> edit my entry', "class": "btn btn-sm btn-outline-warning") %}
+            {% set availableActions = availableActions ~ link_to( url("opshdeplvolunteerslink/delete?origin=operationshiftsoverview&opshid=" ~ shift['shift_id']~ '&dnid=' ~ shift['department_need_id']), '<i class="icon-remove"></i> cancel commitment', "class": "btn btn-sm btn-outline-danger") %}
         {% else %}
             {% set availableActions = link_to( url("opshdeplvolunteerslink/new?origin=operationshiftsoverview&opshid=" ~ shift['shift_id'] ~ '&dnid=' ~ shift['department_need_id']), '<i class="icon-check"></i> Commit', "class": "btn btn-sm btn-outline-primary") %}
         {% endif %}

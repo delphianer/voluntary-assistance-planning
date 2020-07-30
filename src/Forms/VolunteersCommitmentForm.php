@@ -10,10 +10,12 @@ use Phalcon\Forms\Element\TextArea;
 use Phalcon\Forms\Form;
 use Phalcon\Validation\Validator\Numericality;
 use Phalcon\Validation\Validator\PresenceOf;
+use Vokuro\Models\Certificates;
 use Vokuro\Models\Operationshifts;
 use Vokuro\Models\OperationshiftsDepartmentsLink;
 use Vokuro\Models\OpshdeplVolunteersLink;
 use Vokuro\Models\Volunteers;
+use Vokuro\Models\VolunteersCertificatesLink;
 
 class VolunteersCommitmentForm extends Form
 {
@@ -26,6 +28,7 @@ class VolunteersCommitmentForm extends Form
         /**
          * @var Operationshifts $operationShift
          * @var OperationshiftsDepartmentsLink $operationShiftDepartmentNeeds
+         * @var Volunteers $volunteer
          */
         $currentAction = $this->dispatcher->getActionName();
         $operationShift = array_key_exists('operationShift', $options) ? $options['operationShift'] : null;
@@ -45,7 +48,7 @@ class VolunteersCommitmentForm extends Form
 
 
         $this->add(new Text('shortDescription', [
-            'placeholder' => 'short description -> if you want to tell something)',
+            'placeholder' => 'short description -> if you want to tell something',
             'class' => 'form-control'
         ]));
 
@@ -96,7 +99,7 @@ class VolunteersCommitmentForm extends Form
             $this->add(new Select('volunteersId', $volunteers, [
                 'using'      => [
                     'id',
-                    'firstAndLastName',// todo: test
+                    'firstAndLastName',
                 ],
                 'useEmpty'   => $canUseEmpty,
                 'emptyText'  => 'any department',
@@ -114,7 +117,7 @@ class VolunteersCommitmentForm extends Form
             $options = [$value => $label];
             $attributes = [
                 'class' => 'form-control',
-                'disabled' => 'true' // test disabled
+                'disabled' => 'true'
             ];
             $volunteersId = new Hidden('volunteersId');
             $volunteersId->setAttribute('value', $value);
@@ -124,9 +127,34 @@ class VolunteersCommitmentForm extends Form
             $this->add($s);
         }
 
+        $certificates = [];
+        if (is_null($volunteer)) {
+            $certificates = Certificates::find();
+        } else {
+            $modelManager = $this
+                ->modelsManager
+                ->createBuilder()
+                //->columns(['"[Certificates].[id]','[Certificates].[label]'])
+                ->from(Certificates::class)
+                ->join(VolunteersCertificatesLink::class, 'volunteersId = '.$volunteer->getId())
+                ->getQuery()
+                ->execute();
+                //->getSingleResult(['operation_id' =>  $this->getOperationId()]);
 
-        $this->add(new Text('volCurrentMaximumCertRank', [
-            'class' => 'form-control'
+            foreach ($modelManager as $c) {
+                $certificates = array_merge($certificates, [$c->getId() => $c->getLabel()]);
+            }
+        }
+
+        $this->add(new Select('volCurrentMaximumCertRank', $certificates, [
+            'using'      => [
+                'id',
+                'label',
+            ],
+            'useEmpty'   => true,
+            'emptyText'  => 'any',
+            'emptyValue' => '',
+            'class' => 'form-control  mr-sm-3'
         ]));
     }
 }
