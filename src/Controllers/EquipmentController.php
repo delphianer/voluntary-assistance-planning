@@ -95,7 +95,7 @@ class EquipmentController extends ControllerBase
             $this->tag->setDefault("label", $equipment->getLabel());
             $this->tag->setDefault("description", $equipment->getDescription());
             $this->tag->setDefault("total_count", $equipment->getTotalCount());
-            $this->tag->setDefault("isRequsable", $equipment->getIsReusable());
+            $this->tag->setDefault("isReusable", $equipment->getIsReusable());
 
         }
 
@@ -240,6 +240,6 @@ class EquipmentController extends ControllerBase
         $equipment->setLabel($this->request->getPost("label", "string"));
         $equipment->setDescription($this->request->getPost("description", "string"));
         $equipment->settotalCount($this->request->getPost("total_count", "int"));
-        $equipment->setIsReusable($this->request->getPost("isRequsable", "string"));
+        $equipment->setIsReusable($this->request->getPost("isReusable", "string"));
     }
 }

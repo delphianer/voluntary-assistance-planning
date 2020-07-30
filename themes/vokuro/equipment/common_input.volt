@@ -21,12 +21,12 @@
 </div>
 
 <div class="form-group">
-    <label for="fieldIsRequsable" class="col-sm-2 control-label">IsRequsable</label>
+    <label for="fieldIsRequsable" class="col-sm-2 control-label">IsReusable</label>
     <div class="col-sm-10">
         {% if dispatcher.getActionName() == 'index' %}
-            {{ selectStatic(["isRequsable", "class" : "form-control", "id" : "fieldIsRequsable"], ['':'Any','N':'No','Y':'Yes'] ) }}
+            {{ selectStatic(["isReusable", "class" : "form-control", "id" : "fieldIsRequsable"], ['':'Any','N':'No','Y':'Yes'] ) }}
         {% else %}
-            {{ selectStatic(["isRequsable", "class" : "form-control", "id" : "fieldIsRequsable"], ['N':'No','Y':'Yes'] ) }}
+            {{ selectStatic(["isReusable", "class" : "form-control", "id" : "fieldIsRequsable"], ['N':'No','Y':'Yes'] ) }}
         {% endif %}
     </div>
 </div>
