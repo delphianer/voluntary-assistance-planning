@@ -5,13 +5,18 @@
 </div>
 
 
-<header class="jumbotron" id="overview">
+<header class="jumbotron p-4 mb-5" id="overview">
     <div class="row">
         <div class="col font-weight-bold">
             <h3>
             Operation:
             <b>{{ operation.shortDescription }}</b>
             </h3>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col p-3 border bg-white rounded">
+            {{ operation.longDescription }}
         </div>
     </div>
 </header>
@@ -33,7 +38,9 @@
             ['title' : 'Start', 'class':'text-center'],
             ['title' : 'End', 'class':'text-center'],
             ['title' : 'Department', 'class':'text-center'],
-            ['title' : 'Needs', 'class':'text-center'],
+            ['title' : '<i class="icon-suitcase"></i>', 'class':'text-center'],
+            ['title' : '<i class="icon-ambulance"></i>', 'class':'text-center'],
+            ['title' : '<i class="icon-user"></i>', 'class':'text-center'],
             ['title' : 'Committed', 'class':'text-center'],
             ['title' : '', 'class':'text-center'],
             ['title' : editLabel, 'class':'text-center']
@@ -50,6 +57,8 @@
         {% do arrayPush(rowData , [ 'data' : shift['event_start'], 'class':'text-center'] ) %}
         {% do arrayPush(rowData , [ 'data' : shift['event_end'], 'class':'text-center'] ) %}
         {% do arrayPush(rowData , [ 'data' : shift['department_label'], 'class':'text-center'] ) %}
+        {% do arrayPush(rowData , [ 'data' : shift['event_equipmentcount'], 'class':'text-center'] ) %}
+        {% do arrayPush(rowData , [ 'data' : shift['event_vehiclecount'], 'class':'text-center'] ) %}
         {% do arrayPush(rowData , [ 'data' : shift['event_needed'], 'class':'text-center'] ) %}
         {% do arrayPush(rowData , [ 'data' : shift['event_volunteersCommitted'], 'class':'text-center'] ) %}
 
