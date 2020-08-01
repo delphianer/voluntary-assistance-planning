@@ -42,7 +42,7 @@ class DataentryhomeController extends ControllerBase
         $this->view->setVar('volunteersWithoutCertification', $this->getVolunteersWithoutCertificationCount());
 
         $this->view->setVar('vehiclesCount', $this->getVehiclesCount(""));
-        $this->view->setVar('vehiclesInspectionAhead', $this->getVehiclesWithInspectionAhead(30));
+        $this->view->setVar('vehiclesInspectionAhead', $this->getVehiclesCountWithInspectionAhead(30));
 
         $this->view->setVar('equipmentCount', $this->getEquipmentCount(""));
         $this->view->setVar('equipmentNotOnStockCount', $this->getEquipmentNotOnStockCount("total_count > 0 and isReusable = 'N'"));
@@ -57,7 +57,7 @@ class DataentryhomeController extends ControllerBase
 
     private function getVolunteersCount(string $whereCondition)
     {
-        return $this->eventList->getSimpleCountFromTable(['cnt' => 'COUNT(*) '], ['vol' => Volunteers::class], 'cnt', $whereCondition);
+        return $this->eventList->getOneCellFromTable(['cnt' => 'COUNT(*) '], ['vol' => Volunteers::class], 'cnt', $whereCondition);
     }
 
     private function getVolunteersWithoutCertificationCount()
@@ -66,21 +66,22 @@ class DataentryhomeController extends ControllerBase
          *  @var Criteria $model
          */
         $model = Volunteers::query()
-            //->columns(['cnt' => 'COUNT(*) '])
-            ->leftJoin('Vokuro\Models\VolunteersCertificatesLink', 'Vokuro\Models\VolunteersCertificatesLink.volunteersId = \Vokuro\Models\Volunteers.id' )
-            ->andWhere('Vokuro\Models\VolunteersCertificatesLink.id IS NULL')
+            ->leftJoin('Vokuro\Models\VolunteersCertificatesLink', 'Vokuro\Models\VolunteersCertificatesLink.volunteersId = \Vokuro\Models\Volunteers.id')
+            ->andWhere('Vokuro\Models\VolunteersCertificatesLink.validUntil < NOW()')
+            ->orWhere('Vokuro\Models\VolunteersCertificatesLink.id IS NULL')
             ->execute();
         return sizeof($model);
     }
 
     private function getVehiclesCount(string $whereCondition)
     {
-        return $this->eventList->getSimpleCountFromTable(['cnt' => 'COUNT(*) '], ['vehi' => Vehicles::class], 'cnt', $whereCondition);
+        return $this->eventList->getOneCellFromTable(['cnt' => 'COUNT(*) '], ['vehi' => Vehicles::class], 'cnt', $whereCondition);
     }
 
-    private function getVehiclesWithInspectionAhead(int $daysAhead)
+
+    private function getVehiclesCountWithInspectionAhead(int $daysAhead)
     {
-        return $this->eventList->getSimpleCountFromTable(
+        return $this->eventList->getOneCellFromTable(
             ['cnt' => 'COUNT(*) '],
             ['vehi' => Vehicles::class],
             'cnt',
@@ -90,21 +91,21 @@ class DataentryhomeController extends ControllerBase
 
     private function getEquipmentCount(string $whereCondition)
     {
-        return $this->eventList->getSimpleCountFromTable(['cnt' => 'COUNT(*) '], ['eq' => Equipment::class], 'cnt', $whereCondition);
+        return $this->eventList->getOneCellFromTable(['cnt' => 'COUNT(*) '], ['eq' => Equipment::class], 'cnt', $whereCondition);
     }
 
     private function getEquipmentNotOnStockCount(string $whereCondition)
     {
-        return $this->eventList->getSimpleCountFromTable(['cnt' => 'COUNT(*) '], ['eq' => Equipment::class], 'cnt', $whereCondition);
+        return $this->eventList->getOneCellFromTable(['cnt' => 'COUNT(*) '], ['eq' => Equipment::class], 'cnt', $whereCondition);
     }
 
     private function getClientsCount(string $whereCondition)
     {
-        return $this->eventList->getSimpleCountFromTable(['cnt' => 'COUNT(*) '], ['cl' => Clients::class], 'cnt', $whereCondition);
+        return $this->eventList->getOneCellFromTable(['cnt' => 'COUNT(*) '], ['cl' => Clients::class], 'cnt', $whereCondition);
     }
 
     private function getLocationsCount(string $whereCondition)
     {
-        return $this->eventList->getSimpleCountFromTable(['cnt' => 'COUNT(*) '], ['loc' => Locations::class], 'cnt', $whereCondition);
+        return $this->eventList->getOneCellFromTable(['cnt' => 'COUNT(*) '], ['loc' => Locations::class], 'cnt', $whereCondition);
     }
 }

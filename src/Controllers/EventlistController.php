@@ -152,6 +152,12 @@ class EventlistController extends ControllerBase
                     ,(select count(*)
                         from opshdepl_volunteers_link ovl
                         where ovl.opDepNeedId = odl.id ) event_volunteersCommitted
+                    ,(select count(*)
+                        from operationshifts_equipment_link osl
+                        where os.id = osl.operationShiftId ) event_equipmentcount
+                    ,(select count(*)
+                        from operationshifts_vehicles_link ovl
+                        where os.id = ovl.operationShiftId ) event_vehiclecount
                     ,nvl((select count(*)
                         from opshdepl_volunteers_link ovl
                         where  ovl.opDepNeedId = odl.id
@@ -174,8 +180,13 @@ class EventlistController extends ControllerBase
 
 
 
-    public function getSimpleCountFromTable(array $countColumns, array $fromTables, string $resultColName, string $whereCondition, array $whereBinding = null)
-    {
+    public function getOneCellFromTable(
+        array $countColumns,
+        array $fromTables,
+        string $resultColName,
+        string $whereCondition,
+        array $whereBinding = null
+    ) {
         $model = $this
             ->modelsManager
             ->createBuilder()
@@ -197,30 +208,13 @@ class EventlistController extends ControllerBase
     {
         $whereCondition = 'apo.['.$dateColumn.'] between :rangeStart: and :rangeEnd:';
         $whereBinding = ['rangeStart' => $BetweenDateRangeStart, 'rangeEnd' => $BetweenDateRangeEnd];
-        return $this->getSimpleCountFromTable(['cnt' => 'COUNT(*) '], ['apo' => Appointments::class], 'cnt', $whereCondition, $whereBinding);
+        return $this->getOneCellFromTable(['cnt' => 'COUNT(*) '], ['apo' => Appointments::class], 'cnt', $whereCondition, $whereBinding);
     }
 
     public function getOperationsCount(string $dateColumn, string $BetweenDateRangeStart, string $BetweenDateRangeEnd)
     {
         $whereCondition = 'opsh.['.$dateColumn.'] between :rangeStart: and :rangeEnd:';
         $whereBinding = ['rangeStart' => $BetweenDateRangeStart, 'rangeEnd' => $BetweenDateRangeEnd];
-        return $this->getSimpleCountFromTable(['operationsCount' => 'COUNT(distinct op.id) '], ['op' => Operations::class,'opsh' => Operationshifts::class], 'operationsCount', $whereCondition, $whereBinding);
-        /*
-        $model = $this
-            ->modelsManager
-            ->createBuilder()
-            ->columns(['operationsCount' => 'COUNT(distinct op.id) '])
-            ->from(['op' => Operations::class,'opsh' => Operationshifts::class])
-        ;
-        if (!empty($whereCondition)) {
-            $model = $model->where($whereCondition);
-            if (!is_null($whereBinding) && is_array($whereBinding)) {
-                $model = $model->setBindParams($whereBinding);
-            }
-        }
-        $model = $model->getQuery();
-        $model = $model->getSingleResult();
-        return $model['operationsCount'];
-         */
+        return $this->getOneCellFromTable(['operationsCount' => 'COUNT(distinct op.id) '], ['op' => Operations::class,'opsh' => Operationshifts::class], 'operationsCount', $whereCondition, $whereBinding);
     }
 }
