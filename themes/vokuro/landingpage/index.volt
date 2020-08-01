@@ -22,6 +22,7 @@
         </div>
         {% endif %}
     </div>
+    {# todo: implement later
     {% if volunteer is defined %}
     <hr class="my-4">
     <div class="row ">
@@ -33,6 +34,7 @@
         </div>
     </div>
     {% endif %}
+    #}
     <hr class="my-4">
     <div class="row">
         <div class="col is-3">

@@ -225,7 +225,8 @@ final class MasterDataControllerCest
     /**
      * @param AcceptanceTester $I
      */
-    public function testSearchActionNoExistingTestsYet(AcceptanceTester $I): void
+    public function testSearchActionNoExistingTestsYet(
+        AcceptanceTester $I): void
     {
         $I->setCookie('PHPSESSID', $I->getLastLogonCookie($I));
 
@@ -385,66 +386,6 @@ final class MasterDataControllerCest
     }
 
 
-
-
-
-    /**
-     * @param AcceptanceTester $I
-     */
-    public function testWholeProcess(AcceptanceTester $I): void
-    {
-        /*
-        $I->setCookie('PHPSESSID', $this->cookie);
-        $testEntryShortDesc = 'simpleTestEntry'.date("Ymd.his");
-
-        foreach ($this->modelsWithDescriptionAndID as $tbl) {
-            $I->wantToTest("Create new ".$tbl);
-            $I->amOnPage('/'.$tbl.'/new');
-            $I->fillField('label', $testEntryShortDesc);
-            $I->seeInCurrentUrl('/'.$tbl.'/new');
-            $I->seeInSource('name="label"');
-            $I->dontSeeInSource('name="id"');
-            $I->seeInSource('value="Save"');
-            $I->click('//input[@type="submit"]');
-            $I->seeInCurrentUrl('/'.$tbl.'/create');
-            $I->see('was created successfully');
-
-            $I->wantToTest("Search new created ".$tbl);
-            $I->seeInField('label', $testEntryShortDesc);
-            $I->click('//input[@type="submit"]');
-            $I->see($testEntryShortDesc);
-
-            $I->wantToTest("prepare edit new created data ".$tbl);
-
-            // get edit-link and extract ID
-            $idStr = $I->grabAttributeFrom(Locator::combine('a[class="btn btn-sm btn-outline-warning"]', '//tbody/tr/td/a[0]'), 'href');
-            $idStrArr = explode('/', $idStr);
-            $id = $idStrArr[3];
-
-            $I->wantToTest("Search new created ".$tbl);
-
-            $I->wantToTest("edit new created (ID=".$id.") data at ".$tbl);
-            $I->click(Locator::combine('a[class="btn btn-sm btn-outline-warning"]', '//tbody/tr/td/a[0]'));
-            // stay edit:
-            $I->seeInCurrentUrl('/'.$tbl.'/edit/'.$id);
-            $I->seeInField('label', $testEntryShortDesc);
-            $testEntryShortDescEdited = $testEntryShortDesc. '.edited';
-            $I->fillField('label', $testEntryShortDescEdited);
-            $I->click('//button[@type="submit"]');
-            $I->seeInCurrentUrl('/'.$tbl.'/save');
-            $I->see('was updated successfully');
-
-            $I->wantToTest("Search entry again ".$testEntryShortDescEdited);
-            $I->amOnPage('/'.$tbl.'/search?label='.$testEntryShortDescEdited);
-            $I->see($testEntryShortDescEdited);
-
-            $I->wantToTest("delete entry with ID '.$id.' -> ".$testEntryShortDescEdited);
-            $I->amOnPage('/'.$tbl.'/delete/'.$id);
-            $I->seeInCurrentUrl('/'.$tbl.'/delete/'.$id);
-            $I->see('was deleted successfully');
-        }
-        */
-    }
 
 
 

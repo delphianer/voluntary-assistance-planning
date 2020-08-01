@@ -100,7 +100,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="7" class="text-center">No shift set up</td>
+                <td colspan="10" class="text-center">No shift set up</td>
             </tr>
         {% endfor %}
         </tbody>
