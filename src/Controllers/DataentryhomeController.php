@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Vokuro\Controllers;
 
+use Phalcon\Mvc\Model\Criteria;
 use Vokuro\Models\Clients;
 use Vokuro\Models\Equipment;
 use Vokuro\Models\Locations;
@@ -29,18 +30,23 @@ class DataentryhomeController extends ControllerBase
         $this->view->setVar('extraTitle', "Data Entry Overview");
 
         $this->eventList = new EventlistController();
-        $this->view->setVar('appointmentsNextWeekCount', $this->eventList->getAppointmentsCount("start between NOW() and  DATE_FORMAT(NOW()+7,'%Y-%m-%d 00:00:00')"));
-        $this->view->setVar('appointmentsNext30DaysCount', $this->eventList->getAppointmentsCount("start between NOW() and  DATE_FORMAT(NOW()+7,'%Y-%m-%d 00:00:00')"));
-        $this->view->setVar('appointmentsDoneCount', $this->eventList->getAppointmentsCount("[end] <= NOW()"));
+        $this->view->setVar('appointmentsNextWeekCount', $this->eventList->getAppointmentsCount('start', date('Y-m-d'), date('Y-m-d', strtotime('+7 DAY'))));
+        $this->view->setVar('appointmentsNext30DaysCount', $this->eventList->getAppointmentsCount('start', date('Y-m-d'), date('Y-m-d', strtotime('+30 DAY'))));
+        $this->view->setVar('appointmentsDoneCount', $this->eventList->getAppointmentsCount("end", date('Y-m-d', strtotime('-365 DAY')), date('Y-m-d')));
 
-        $this->view->setVar('operationsNextWeekCount', $this->eventList->getOperationsCount("start between NOW() and  DATE_FORMAT(NOW()+7,'%Y-%m-%d 00:00:00')"));
-        $this->view->setVar('operationsNext30DaysCount', $this->eventList->getOperationsCount("start between NOW() and  DATE_FORMAT(NOW()+7,'%Y-%m-%d 00:00:00')"));
-        $this->view->setVar('operationsDoneCount', $this->eventList->getOperationsCount("[end] <= NOW()"));
+        $this->view->setVar('operationsNextWeekCount', $this->eventList->getOperationsCount('start', date('Y-m-d'), date('Y-m-d', strtotime('+7 DAY'))));
+        $this->view->setVar('operationsNext30DaysCount', $this->eventList->getOperationsCount('start', date('Y-m-d'), date('Y-m-d', strtotime('+30 DAY'))));
+        $this->view->setVar('operationsDoneCount', $this->eventList->getOperationsCount("end", date('Y-m-d', strtotime('-365 DAY')), date('Y-m-d')));
 
         $this->view->setVar('volunteersCount', $this->getVolunteersCount(""));
+        $this->view->setVar('volunteersWithoutCertification', $this->getVolunteersWithoutCertificationCount());
+
         $this->view->setVar('vehiclesCount', $this->getVehiclesCount(""));
+        $this->view->setVar('vehiclesInspectionAhead', $this->getVehiclesWithInspectionAhead(30));
+
         $this->view->setVar('equipmentCount', $this->getEquipmentCount(""));
         $this->view->setVar('equipmentNotOnStockCount', $this->getEquipmentNotOnStockCount("total_count > 0 and isReusable = 'N'"));
+
         $this->view->setVar('clientsCount', $this->getClientsCount(""));
         $this->view->setVar('locationsCount', $this->getLocationsCount(""));
 
@@ -54,9 +60,32 @@ class DataentryhomeController extends ControllerBase
         return $this->eventList->getSimpleCountFromTable(['cnt' => 'COUNT(*) '], ['vol' => Volunteers::class], 'cnt', $whereCondition);
     }
 
+    private function getVolunteersWithoutCertificationCount()
+    {
+        /**
+         *  @var Criteria $model
+         */
+        $model = Volunteers::query()
+            //->columns(['cnt' => 'COUNT(*) '])
+            ->leftJoin('Vokuro\Models\VolunteersCertificatesLink', 'Vokuro\Models\VolunteersCertificatesLink.volunteersId = \Vokuro\Models\Volunteers.id' )
+            ->andWhere('Vokuro\Models\VolunteersCertificatesLink.id IS NULL')
+            ->execute();
+        return sizeof($model);
+    }
+
     private function getVehiclesCount(string $whereCondition)
     {
         return $this->eventList->getSimpleCountFromTable(['cnt' => 'COUNT(*) '], ['vehi' => Vehicles::class], 'cnt', $whereCondition);
+    }
+
+    private function getVehiclesWithInspectionAhead(int $daysAhead)
+    {
+        return $this->eventList->getSimpleCountFromTable(
+            ['cnt' => 'COUNT(*) '],
+            ['vehi' => Vehicles::class],
+            'cnt',
+            "vehi.[technicalInspection] > '".date('Y-m-d', strtotime('+'.$daysAhead.' DAY'))."'"
+        );
     }
 
     private function getEquipmentCount(string $whereCondition)
@@ -78,5 +107,4 @@ class DataentryhomeController extends ControllerBase
     {
         return $this->eventList->getSimpleCountFromTable(['cnt' => 'COUNT(*) '], ['loc' => Locations::class], 'cnt', $whereCondition);
     }
-
 }

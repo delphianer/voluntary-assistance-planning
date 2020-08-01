@@ -31,35 +31,55 @@
         </div>
     </div>
     <hr class="my-4">
-    <div class="row">
+    <div class="row m-1">
         <div class="col is-3">
             Volunteers
         </div>
         <div class="col is-3">
             {{ volunteersCount }}
         </div>
+        {% if volunteersWithoutCertification > 0 %}
+        <div class="col is-3 bg-danger text-white">
+            without valid certification
+        </div>
+        <div class="col is-3 bg-danger text-white">
+            {{ volunteersWithoutCertification }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="row m-1">
         <div class="col is-3">
             Vehicles
         </div>
         <div class="col is-3">
            {{ vehiclesCount }}
         </div>
+        {% if vehiclesInspectionAhead > 0 %}
+        <div class="col is-3 bg-danger text-white">
+            soon inspection
+        </div>
+        <div class="col is-3 bg-danger text-white">
+            {{ vehiclesInspectionAhead }}
+        </div>
+        {% endif %}
     </div>
-    <div class="row">
+    <div class="row m-1">
         <div class="col is-3">
             Equipment total
         </div>
         <div class="col is-3">
             {{ equipmentCount }}
         </div>
-        <div class="col is-3">
-            Equipment out of Stock
+        {% if equipmentNotOnStockCount > 0 %}
+        <div class="col is-3 bg-danger text-white">
+            out of Stock
         </div>
-        <div class="col is-3">
+        <div class="col is-3 bg-danger text-white">
             {{ equipmentNotOnStockCount }}
         </div>
+        {% endif %}
     </div>
-    <div class="row">
+    <div class="row m-1">
         <div class="col is-3">
             Clients
         </div>

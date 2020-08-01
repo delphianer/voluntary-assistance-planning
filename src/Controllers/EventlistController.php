@@ -174,7 +174,7 @@ class EventlistController extends ControllerBase
 
 
 
-    public function getSimpleCountFromTable(array $countColumns, array $fromTables, string $resultColName, string $whereCondition)
+    public function getSimpleCountFromTable(array $countColumns, array $fromTables, string $resultColName, string $whereCondition, array $whereBinding = null)
     {
         $model = $this
             ->modelsManager
@@ -183,20 +183,29 @@ class EventlistController extends ControllerBase
             ->from($fromTables);
         if (!empty($whereCondition)) {
             $model = $model->where($whereCondition);
+            if (!is_null($whereBinding) && is_array($whereBinding)) {
+                $model = $model->setBindParams($whereBinding);
+            }
         }
-        $model = $model->getQuery()
-            ->getSingleResult();
+        $model = $model->getQuery();
+        $model = $model->getSingleResult();
         return $model[$resultColName];
     }
 
 
-    public function getAppointmentsCount(string $whereCondition)
+    public function getAppointmentsCount(string $dateColumn, string $BetweenDateRangeStart, string $BetweenDateRangeEnd)
     {
-        return $this->getSimpleCountFromTable(['cnt' => 'COUNT(*) '], ['apo' => Appointments::class], 'cnt', $whereCondition);
+        $whereCondition = 'apo.['.$dateColumn.'] between :rangeStart: and :rangeEnd:';
+        $whereBinding = ['rangeStart' => $BetweenDateRangeStart, 'rangeEnd' => $BetweenDateRangeEnd];
+        return $this->getSimpleCountFromTable(['cnt' => 'COUNT(*) '], ['apo' => Appointments::class], 'cnt', $whereCondition, $whereBinding);
     }
 
-    public function getOperationsCount(string $whereCondition)
+    public function getOperationsCount(string $dateColumn, string $BetweenDateRangeStart, string $BetweenDateRangeEnd)
     {
+        $whereCondition = 'opsh.['.$dateColumn.'] between :rangeStart: and :rangeEnd:';
+        $whereBinding = ['rangeStart' => $BetweenDateRangeStart, 'rangeEnd' => $BetweenDateRangeEnd];
+        return $this->getSimpleCountFromTable(['operationsCount' => 'COUNT(distinct op.id) '], ['op' => Operations::class,'opsh' => Operationshifts::class], 'operationsCount', $whereCondition, $whereBinding);
+        /*
         $model = $this
             ->modelsManager
             ->createBuilder()
@@ -205,9 +214,13 @@ class EventlistController extends ControllerBase
         ;
         if (!empty($whereCondition)) {
             $model = $model->where($whereCondition);
+            if (!is_null($whereBinding) && is_array($whereBinding)) {
+                $model = $model->setBindParams($whereBinding);
+            }
         }
-        $model = $model->getQuery()
-            ->getSingleResult();
+        $model = $model->getQuery();
+        $model = $model->getSingleResult();
         return $model['operationsCount'];
+         */
     }
 }
