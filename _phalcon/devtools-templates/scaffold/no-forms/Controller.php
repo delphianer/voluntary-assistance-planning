@@ -42,7 +42,9 @@ class $className$Controller extends ControllerBase
         if ($count === 0) {
             $this->flash->notice('The search did not find any $plural$');
             $this->dispatcher->forward([
-                // todo: if your table has an underline (e.g. table_name) -> remove all occurrences because controller is without
+                // todo: if your table has an underline (e.g. table_name)
+                //       -> remove all occurrences because controller is without
+                //       ! also check folders of view directory: remove underlines
                 "controller" => "$plural$",
                 'action' => 'index',
             ]);
