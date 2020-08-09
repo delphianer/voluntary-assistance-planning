@@ -19,6 +19,8 @@
     {% endif %}
 </header>
 
+<!-- later in again when there is something to show
+
 <div class="row">
     <div class="col-md-12 col-lg-4">
         <div class="card">
@@ -49,3 +51,5 @@
         </address>
     </div>
 </div>
+
+ -->
