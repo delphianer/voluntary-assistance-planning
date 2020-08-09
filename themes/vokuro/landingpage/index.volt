@@ -84,20 +84,33 @@
     {#---------- header definition -------------#}
 
     {% set aclEditOperation = (userRole is defined and acl.isAllowed( userRole, "operations", "edit")) %}
-    {% set editLabel = "." %}
-    {% if aclEditOperation %}
-        {% set editLabel = "Edit" %}
+    {% set accesslabel = '-' %}
+    {% if volunteer is defined %}
+        {% set accesslabel = 'Go List Shifts' %}
     {% endif %}
 
-    {% set headerData = [
-            ['title' : 'Label', 'class':'text-center'],
-            ['title' : 'Start', 'class':'text-center'],
-            ['title' : 'End', 'class':'text-center'],
-            ['title' : 'Needs', 'class':'text-center'],
-            ['title' : 'Committed', 'class':'text-center'],
-            ['title' : 'Go List Shifts', 'class':'text-center'],
-            ['title' : editLabel, 'class':'text-center']
-        ] %}
+
+    {% if aclEditOperation %}
+        {% set headerData = [
+                ['title' : 'Label', 'class':'text-center'],
+                ['title' : 'Start', 'class':'text-center'],
+                ['title' : 'End', 'class':'text-center'],
+                ['title' : 'Needs', 'class':'text-center'],
+                ['title' : 'Committed', 'class':'text-center'],
+                ['title' : accesslabel, 'class':'text-center'],
+                ['title' : 'Edit', 'class':'text-center']
+            ] %}
+    {% else %}
+        {% set headerData = [
+                ['title' : 'Label', 'class':'text-center'],
+                ['title' : 'Start', 'class':'text-center'],
+                ['title' : 'End', 'class':'text-center'],
+                ['title' : 'Needs', 'class':'text-center'],
+                ['title' : 'Committed', 'class':'text-center'],
+                ['title' : accesslabel, 'class':'text-center']
+            ] %}
+    {% endif %}
+
 
     {#---------- table body definition ---------------#}
 
@@ -112,8 +125,12 @@
         {% do arrayPush(rowData , [ 'data' : event['event_volunteersNeeded'], 'class':'text-center'] ) %}
         {% do arrayPush(rowData , [ 'data' : event['event_volunteersCommitted'], 'class':'text-center'] ) %}
 
-        {% set goDetails = link_to( url("operationshiftsoverview/?origin=landingpage&opid=" ~ event['event_id']), '<i class="icon-search"></i> More Details', "class": "btn btn-sm btn-outline-primary") %}
-        {% do arrayPush(rowData , [ 'data' : goDetails, 'class' : 'text-center'] ) %}
+        {% if volunteer is defined %}
+            {% set goDetails = link_to( url("operationshiftsoverview/?origin=landingpage&opid=" ~ event['event_id']), '<i class="icon-search"></i> More Details', "class": "btn btn-sm btn-outline-primary") %}
+            {% do arrayPush(rowData , [ 'data' : goDetails, 'class' : 'text-center'] ) %}
+        {% else %}
+            {% do arrayPush(rowData , [ 'data' : '-', 'class' : 'text-center'] ) %}
+        {% endif %}
 
         {% if aclEditOperation %}
             {% do arrayPush(rowData , [ 'data' : link_to( url("operations/edit/") ~ event['event_id'], '<i class="icon-pencil"></i> Edit', "class": "btn btn-sm btn-outline-warning"), 'class' : 'text-center'] ) %}

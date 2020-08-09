@@ -91,8 +91,8 @@
             <div class="col font-weight-bold text-center">
                 {{ vehicleLink.Vehicles.label }}
             </div>
-            <div class="col font-italic font-weight-bold">
-                {{ vehicleLink.shortDescription }}
+            <div class="col">
+                <b>Description:</b><br /> {{ vehicleLink.Vehicles.description }}
             </div>
         </div>
         <div class="row bg-white m-1">
@@ -134,8 +134,8 @@
             </div>
         </div>
         <div class="row bg-white m-1">
-            <div class="col">
-                Description: {{ vehicleLink.Vehicles.description }}
+            <div class="col font-italic font-weight-bold">
+                {{ vehicleLink.shortDescription }}
             </div>
         </div>
         {% endfor %}

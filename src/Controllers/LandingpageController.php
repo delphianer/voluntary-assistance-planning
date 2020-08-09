@@ -34,7 +34,7 @@ class LandingpageController extends ControllerBase
         $identity = $this->auth->getIdentity();
         $this->view->setVar('authId', $identity['id']);
         $this->view->setVar('authName', $identity['name']);
-        $volunteer = Volunteers::findFirst(['userId' >= $identity['id']]);
+        $volunteer = Volunteers::findFirst(['[userId] = ' .$identity['id']]);
         $this->view->setVar('volunteer', $volunteer);
 
         $this->view->setVar('nextOperations', $this->eventList->getNextOperationsWithCommitmentFormat(10, $volunteer));

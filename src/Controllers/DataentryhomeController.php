@@ -16,6 +16,11 @@ use Vokuro\Models\Volunteers;
 class DataentryhomeController extends ControllerBase
 {
     /**
+     * @var  EventlistController
+     */
+    private $eventList = null;
+
+    /**
      * initialize this Controller
      */
     public function initialize()
@@ -82,10 +87,10 @@ class DataentryhomeController extends ControllerBase
     private function getVehiclesCountWithInspectionAhead(int $daysAhead)
     {
         return $this->eventList->getOneCellFromTable(
-            ['cnt' => 'COUNT(*) '],
-            ['vehi' => Vehicles::class],
-            'cnt',
-            "vehi.[technicalInspection] > '".date('Y-m-d', strtotime('+'.$daysAhead.' DAY'))."'"
+            ['cnt' => 'COUNT(*) '], // $countColumns
+            ['vehi' => Vehicles::class], // $fromTables
+            'cnt', // $resultColName
+            "vehi.[technicalInspection] < '".date('Y-m-d', strtotime('+'.$daysAhead.' DAY'))."'" // $whereCondition
         );
     }
 

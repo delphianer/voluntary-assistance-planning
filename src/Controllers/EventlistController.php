@@ -81,10 +81,10 @@ class EventlistController extends ControllerBase
     /**
      * @param int $limit
      * @param int $opid
-     * @param Volunteers $vol
+     * @param Volunteers|null $vol
      * @return mixed
      */
-    public function getNextOperationsWithCommitmentFormat(int $limit, Volunteers $vol)
+    public function getNextOperationsWithCommitmentFormat(int $limit, $vol)
     {
         $myID = 0;
         if (isset($vol)) {
@@ -130,10 +130,10 @@ class EventlistController extends ControllerBase
 
     /**
      * @param int $opid
-     * @param Volunteers $vol
+     * @param Volunteers|null $vol
      * @return mixed
      */
-    public function getOperationShiftsWithCommitmentFormat(int $opid, Volunteers $vol)
+    public function getOperationShiftsWithCommitmentFormat(int $opid, $vol)
     {
         $myID = 0;
         if (isset($vol)) {

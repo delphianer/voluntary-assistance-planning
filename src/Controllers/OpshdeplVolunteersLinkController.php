@@ -300,7 +300,7 @@ class OpshdeplVolunteersLinkController extends ControllerBase
         $formOptions['operationShiftDepartmentNeeds'] = $operationShiftDepartmentNeeds;
 
         $identity = $this->auth->getIdentity();
-        $volunteer = Volunteers::findFirst(['userId' >= $identity['id']]);
+        $volunteer = Volunteers::findFirst(['[userId] = ' .$identity['id']]);
         $this->view->setVar('volunteer', $volunteer);
         $formOptions['volunteer'] = $volunteer;
 

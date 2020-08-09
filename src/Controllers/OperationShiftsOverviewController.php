@@ -35,7 +35,7 @@ class OperationShiftsOverviewController extends ControllerBase
             $this->view->setVar('operation', $operation);
 
             $identity = $this->auth->getIdentity();
-            $volunteer = Volunteers::findFirst(['userId' >= $identity['id']]);
+            $volunteer = Volunteers::findFirst(['[userId] = ' .$identity['id']]);
 
             $eventList = new EventlistController();
             $this->view->setVar('operationShiftsWithCommitmentList', $eventList->getOperationShiftsWithCommitmentFormat($opid, $volunteer));

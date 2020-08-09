@@ -7,7 +7,7 @@
     <tr style="background:#D44413">
         <td style="padding-left:20px">
             <a target="_blank" style="text-decoration:none;color:inherit;font-family:'HelveticaNeue','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:normal;">
-                <h1 style="color:#fff">Vökuró</h1>
+                <h1 style="color:#fff">V:A:P</h1>
             </a>
         </td>
     </tr>
@@ -21,18 +21,6 @@
         <td align="right" style="padding:25px 0  0 0;">
             <table border="0" cellspacing="0" cellpadding="0" style="padding-bottom:9px;" align="right">
                 <tbody>
-                <tr style="border-bottom:1px solid #999999;">
-                    <td width="24" style="padding:0 7px 0 0;">
-                        <a href="https://phalcon.link/facebook" style="border-width:0;">
-                            <img src="//{{ publicUrl }}/img/facebook.gif" width="24" height="24" alt="Facebook Image">
-                        </a>
-                    </td>
-                    <td width="24">
-                        <a href="https://phalcon.link/twitter" style="border-width:0;">
-                            <img src="//{{ publicUrl }}/img/twitter.gif" width="24" height="24" alt="Twitter Image">
-                        </a>
-                    </td>
-                </tr>
                 <tr style="height:1px; background:#000;padding-top:15px">
                     <td></td>
                     <td></td>

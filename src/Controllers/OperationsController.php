@@ -82,6 +82,8 @@ class OperationsController extends ControllerBase
     public function editAction($id)
     {
         $processOperationsId = $this->dispatcher->getParam('processOperationsId');
+        $d = $this->dispatcher;
+        $last = $this->dispatcher->getLastController();
         if (isset($processOperationsId)) {
             $id = $processOperationsId;
             $this->view->setVar('setActiveTabKey', 'shifts');
@@ -208,6 +210,8 @@ class OperationsController extends ControllerBase
 
         $this->flash->success("operation was updated successfully");
 
+        // TODO: weiter -> bei überleitung von landingpage
+        $r = $this->request->getHTTPReferer();
         $this->dispatcher->forward([
             'controller' => "operations",
             'action' => 'index'
