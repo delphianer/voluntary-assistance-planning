@@ -13,6 +13,6 @@ final class AboutControllerCest
     public function testIndex(AcceptanceTester $I): void
     {
         $I->amOnPage('/about');
-        $I->see('About this Demo');
+        $I->see('About Voluntary Assistance Planning');
     }
 }
