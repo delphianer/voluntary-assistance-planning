@@ -25,3 +25,16 @@ $router->add('/reset-password/{code}/{email}', [
     'controller' => 'user_control',
     'action'     => 'resetPassword',
 ]);
+
+
+$router->add('/calendarapi/v1/get/', [
+    'controller' => 'CalendarJsonAPI',
+    'action'     => 'getSchedules',
+]);
+
+
+$router->add('/calendarapi/v1/get/{startdate}/{enddate}/{timeZone}', [
+    'controller' => 'calendarjsonapi',
+    'action'     => 'getSchedules',
+]);
+

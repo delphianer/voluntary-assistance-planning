@@ -1,0 +1,9 @@
+<h3 class="mt-5">Calendar View</h2>
+
+  <div id='script-warning'>
+    <code>php/get-events.php</code> must be running.
+  </div>
+
+  <div id='loading'>loading...</div>
+
+  <div id='calendar'></div>

@@ -7,6 +7,7 @@
 
 {%- set menus = [
     'Landing Page': 'landingpage',
+    'Calendar View': 'calendarview',
     'About': 'about'
 ] -%}
 
