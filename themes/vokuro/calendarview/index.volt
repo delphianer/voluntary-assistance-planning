@@ -1,7 +1,7 @@
-<h3 class="mt-5">Calendar View</h2>
+<h3 class="mt-5">{{ extraTitle }}</h2>
 
   <div id='script-warning'>
-    <code>php/get-events.php</code> must be running.
+    Backend not responsing...
   </div>
 
   <div id='loading'>loading...</div>
