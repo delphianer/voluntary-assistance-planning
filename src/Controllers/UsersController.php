@@ -36,7 +36,8 @@ class UsersController extends ControllerBase
     public function indexAction(): void
     {
         $this->view->setVar('form', new UsersForm());
-        $this->assets->collection("js")->addJs("/js/privateUsers.js", true, true);
+        // was original vokuro: no need for that
+        //$this->assets->collection("js")->addJs("/js/privateUsers.js", true, true);
         $this->view->setVar('extraTitle', "Search for User");
     }
 

@@ -1,3 +1,6 @@
+// original from vokuro-project - disabled because no need for that functionality
+
+
 var PrivateUsers = (function () {
     "use strict";
 

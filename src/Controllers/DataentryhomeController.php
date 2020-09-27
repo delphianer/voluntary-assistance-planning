@@ -87,7 +87,7 @@ class DataentryhomeController extends ControllerBase
     private function getVehiclesCountWithInspectionAhead(int $daysAhead)
     {
         return $this->eventList->getOneCellFromTable(
-            ['cnt' => 'COUNT(*) '], // $countColumns
+            ['cnt' => 'COUNT(*) '], // $columnSelect
             ['vehi' => Vehicles::class], // $fromTables
             'cnt', // $resultColName
             "vehi.[technicalInspection] < '".date('Y-m-d', strtotime('+'.$daysAhead.' DAY'))."'" // $whereCondition

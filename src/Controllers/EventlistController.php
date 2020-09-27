@@ -181,7 +181,7 @@ class EventlistController extends ControllerBase
 
 
     public function getOneCellFromTable(
-        array $countColumns,
+        array $columnSelect,
         array $fromTables,
         string $resultColName,
         string $whereCondition,
@@ -190,7 +190,7 @@ class EventlistController extends ControllerBase
         $model = $this
             ->modelsManager
             ->createBuilder()
-            ->columns($countColumns)
+            ->columns($columnSelect)
             ->from($fromTables);
         if (!empty($whereCondition)) {
             $model = $model->where($whereCondition);
