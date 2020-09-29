@@ -20,19 +20,25 @@ class CalendarJsonAPIController extends ControllerBase
     {
     }
 
+
     // test: http://localhost/calendarapi/v1/get/?start=2020-08-30T00:00:00+02:00&end=2020-10-30T00:00:00+02:00&test=1
     // todo: $publicOnly
     // todo: decide getAppointmentsInDateRange as Function of model with daterange and options like public only?
     //       then: here only limit and pagination... OR: limit and pagination in Controller-function with params and
     //             here only convertation into array for json encoding...
-    private function getSchedulesByAppointments($startDate, $endDate, $publicOnly)
+    /**
+     * @param $class
+     * @param $startDate
+     * @param $endDate
+     * @param $publicOnly
+     * @return array
+     */
+    private function getSchedulesBy($class, $startDate, $endDate, $publicOnly)
     {
-        $query = [];
         $conditions = '';
-        $builder = Criteria::fromInput($this->getDI(), Appointments::class, $query);
+        $builder = Criteria::fromInput($this->getDI(), $class, []);
         if (isset($startDate)) {
             $conditions .= (!empty($conditions) ? ' and ' : '' ) . "[start] >= '$startDate'";
-            //$builder->conditions('start >= DATE_FORMAT(NOW(),\'%Y-%m-%d 00:00:00\')'); // in the future
         }
         if (isset($endDate)) {
             $conditions .= (!empty($conditions) ? ' and ' : '' ) . "[end] <= '$endDate'";
@@ -42,62 +48,44 @@ class CalendarJsonAPIController extends ControllerBase
         }
         $builder->orderBy("start");
 
-        $appointmentsArr = [];
         $b = $builder->createBuilder();
         $paginator   = new Paginator(
             [
                 'builder'   => $b,
-                'limit'     => 1000, // max. 1000 appointments ... should never be so much...
-                'page'      => $this->request->getQuery('page', 'int', 1),
+                'limit'     => 10000,
+                'page'      => 1,//$this->request->getQuery('page', 'int', 1),
             ]
         );
 
-        $appointments = $paginator->paginate()->items;
+        $items = $paginator->paginate()->items;
 
-        /**
-         * @var Appointments $appointment
-         */
-        foreach ($appointments as $appointment) {
-            $appointmentArr = [];
-            $appointmentArr["id"] = $appointment->getId();
-            $appointmentArr["title"] = $appointment->getLabel();
-            $appointmentArr["start"] = $appointment->getStart();
-            if (!empty($appointment->getEnd())) {
-                $appointmentArr["end"] = $appointment->getEnd();
+        $resultArr = [];
+        foreach ($items as $appointmentOrOperation) {
+            $appointmentOrOperationArr = [];
+            $appointmentOrOperationArr["id"] = $appointmentOrOperation->getId();
+            if ($class == Appointments::class) {
+                $appointmentOrOperationArr["title"] = $appointmentOrOperation->getLabel();
+            } else { // operation
+                $appointmentOrOperationArr["title"] = $appointmentOrOperation->getShortDescription();
             }
-            array_push($appointmentsArr, $appointmentArr);
+            $appointmentOrOperationArr["start"] = $appointmentOrOperation->getStart();
+            if (!empty($appointmentOrOperation->getEnd())) {
+                $appointmentOrOperationArr["end"] = $appointmentOrOperation->getEnd();
+            }
+            array_push($resultArr, $appointmentOrOperationArr);
         }
-        return $appointmentsArr;
-    }
-
-    private function getSchedulesByOperations($startDate, $endDate, $publicOnly)
-    {
-        // todo: $publicOnly
-
-        $builder = Criteria::fromInput($this->getDI(), Operationshifts::class, $this->request->getQuery());
-        $builder->orderBy("start");
-
-        $count = Operationshifts::count($builder->getParams());
-        if ($count === 0) {
-            $this->flash->notice('The search did not find any operationshifts');
-            $this->dispatcher->forward([
-                "controller" => "operationshifts",
-                'action' => 'index',
-            ]);
-
-            return;
-        }
-        if (!isset($operationshift)) {
-            $shortDescription = (Operations::findFirstByid($opId))->shortDescription;
-        } else {
-            $shortDescription = $operationshift->Operations->shortDescription;
-        }
+        return $resultArr;
     }
 
 
-
-
-    private function handle_next_element(array $allSchedules, string $marker, string $readableMarker, \ArrayIterator $opIter)
+    /**
+     * @param array $allSchedules
+     * @param string $marker
+     * @param string $readableMarker
+     * @param \ArrayIterator $opIter
+     * @return array
+     */
+    private function handle_next_element(array $allSchedules, string $marker, string $readableMarker, \ArrayIterator $opIter): array
     {
         $current =  $opIter->current();
         if (isset($current["id"])) {
@@ -108,6 +96,7 @@ class CalendarJsonAPIController extends ControllerBase
         }
         array_push($allSchedules, $current);
         $opIter->next();
+
         return $allSchedules;
     }
 
@@ -121,33 +110,13 @@ class CalendarJsonAPIController extends ControllerBase
      */
     private function getResonseJsonFromDates($startDate, $endDate, $timezone, $publicOnly)
     {
-        $appointmentSchedules = $this->getSchedulesByAppointments($startDate->format("Y-m-d H:i:s"), $endDate->format("Y-m-d H:i:s"), $publicOnly);
-        //$operationSchedules = $this->getSchedulesByOperations($startDate, $endDate, $publicOnly);
-
-        // Example from fullcalendar.io
-        $schedule = [
-            ["id" => "1",'title' => "All Day Event (public)", "start" => "2020-09-01"],
-            ["id" => "2",'title' => "Long Event","start"=> "2020-09-07","end"=> "2020-09-10"],
-            ["id" => "999",'title' => "Repeating Event","start"=> "2020-09-09T16:00:00-02:00","end"=> "2020-09-09T17:00:00-02:00"],
-            ["id" => "999",'title' => "Repeating Event","start"=> "2020-09-16T16:00:00-02:00","end"=> "2020-09-16T17:00:00-02:00"],
-            ["id" => "999",'title' => "Repeating Event","start"=> "2020-09-23T16:00:00-02:00","end"=> "2020-09-23T17:00:00-02:00"],
-            ["id" => "3",'title' => "Conference","start"=> "2020-09-11","end"=> "2020-09-13"],
-            ["id" => "4",'title' => "Meeting","start"=> "2020-09-12T10:30:00-02:00","end"=> "2020-09-12T12:30:00-02:00"],
-            ["id" => "5",'title' => "Conf2","start"=> "2020-10-11","end"=> "2020-10-20"],
-        ];
-
-        $operationSchedules = [
-            ["id" => "1",'title' => "test2","start"=> "2020-09-16T12:00:00-02:00","end"=> "2020-09-16T13:00:00-02:00"],
-            ["id" => "2",'title' => "Sanitätsdienst Oktober-Sportfest","start"=> "2020-10-09","end"=> "2020-10-09"],
-            ["id" => "2",'title' => "Frühschicht","start"=> "2020-10-09T07:00:00-02:00","end"=> "2020-10-09T12:30:00-02:00"],
-            ["id" => "3",'title' => "Sanitätsdienst Reitturnier","start"=> "2020-10-10"],
-            ["id" => "3",'title' => "Frühschicht","start"=> "2020-10-10T09:00:00-02:00","end"=> "2020-10-10T14:30:00-02:00"],
-        ];
+        $appointmentSchedules = $this->getSchedulesBy(Appointments::class, $startDate->format("Y-m-d H:i:s"), $endDate->format("Y-m-d H:i:s"), $publicOnly);
+            //$this->getSchedulesByAppointments($startDate->format("Y-m-d H:i:s"), $endDate->format("Y-m-d H:i:s"), $publicOnly);
+        $operationSchedules = $this->getSchedulesBy(Operationshifts::class, $startDate->format("Y-m-d H:i:s"), $endDate->format("Y-m-d H:i:s"), $publicOnly);
 
         // combine applications with operations
         $allSchedules = [];
         $apIter = (new ArrayObject($appointmentSchedules))->getIterator();
-        //$apIter = (new ArrayObject($schedule))->getIterator();
         $opIter = (new ArrayObject($operationSchedules))->getIterator();
 
         while ($apIter->valid() || $opIter->valid()) {
@@ -164,66 +133,7 @@ class CalendarJsonAPIController extends ControllerBase
             }
         }
 
-        $json2 = json_encode($allSchedules);
-
-        $json = '[
-                      {
-                        "title": "All Day Event",
-                        "start": "2020-09-01"
-                      },
-                      {
-                        "title": "Long Event",
-                        "start": "2020-09-07",
-                        "end": "2020-09-10"
-                      },
-                      {
-                        "id": "999",
-                        "title": "Repeating Event",
-                        "start": "2020-09-09T16:00:00-05:00"
-                      },
-                      {
-                        "id": "999",
-                        "title": "Repeating Event",
-                        "start": "2020-09-16T16:00:00-05:00"
-                      },
-                      {
-                        "title": "Conference",
-                        "start": "2020-09-11",
-                        "end": "2020-09-13"
-                      },
-                      {
-                        "title": "Meeting",
-                        "start": "2020-09-12T10:30:00-05:00",
-                        "end": "2020-09-12T12:30:00-05:00"
-                      },
-                      {
-                        "title": "Lunch",
-                        "start": "2020-09-12T12:00:00-05:00"
-                      },
-                      {
-                        "title": "Meeting",
-                        "start": "2020-09-12T14:30:00-05:00"
-                      },
-                      {
-                        "title": "Happy Hour",
-                        "start": "2020-09-12T17:30:00-05:00"
-                      },
-                      {
-                        "title": "Dinner",
-                        "start": "2020-09-12T20:00:00"
-                      },
-                      {
-                        "title": "Birthday Party",
-                        "start": "2020-09-13T07:00:00-05:00"
-                      },
-                      {
-                        "title": "Click for Google",
-                        "url": "http://google.com/",
-                        "start": "2020-09-28"
-                      }
-                    ]
-                    ';
-        return $json2;
+        return json_encode($allSchedules);
     }
 
     // todo: /calendarapi/v1/get/{startdate}/{enddate}/{timeZone}
@@ -233,7 +143,7 @@ class CalendarJsonAPIController extends ControllerBase
         $query = $this->request->getQuery();
         $timeZone = 'local';
         $publicOnly = !$this->session->has('auth-identity');
-        if (isset($query["test"])){
+        if (isset($query["test"])) {
             $query["start"] = str_replace(' ', '+', $query["start"]);
             $query["end"]= str_replace(' ', '+', $query["end"]);
         }
