@@ -28,10 +28,6 @@
     {#---------- header definition -------------#}
 
     {% set aclEditOperationshifts = (userRole is defined and acl.isAllowed( userRole, "operationshifts", "edit")) %}
-    {% set editLabel = "" %}
-    {% if aclEditOperationshifts %}
-        {% set editLabel = "Admin" %}
-    {% endif %}
 
     {% set headerData = [
             ['title' : 'Label', 'class':'text-center'],
@@ -42,9 +38,13 @@
             ['title' : '<i class="icon-ambulance"></i>', 'class':'text-center'],
             ['title' : '<i class="icon-user"></i>', 'class':'text-center'],
             ['title' : 'Committed', 'class':'text-center'],
-            ['title' : '', 'class':'text-center'],
-            ['title' : editLabel, 'class':'text-center']
+            ['title' : '', 'class':'text-center']
         ] %}
+
+        {% if aclEditOperationshifts %}
+            {% do arrayPush(headerData , ['title' : "Admin", 'class':'text-center'] ) %}
+        {% endif %}
+
 
     {#---------- table body definition ---------------#}
 
