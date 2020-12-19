@@ -61,11 +61,10 @@ class OpshdeplVolunteersLinkController extends ControllerBase
         if (!$this->request->isPost()) {
             if ((intval($this->request->get('opshid')) > 0) && (intval($this->request->get('opshid')) > 0)) {
                 $this->initFormByRequest();
-                $params = [
-                    'opDepNeedId' => intval($this->request->get('dnid')),
-                    'volunteersId' => $this->view->getVar('volunteer')->getId()
-                ];
-                $opshdepl_volunteers_link = OpshdeplVolunteersLink::findFirst($params);
+
+                $id = $this->getIDByOpDepNeedIdPlusvolunteersId( intval($this->request->get('dnid')), $this->view->getVar('volunteer')->getId());
+
+                $opshdepl_volunteers_link = OpshdeplVolunteersLink::findFirstByid($id);
             } elseif (is_null($id)) {
                 $this->response->redirect('landingpage');
                 return;
@@ -211,11 +210,10 @@ class OpshdeplVolunteersLinkController extends ControllerBase
         $opid = 0;
         if ((intval($this->request->get('opshid')) > 0) && (intval($this->request->get('opshid')) > 0)) {
             $this->initFormByRequest();
-            $params = [
-                'opDepNeedId' => intval($this->request->get('dnid')),
-                'volunteersId' => $this->view->getVar('volunteer')->getId()
-            ];
-            $opshdepl_volunteers_link = OpshdeplVolunteersLink::findFirst($params);
+
+            $id = $this->getIDByOpDepNeedIdPlusvolunteersId(intval($this->request->get('dnid')), $this->view->getVar('volunteer')->getId());
+
+            $opshdepl_volunteers_link = OpshdeplVolunteersLink::findFirstByid($id);
             $origin = $this->request->get('origin');
             $opid = $opshdepl_volunteers_link->OperationshiftsDepartmentsLink->Operationshifts->getOperationId();
         } elseif (is_null($id)) {
@@ -248,7 +246,7 @@ class OpshdeplVolunteersLinkController extends ControllerBase
             return;
         }
 
-        $this->flash->success("Commitment was deleted successfully");
+        $this->flash->success("Commitment was canceled successfully");
 
         if ($this->handledBackAction($origin,$opid)) {
             return;
@@ -279,7 +277,7 @@ class OpshdeplVolunteersLinkController extends ControllerBase
     {
         $origin = $this->request->get('origin');
         $opshid = intval($this->request->get('opshid'));
-        $dnid = intval($this->request->get('dnid'));
+        $dnid = intval($this->request->get('dnid')); // department-need-id
 
 
         $formOptions = [];
@@ -325,5 +323,22 @@ class OpshdeplVolunteersLinkController extends ControllerBase
             return true;
         }
         return false;
+    }
+
+    // get the id to load the unique dataset:
+    private function getIDByOpDepNeedIdPlusvolunteersId(int $opDepNeedId, $volunteersId)
+    {
+        $modelManager = $this
+            ->modelsManager
+            ->createBuilder()
+            ->columns(['id' => 'id'])
+            ->from(OpshdeplVolunteersLink::class)
+            ->where('opDepNeedId = :opDepNeed_Id:')
+            ->andWhere('volunteersId = :volunteers_Id:')
+            ->getQuery()
+            ->getSingleResult(['opDepNeed_Id' =>  $opDepNeedId,
+                'volunteers_Id' =>  $volunteersId]);
+
+        return $modelManager['id'];
     }
 }
